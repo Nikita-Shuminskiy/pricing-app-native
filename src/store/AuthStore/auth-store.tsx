@@ -1,11 +1,14 @@
-import { authApi, userApi } from 'api/api';
-import { action, makeObservable, observable } from 'mobx';
-import { NewUserType, UserType } from 'store/Type/models';
+import {userApi} from '../../api/api';
+import {action, makeObservable, observable} from 'mobx';
+import {NewUserType, UserType} from '../Type/models';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {deviceStorage} from "../../storage/storage";
+import {authApi} from "../../api/authApi";
 
 export class AuthStore {
 	user: UserType = {} as UserType;
 
-	isAuth: boolean | undefined;
+	isAuth: boolean | null = false
 
 	setUser(userData: UserType): void {
 		this.user = userData;
@@ -21,31 +24,30 @@ export class AuthStore {
 			const { data } = await userApi.getUser();
 			this.setUser(data);
 		} catch (e: any) {
-			console.dir(e);
+			console.log(e);
 		}
 	}
 
-	async login(userData: { email: string; password: string }): Promise<void> {
-		const { data } = await authApi.login(userData.email, userData.password);
-		localStorage.setItem('token', data.token);
+	async login(userData: { email: string; password: string }){
+		const { data } = await authApi.login(userData.email, userData.password)
+		await deviceStorage.saveItem('token', data.token);
 		this.setAuth(true);
 		await this.getUser();
 	}
 
 	async logOutUser(): Promise<void> {
 		await authApi.logOut();
-		localStorage.removeItem('token');
-		localStorage.removeItem('auth');
+		await AsyncStorage.removeItem('token');
 		this.setAuth(false);
 	}
 
-	async registration(userData: NewUserType): Promise<void> {
+	async registration(userData: NewUserType) {
 		await authApi.registration(userData);
 	}
 
-	async checkAuth(): Promise<any> {
+	async checkAuth(){
 		const { data } = await authApi.refreshToken();
-		localStorage.setItem('token', data.token);
+		await AsyncStorage.setItem('token', data.token)
 		this.setAuth(true);
 		await this.getUser();
 	}

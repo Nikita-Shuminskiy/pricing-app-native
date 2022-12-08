@@ -1,5 +1,5 @@
 {
-  "name": "pony-native",
+  "name": "pony-web-native",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -9,13 +9,33 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/webpack-config": "^0.17.2",
+    "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-navigation/native": "^6.1.0",
+    "@react-navigation/native-stack": "^6.9.5",
+    "@types/axios": "^0.14.0",
+    "@types/classnames": "^2.3.1",
+    "@types/moment": "^2.13.0",
     "@types/react": "~18.0.24",
     "@types/react-native": "~0.70.6",
+    "@types/uuid": "^8.3.4",
+    "axios": "^1.2.1",
     "expo": "~47.0.8",
     "expo-status-bar": "~1.4.2",
+    "formik": "^2.2.9",
+    "i18next": "^19.8.2",
+    "i18next-browser-languagedetector": "^6.0.1",
+    "i18next-http-backend": "^1.0.21",
+    "mobx": "^6.6.1",
+    "mobx-react-lite": "^3.4.0",
     "react": "18.1.0",
+    "react-dom": "18.1.0",
     "react-native": "0.70.5",
+    "react-native-safe-area-context": "4.4.1",
+    "react-native-screens": "~3.18.0",
+    "react-native-svg": "13.4.0",
+    "react-native-svg-icon": "^0.10.0",
+    "react-native-web": "~0.18.9",
     "typescript": "^4.6.3"
   },
   "devDependencies": {

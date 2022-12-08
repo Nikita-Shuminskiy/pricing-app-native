@@ -1,25 +1,11 @@
-import {StatusBar} from 'expo-status-bar';
-import {StyleSheet, Text, View} from 'react-native';
+import {MainNavigation} from "./src/navigation/main-navigation";
 
-export default function App() {
+const App = () => {
     return (
-        <View style={styles.container}>
-            <Text>Фил охуеет когда узнает что пони веб переезжяет в мобилки</Text>
-            <StatusBar style="auto"/>
-        </View>
+        <>
+           <MainNavigation/>
+        </>
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    img: {
-        width: 50,
-        height: 200,
-        resizeMode: 'stretch',
-    }
-});
+export default App;
