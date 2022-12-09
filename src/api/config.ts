@@ -33,7 +33,7 @@ instance.interceptors.response.use(
         const originalRequest = error.config;
         if (error.response.status === 403 && !originalRequest._retry) {
             originalRequest._retry = true;
-            const {data} = await authApi.refreshToken();
+            const {data} = await instance.post<{ token: string }>(`auth/refresh`);
             axios.defaults.headers.common['authorization'] = 'Bearer ' + data.token;
             return instance(originalRequest);
         }

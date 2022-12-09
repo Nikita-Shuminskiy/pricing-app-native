@@ -49,12 +49,6 @@ export const historyApi = {
     },
 };
 
-export const userApi = {
-    getUser(): Promise<AxiosResponse<UserType>> {
-        return instance.get<UserType>(`users/user`);
-    },
-};
-
 export const chartApi = {
     getChartData(params: ParamsToChartDate): Promise<AxiosResponse<ChartDataType[]>> {
         try {
