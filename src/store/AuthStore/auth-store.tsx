@@ -1,4 +1,4 @@
-import {userApi} from '../../api/api';
+import {userApi} from '../../api/userApi';
 import {action, makeObservable, observable} from 'mobx';
 import {NewUserType, UserType} from '../Type/models';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,12 +20,8 @@ export class AuthStore {
 	}
 
 	async getUser(): Promise<void> {
-		try {
-			const { data } = await userApi.getUser();
-			this.setUser(data);
-		} catch (e: any) {
-			console.log(e);
-		}
+		const { data } = await userApi.getUser();
+		this.setUser(data);
 	}
 
 	async login(userData: { email: string; password: string }){

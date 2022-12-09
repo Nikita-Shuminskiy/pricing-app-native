@@ -13,6 +13,7 @@ import {colors} from "../assets/colors/colors";
 import iconsEnum from "../assets/ico-constants/icons-constants";
 import {Icon, Input} from 'react-native-elements';
 import regex from "../helpers/regex";
+import {createAlert} from "../common/components/alert";
 
 type LoginScreenProps = {
     navigation: NavigationProp<ParamListBase>
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     logo: {
-        width: 100,
+        width: 120,
         height: 50,
         marginBottom: 30,
     },

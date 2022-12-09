@@ -10,6 +10,8 @@ import RootStore from "../store/RootStore/root-store";
 import {getToken} from "../utils/utils";
 import {LoadingEnum} from "../store/Type/models";
 import RegistrationScreen from "../screen/RegistrationScreen";
+import {ActivityIndicator, View, StyleSheet} from "react-native";
+import {colors} from "../assets/colors/colors";
 
 
 const Stack = createNativeStackNavigator();
@@ -23,23 +25,41 @@ export const MainNavigation = observer(() => {
         }
     }, []);
     if (isLoading === LoadingEnum.fetching) {
-        console.log('loading')
+
+        return <View style={[styles.container, styles.horizontal]}>
+            <ActivityIndicator size="large" color={colors.orange}/>
+        </View>
     }
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="main">
+            <Stack.Navigator initialRouteName={"main"}>
                 {
                     isAuth ? (
-                        <Stack.Screen options={{title: 'Главная страница'}} name="main" component={MainScreen}/>
+                        <Stack.Screen options={{title: 'Главная страница'}} name={"main"} component={MainScreen}/>
                     ) : (
                         <React.Fragment>
-                            <Stack.Screen options={{title: 'Вход'}} name="login" component={LoginScreen}/>
-                            <Stack.Screen options={{title: 'Регистрация'}} name="registration" component={RegistrationScreen}/>
+                            <Stack.Screen options={{title: 'Вход'}}
+                                          name="login"
+                                          component={LoginScreen}/>
+                            <Stack.Screen options={{title: 'Регистрация'}}
+                                          name="registration"
+                                          component={RegistrationScreen}/>
                         </React.Fragment>
-
                     )
                 }
             </Stack.Navigator>
         </NavigationContainer>
     );
+});
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center"
+    },
+    horizontal: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        padding: 10
+    }
 });
