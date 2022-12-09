@@ -42,7 +42,7 @@ export class AuthStore {
 	}
 
 	async registration(userData: NewUserType) {
-		await authApi.registration(userData);
+		return await authApi.registration(userData);
 	}
 
 	async checkAuth(){

@@ -9,11 +9,12 @@ import LoginScreen from "../screen/LoginScreen";
 import RootStore from "../store/RootStore/root-store";
 import {getToken} from "../utils/utils";
 import {LoadingEnum} from "../store/Type/models";
+import RegistrationScreen from "../screen/RegistrationScreen";
 
 
 const Stack = createNativeStackNavigator();
 export const MainNavigation = observer(() => {
-    const {isLoading, setIsLoading} = NotificationStore;
+    const {isLoading} = NotificationStore;
     const {isAuth} = AuthStore;
 
     useEffect(() => {
@@ -26,16 +27,16 @@ export const MainNavigation = observer(() => {
     }
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="Main">
+            <Stack.Navigator initialRouteName="main">
                 {
                     isAuth ? (
-                        <Stack.Screen options={{title: 'Главная страница'}} name="main">
-                            {(props) => <MainScreen {...props} />}
-                        </Stack.Screen>
+                        <Stack.Screen options={{title: 'Главная страница'}} name="main" component={MainScreen}/>
                     ) : (
-                        <Stack.Screen options={{title: 'Вход'}} name="login">
-                            {(props) => <LoginScreen {...props} />}
-                        </Stack.Screen>
+                        <React.Fragment>
+                            <Stack.Screen options={{title: 'Вход'}} name="login" component={LoginScreen}/>
+                            <Stack.Screen options={{title: 'Регистрация'}} name="registration" component={RegistrationScreen}/>
+                        </React.Fragment>
+
                     )
                 }
             </Stack.Navigator>

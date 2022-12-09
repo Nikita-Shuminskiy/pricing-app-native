@@ -4,83 +4,119 @@ import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {Formik} from "formik";
 // @ts-ignore
 import logo from '../assets/logo/logo-pony-web.png'
-import Link from "../common/link";
-import Button from "../common/button";
+import Link from "../common/components/link";
+import Button from "../common/components/button";
 import AuthStore from "../store/AuthStore/auth-store";
+import LoginLayout from "../common/components/login-layout/login-layout";
+import SafeAreaView from "../common/components/safe-area-view/safe-area-view";
+import {colors} from "../assets/colors/colors";
+import iconsEnum from "../assets/ico-constants/icons-constants";
+import {Icon, Input} from 'react-native-elements';
+import regex from "../helpers/regex";
 
 type LoginScreenProps = {
     navigation: NavigationProp<ParamListBase>
 }
 const LoginScreen = ({navigation}: LoginScreenProps) => {
     const {login} = AuthStore
+    const [showPassword, setShowPassword] = useState(true)
 
-    const [data, setData] = useState<any>({
-        email: 'shuminskiy.nik@mail.ru',
-        password: '123123123'
-    })
-
-    const onSubmit = () => {
-        login({email: data.email, password: data.password})
+    const onSubmit = (values, {setFieldError, setSubmitting}) => {
+        login({email: values.email.trim(), password: values.password})
     }
     const onPressLink = () => {
         navigation.navigate('registration')
     }
-    return <View style={styles.container}>
-        <Image style={styles.logo} source={logo}/>
-        <View style={styles.inputContainer}>
-            <TextInput
-                style={styles.input}
-                onChange={input => setData({...data, email: input})}
-                autoCapitalize="none"
-                placeholder={'Логин'}
-                value={data.email}
+    return (
+        <SafeAreaView>
+            <LoginLayout>
+                <Formik
+                    initialValues={{
+                        email: '',
+                        password: '',
+                    }}
+                    validate={values => {
+                        const errors = {};
+                        if (!regex.email.test(values.email.trim())) {
+                            errors['inValidEmail'] = true;
+                        }
+                        return errors;
+                    }}
+                    onSubmit={onSubmit}
+                >
+                    {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
+                        <React.Fragment>
+                            <Image style={styles.logo} source={logo}/>
+                            <View style={styles.inputContainer}>
+                                <Input
+                                    style={styles.input}
+                                    onChangeText={handleChange('email')}
+                                    placeholder={'введите логин'}
+                                    value={values.email}
+                                    rightIcon={
+                                        <Icon
+                                            name={iconsEnum.EMAIL.name}
+                                            size={24}
+                                            color={colors.gray} tvParallaxProperties={undefined}/>
+                                    }
+                                    autoCompleteType={true}
+                                    onBlur={handleBlur('email')}
+                                    errorMessage={touched.email && errors.inValidEmail && 'Некорректно введен емейл'}
+                                    label={'Емайл'}
+                                />
+                                <Input
+                                    rightIcon={
+                                        <Icon
+                                            /*   raised*/
+                                            name={showPassword ? iconsEnum.LOCK.name : iconsEnum.LOCK_OPEN.name}
+                                            size={24}
+                                            onPress={() => setShowPassword(prevState => !prevState)}
+                                            color={colors.gray} tvParallaxProperties={undefined}/>
+                                    }
+                                    style={styles.input}
+                                    onChangeText={handleChange('password')}
+                                    placeholder={'введите пароль'}
+                                    onBlur={handleBlur('password')}
+                                    errorMessage={errors.inValidPassword && touched.password && 'Пароль должен содержать не меньше 4-рех символов'}
+                                    secureTextEntry={showPassword}
+                                    value={values.password}
+                                    autoCompleteType={true}
+                                    label={'Пароль'}
+                                />
+                                <Button
+                                    disabled={!!errors.inValidEmail || !!errors.inValidPassword}
+                                    title={'Вход'}
+                                    onPress={handleSubmit}
+                                />
+                            </View>
+                            <Link style={styles.link} text={'Регистрация'} onPress={onPressLink}/>
+                        </React.Fragment>
+                    )}
+                </Formik>
+            </LoginLayout>
+        </SafeAreaView>
 
-            />
-            <TextInput
-                style={styles.input}
-                onChange={input => setData({...data, password: input})}
-                autoCapitalize="none"
-                placeholder={'Пороль'}
-                value={data.password}
-
-            />
-            <Button
-                title={'Вход'}
-                onPress={onSubmit}
-            />
-        </View>
-        <Link style={styles.link} text={'Регистрация'} onPress={onPressLink}/>
-    </View>
+    )
 }
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'space-evenly'
-    },
     inputContainer: {
+        width: '100%',
         alignItems: 'center'
     },
     logo: {
         width: 100,
-        height: 50
+        height: 50,
+        marginBottom: 30,
     },
     input: {
-        padding: 10,
-        margin: 10,
-        borderWidth: 2,
-        borderColor: 'rgb(230, 231, 233)',
-        width: 200,
-        height: 50,
+        borderColor: colors.grayWhite,
     },
     error: {
-        color: 'red'
+        color: colors.red
     },
     link: {
-        marginTop: 10,
-        color: 'gray'
+        marginTop: 40,
     }
 });

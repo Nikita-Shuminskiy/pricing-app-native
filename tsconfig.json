@@ -10,8 +10,6 @@
     "strict": false,
     "useDefineForClassFields": true
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src", "src/custom.d.ts"],
   "extends": "expo/tsconfig.base"
 }
