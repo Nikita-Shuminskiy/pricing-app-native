@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Image, KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-native";
+import {Image, KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-native";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {Formik} from "formik";
 // @ts-ignore
@@ -12,37 +12,30 @@ import iconsEnum from "../constants/ico-constants/icons-constants";
 import {colors} from "../assets/colors/colors";
 import regex from "../helpers/regex";
 import SafeAreaView from "../common/components/safe-area-view/safe-area-view";
+import {createAlert} from "../common/components/alert";
 
 type PasswordScreenProps = {
     navigation: NavigationProp<ParamListBase>
 }
 
-const createAlert = () =>
-    Alert.alert(
-        "Alert",
-        "Error message",
-        [
-            {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-            },
-        ]
-    );
 
 const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
     const {registration} = AuthStore
     const [showPassword, setShowPassword] = useState(true)
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
-            registration({
-                email: values.email.trim(),
-                password: values.password,
-                name: values.name,
-                lastName: values.lastName
-            }).then((res) => {
-               if (!!res.data) return navigation.navigate('login')
-               return createAlert()
+        registration({
+            email: values.email.trim(),
+            password: values.password,
+            name: values.name,
+            lastName: values.lastName
+        }).then((res) => {
+            if (!!res.data) return navigation.navigate('login')
+            return createAlert({
+                title: 'Message',
+                message: 'Ошибка, попробуйте позже',
+                buttons: [{text: 'close', style: "cancel", onPress: () => console.log('')}]
             })
+        })
     }
     const onPressLink = () => {
         navigation.navigate('login')
@@ -53,11 +46,11 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
             <SafeAreaView>
                 <Formik
                     initialValues={{
-                        email: 'fffdsds@mail.ru',
-                        password: '11111',
-                        confirmPassword: '11111',
-                        name: '23',
-                        lastName: '111'
+                        email: '',
+                        password: '',
+                        confirmPassword: '',
+                        name: '',
+                        lastName: ''
                     }}
                     validate={values => {
                         const errors = {};
@@ -109,9 +102,9 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
                                             color={colors.gray} tvParallaxProperties={undefined}/>
                                     }
                                     autoCompleteType={true}
-                                    onBlur={handleBlur('email*')}
+                                    onBlur={handleBlur('email')}
                                     errorMessage={touched.email && errors.inValidEmail && 'Некорректно введен емейл'}
-                                    label={'Емайл'}
+                                    label={'Емайл*'}
                                 />
                                 <Input
                                     rightIcon={
@@ -153,6 +146,7 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
                                 />
                                 <Button
                                     disabled={!!errors.inValidConfirmPassword || !!errors.inValidPassword || !!errors.inValidPassword}
+                                    styleContainer={styles.button}
                                     title={'Регистрация'}
                                     onPress={handleSubmit}
                                 />
@@ -178,7 +172,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     logo: {
-        width: 100,
+        width: 120,
         height: 50,
         marginBottom: 30,
     },
@@ -188,6 +182,9 @@ const styles = StyleSheet.create({
     },
     error: {
         color: 'red'
+    },
+    button: {
+        marginTop: 30
     },
     link: {
         marginTop: 40,
