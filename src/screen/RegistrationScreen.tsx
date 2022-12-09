@@ -8,7 +8,7 @@ import Link from "../common/components/link";
 import Button from '../common/components/button';
 import AuthStore from "../store/AuthStore/auth-store";
 import {Icon, Input} from "react-native-elements";
-import iconsEnum from "../assets/ico-constants/icons-constants";
+import iconsEnum from "../constants/ico-constants/icons-constants";
 import {colors} from "../assets/colors/colors";
 import regex from "../helpers/regex";
 import SafeAreaView from "../common/components/safe-area-view/safe-area-view";

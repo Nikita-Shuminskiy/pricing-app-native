@@ -10,7 +10,7 @@ import AuthStore from "../store/AuthStore/auth-store";
 import LoginLayout from "../common/components/login-layout/login-layout";
 import SafeAreaView from "../common/components/safe-area-view/safe-area-view";
 import {colors} from "../assets/colors/colors";
-import iconsEnum from "../assets/ico-constants/icons-constants";
+import iconsEnum from "../constants/ico-constants/icons-constants";
 import {Icon, Input} from 'react-native-elements';
 import regex from "../helpers/regex";
 
