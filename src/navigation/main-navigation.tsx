@@ -1,1 +1,61 @@
-import React, {useEffect} from 'react';import {NavigationContainer} from "@react-navigation/native";import {MainScreen} from "../screen/MainScreen";import {createNativeStackNavigator} from "@react-navigation/native-stack";import {observer} from "mobx-react-lite";import AuthStore from "../store/AuthStore/auth-store";import NotificationStore from "../store/NotificationStore";import LoginScreen from "../screen/LoginScreen";import RootStore from "../store/RootStore/root-store";import {getToken} from "../utils/utils";import {LoadingEnum} from "../store/Type/models";import RegistrationScreen from "../screen/RegistrationScreen";import {ActivityIndicator, View, StyleSheet} from "react-native";import {colors} from "../assets/colors/colors";import {routerConstants} from "../constants/router-constants/router-constants";const Stack = createNativeStackNavigator();export const MainNavigation = observer(() => {    const {isLoading} = NotificationStore;    const {isAuth} = AuthStore;    useEffect(() => {        if (getToken()) {            RootStore.AuthStoreService.checkAuth();        }    }, []);    if (isLoading === LoadingEnum.fetching) {        return <View style={[style.container, style.horizontal]}>            <ActivityIndicator size="large" color={colors.orange}/>        </View>    }    return (        <NavigationContainer>            <Stack.Navigator>                {                    isAuth ? (                        <Stack.Screen options={{title: 'Главная страница'}} name={routerConstants.MAIN} component={MainScreen}/>                    ) : (                        <React.Fragment>                            <Stack.Screen options={{title: 'Вход'}} name={routerConstants.LOGIN} component={LoginScreen}/>                            <Stack.Screen options={{title: 'Регистрация'}} name={routerConstants.REGISTRATION}                                          component={RegistrationScreen}/>                        </React.Fragment>                    )                }            </Stack.Navigator>        </NavigationContainer>    );});const style = StyleSheet.create({    container: {        flex: 1,        justifyContent: "center",    },    horizontal: {        flexDirection: "row",        justifyContent: "space-around",        padding: 10,    },})
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {routerConstants} from "../constants/router-constants/router-constants";
+import {MainScreen} from "../screen/mainScreen/MainScreen";
+import {Icon} from "react-native-elements";
+import WalletScreen from "../screen/mainScreen/WalletScreen";
+import {colors} from "../assets/colors/colors";
+import WalletsScreen from "../screen/mainScreen/WalletScreen";
+
+const Tab = createMaterialBottomTabNavigator();
+
+const MainNavigation = () => {
+
+    return (
+        <Tab.Navigator
+            screenOptions={({route}) => ({
+                tabBarIcon: ({focused, color}) => {
+                    let iconName;
+
+                    if (route.name === 'wallets') {
+                        iconName = focused
+                            ? 'account-balance-wallet'
+                            : 'account-balance-wallet'
+                    } else if (route.name === 'work-space') {
+                        iconName = focused ? 'tablet-android' : 'tablet-android';
+                    } else if (route.name === 'chart') {
+                        iconName = focused ? 'bar-chart' : 'bar-chart';
+                    } else if (route.name === 'settings') {
+                        iconName = focused ? 'app-settings-alt' : 'app-settings-alt';
+                    }
+
+                    return (
+                        <Icon
+                            name={iconName}
+                            size={24}
+                            color={color}
+                            tvParallaxProperties={undefined}/>
+                    )
+                },
+            })}
+            activeColor={colors.orange}
+            barStyle={{
+                backgroundColor: colors.white,
+            }}
+        >
+            <Tab.Screen options={{tabBarLabel: 'Кошельки'}}
+                        name={routerConstants.WALLETS}
+                        component={WalletsScreen}/>
+            <Tab.Screen options={{tabBarLabel: 'История'}}
+                        name={routerConstants.WORK_SPACE}
+                        component={MainScreen}/>
+            <Tab.Screen options={{tabBarLabel: 'График'}}
+                        name={routerConstants.CHART}
+                        component={MainScreen}/>
+            <Tab.Screen options={{tabBarLabel: 'Настройки'}}
+                        name={routerConstants.SETTINGS}
+                        component={MainScreen}/>
+        </Tab.Navigator>
+    );
+};
+
+export default MainNavigation;

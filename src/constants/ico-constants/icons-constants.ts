@@ -265,6 +265,22 @@ const iconsEnum = {
 		type: 'materialIcon',
 		name: 'check-circle-outline',
 	},
+	WALLET: {
+		type: 'antdesign',
+		name: 'wallet',
+	},
+	WALLET_OUTLINE: {
+		type: 'ionicons',
+		name: 'wallet-outline',
+	},
+	TABLE: {
+		type: 'antdesign',
+		name: 'table',
+	},
+	CHART: {
+		type: 'ionicons',
+		name: 'bar-chart',
+	},
 };
 
 const types = {

@@ -3,16 +3,17 @@ import {Image, KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-n
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {Formik} from "formik";
 // @ts-ignore
-import logo from '../assets/logo/logo-pony-web.png'
-import Link from "../common/components/link";
-import Button from '../common/components/button';
-import AuthStore from "../store/AuthStore/auth-store";
+import logo from '../../assets/logo/logo-pony-web.png'
+import Link from "../../common/components/link";
+import Button from '../../common/components/button';
+import AuthStore from "../../store/AuthStore/auth-store";
 import {Icon, Input} from "react-native-elements";
-import iconsEnum from "../constants/ico-constants/icons-constants";
-import {colors} from "../assets/colors/colors";
-import regex from "../helpers/regex";
-import SafeAreaView from "../common/components/safe-area-view/safe-area-view";
-import {createAlert} from "../common/components/alert";
+import iconsEnum from "../../constants/ico-constants/icons-constants";
+import {colors} from "../../assets/colors/colors";
+import regex from "../../helpers/regex";
+import SafeAreaView from "../../common/components/safe-area-view";
+import {createAlert} from "../../common/components/alert";
+import {routerConstants} from "../../constants/router-constants/router-constants";
 
 type PasswordScreenProps = {
     navigation: NavigationProp<ParamListBase>
@@ -29,7 +30,7 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
             name: values.name,
             lastName: values.lastName
         }).then((res) => {
-            if (!!res.data) return navigation.navigate('login')
+            if (!!res.data) return navigation.navigate(routerConstants.LOGIN)
             return createAlert({
                 title: 'Message',
                 message: 'Ошибка, попробуйте позже',
@@ -38,7 +39,7 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
         })
     }
     const onPressLink = () => {
-        navigation.navigate('login')
+        navigation.navigate(routerConstants.LOGIN)
     }
     return (
 

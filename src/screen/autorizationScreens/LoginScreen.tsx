@@ -3,17 +3,18 @@ import {Image, StyleSheet, Text, TextInput, View} from "react-native";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {Formik} from "formik";
 // @ts-ignore
-import logo from '../assets/logo/logo-pony-web.png'
-import Link from "../common/components/link";
-import Button from "../common/components/button";
-import AuthStore from "../store/AuthStore/auth-store";
-import LoginLayout from "../common/components/login-layout/login-layout";
-import SafeAreaView from "../common/components/safe-area-view/safe-area-view";
-import {colors} from "../assets/colors/colors";
-import iconsEnum from "../constants/ico-constants/icons-constants";
+import logo from '../../assets/logo/logo-pony-web.png'
+import Link from "../../common/components/link";
+import Button from "../../common/components/button";
+import AuthStore from "../../store/AuthStore/auth-store";
+import LoginLayout from "../../common/components/login-layout";
+import SafeAreaView from "../../common/components/safe-area-view";
+import {colors} from "../../assets/colors/colors";
+import iconsEnum from "../../constants/ico-constants/icons-constants";
 import {Icon, Input} from 'react-native-elements';
-import regex from "../helpers/regex";
-import {createAlert} from "../common/components/alert";
+import regex from "../../helpers/regex";
+import {createAlert} from "../../common/components/alert";
+import {routerConstants} from "../../constants/router-constants/router-constants";
 
 type LoginScreenProps = {
     navigation: NavigationProp<ParamListBase>
@@ -26,7 +27,7 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
         login({email: values.email.trim(), password: values.password})
     }
     const onPressLink = () => {
-        navigation.navigate('registration')
+        navigation.navigate(routerConstants.REGISTRATION)
     }
     return (
         <SafeAreaView>

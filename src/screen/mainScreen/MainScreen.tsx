@@ -1,21 +1,19 @@
 import React from 'react';
 import {StyleSheet, View, Text, Button} from "react-native";
 import {NavigationProp, ParamListBase} from '@react-navigation/native';
-import authStore from "../store/AuthStore/auth-store";
+import authStore from "../../store/AuthStore/auth-store";
+import SafeAreaView from "../../common/components/safe-area-view";
 
 type HomeScreenProps = {
     navigation: NavigationProp<ParamListBase>
 }
-export const MainScreen = ({ navigation }: HomeScreenProps) => {
+export const MainScreen = ({navigation}: HomeScreenProps) => {
     const {logOutUser} = authStore
-    return (
-        <View style={styles.container}>
-            <Text> Добро пожаловать </Text>
-            <Button
-                title={"Выход"}
-                onPress={() => logOutUser()}
-            />
+    return (<SafeAreaView>
+            <View style={styles.container}>
+
         </View>
+    </SafeAreaView>
     );
 };
 
@@ -26,9 +24,4 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    img: {
-        width: 50,
-        height: 200,
-        resizeMode: 'stretch',
-    }
 });
