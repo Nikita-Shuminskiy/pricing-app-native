@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect} from "react";
 import {Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import SafeAreaView from "../components/safe-area-view";
 import {Formik} from "formik";
@@ -10,10 +10,10 @@ import Button from "../components/button";
 // @ts-ignore
 import wallet from '../../assets/images/wallet.png';
 import WalletStore from "../../store/WalletStore/wallet-store";
-import {Picker} from "@react-native-picker/picker";
 import HistoryStore from "../../store/HistoryStore/history-store";
 import SelectPicker from "../components/picker";
 import {createAlert} from "../components/alert";
+import {CurrencyType} from "../../store/Type/models";
 
 type ModalWindowType = {
     onClose: () => void
@@ -102,7 +102,8 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                         labelStyle={{color: colors.gray}}
                                     />
 
-                                    <SelectPicker arrItem={allCurrencyList ? allCurrencyList : []}
+                                    <SelectPicker<CurrencyType>
+                                                  arrItem={allCurrencyList ? allCurrencyList : []}
                                                   defaultLabel={'Выберете валюту'}
                                                   onValueChange={handleChange('currency')}
                                                   values={values.currency}

@@ -36,7 +36,7 @@ const SelectPicker = function <T>({
                 {
                     arrItem.map((list, index) => {
                         // @ts-ignore
-                        return <Picker.Item color={colors.black} label={list.value} value={list._id}/>
+                        return <Picker.Item color={colors.black} label={list.value} value={list.value}/>
                     })
                 }
             </Picker>

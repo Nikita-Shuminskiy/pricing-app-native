@@ -55,7 +55,7 @@ export const DetailInfoWalletScreen = ({navigation}: DetailInfoWalletModalType) 
                     <View style={styles.lastHistoryBlock}>
                         <Text style={styles.textHeader}>3 Последних траты</Text>
                         <View>
-
+                            
                         </View>
                     </View>
                 </View>
@@ -74,7 +74,8 @@ const styles = StyleSheet.create({
     textHeader: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: colors.gray
+        color: colors.white,
+        marginBottom: 20
     },
     lastHistoryBlock: {},
     body: {

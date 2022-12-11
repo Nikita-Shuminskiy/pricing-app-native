@@ -38,7 +38,6 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     })
 
     const onPressTouchWallet = (wallet: WalletModelType) => {
-        console.log(wallet.history)
         setChosenWallet(wallet)
         navigation.navigate(routerConstants.DETAIL_INFO_WALLET)
     }
