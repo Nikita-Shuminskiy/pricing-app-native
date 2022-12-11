@@ -1,11 +1,10 @@
-import {authApi} from './authApi';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const API_URL = 'https://pone-server-production.up.railway.app/api/';
-export const API_URL_PHILL = 'https://pony-web-server-production.up.railway.app/api';
+export const API_URL_PHILL = 'https://server-pricing-production.up.railway.app/api';
 export const instance = axios.create({
-    baseURL: API_URL,
+    baseURL: API_URL_PHILL,
 });
 
 // Request interceptor for API calls

@@ -2,9 +2,9 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import {routerConstants} from "../constants/router-constants/router-constants";
 import {MainScreen} from "../screen/mainScreen/MainScreen";
 import {Icon} from "react-native-elements";
-import WalletScreen from "../screen/mainScreen/WalletScreen";
-import {colors} from "../assets/colors/colors";
 import WalletsScreen from "../screen/mainScreen/WalletScreen";
+import {colors} from "../assets/colors/colors";
+import WalletNavigation from "./WalletNavigation";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -44,7 +44,7 @@ const MainNavigation = () => {
         >
             <Tab.Screen options={{tabBarLabel: 'Кошельки'}}
                         name={routerConstants.WALLETS}
-                        component={WalletsScreen}/>
+                        component={WalletNavigation}/>
             <Tab.Screen options={{tabBarLabel: 'История'}}
                         name={routerConstants.WORK_SPACE}
                         component={MainScreen}/>

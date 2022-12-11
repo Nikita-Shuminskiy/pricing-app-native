@@ -10,11 +10,19 @@ import wallet from '../../assets/images/wallet.png';
 import {FontAwesome} from '@expo/vector-icons';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import {AddWalletModal} from "../../common/modals/add-wallet-modal";
+// @ts-ignore
+import logo from "../../assets/logo/logo-pony-web.png";
+import {NavigationProp, ParamListBase} from "@react-navigation/native";
+import {routerConstants} from "../../constants/router-constants/router-constants";
 
 
-type WalletScreenProps = {}
-const WalletsScreen = observer(({}: WalletScreenProps) => {
-    const {getWallets, userId, wallets} = WalletStore
+type WalletScreenProps = {
+    navigation: NavigationProp<ParamListBase>
+}
+const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
+    const [modalAddWallet, setModalAddWallet] = useState(false);
+    const {getWallets, userId, wallets, setChosenWallet} = WalletStore
+
     useEffect(() => {
         getWallets(userId)
     }, [])
@@ -30,7 +38,9 @@ const WalletsScreen = observer(({}: WalletScreenProps) => {
     })
 
     const onPressTouchWallet = (wallet: WalletModelType) => {
-        alert('Id : ' + wallet?._id + ' Value : ' + wallet?.name);
+        console.log(wallet.history)
+        setChosenWallet(wallet)
+        navigation.navigate(routerConstants.DETAIL_INFO_WALLET)
     }
     const WalletView = ({item}) => {
         return (
@@ -60,21 +70,21 @@ const WalletsScreen = observer(({}: WalletScreenProps) => {
 
         );
     };
-    const [modalAddWallet, setModalAddWallet] = useState(false);
+
     return (
         <>
             <SafeAreaView>
                 <View style={styles.addWalletContainer}>
                     <TouchableOpacity onPress={onPressButton}>
-                        <AntDesign style={styles.imgAddWallet} name="pluscircleo" size={40} color={colors.orange}/>
+                        <AntDesign style={styles.imgAddWallet} name={"pluscircleo"} size={40} color={colors.orange}/>
                     </TouchableOpacity>
+                    <Image style={styles.logo} resizeMode={'contain'} source={logo}/>
                 </View>
                 <View style={styles.container}>
                     <FlatList
                         data={wallets}
                         renderItem={WalletView}
                         keyExtractor={(item, index) => index.toString()}
-                        /*    horizontal={true}*/
                         numColumns={2}
                         /*contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}*/
                     />
@@ -93,8 +103,6 @@ const styles = StyleSheet.create({
     },
     walletContainer: {
         backfaceVisibility: 'hidden',
-        /*   borderWidth: 1,
-           borderColor: colors.white,*/
         alignItems: 'center',
         backgroundColor: colors.white,
         width: 170,
@@ -109,18 +117,24 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.34,
         shadowRadius: 6.27,
-
         elevation: 10
-
+    },
+    logo: {
+        width: 80,
+        height: 80,
+        marginRight: 5,
     },
     addWalletContainer: {
-        width: '100%'
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: "center"
 
     },
     imgAddWallet: {
         width: 50,
         height: 50,
-        marginTop: 20,
+        marginTop: 10,
         marginLeft: 15,
     },
     walletName: {

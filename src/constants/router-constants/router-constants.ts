@@ -8,5 +8,5 @@ export const routerConstants = {
     WORK_SPACE: 'work-space',
     ADD_WALLET: 'add-wallet',
     CHANGE_WALLET: 'change-wallet',
-    ADD_SPEND: 'add-spend'
+    DETAIL_INFO_WALLET: 'detail-info-wallet'
 }
