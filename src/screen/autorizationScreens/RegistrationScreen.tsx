@@ -32,9 +32,9 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
         }).then((res) => {
             if (!!res.data) return navigation.navigate(routerConstants.LOGIN)
             return createAlert({
-                title: 'Message',
+                title: 'Сообщение',
                 message: 'Ошибка, попробуйте позже',
-                buttons: [{text: 'close', style: "cancel", onPress: () => console.log('')}]
+                buttons: [{text: 'Закрыть', style: "cancel", onPress: () => console.log('')}]
             })
         })
     }

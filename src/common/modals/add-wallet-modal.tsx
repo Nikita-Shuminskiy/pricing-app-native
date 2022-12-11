@@ -12,6 +12,8 @@ import wallet from '../../assets/images/wallet.png';
 import WalletStore from "../../store/WalletStore/wallet-store";
 import {Picker} from "@react-native-picker/picker";
 import HistoryStore from "../../store/HistoryStore/history-store";
+import SelectPicker from "../components/picker";
+import {createAlert} from "../components/alert";
 
 type ModalWindowType = {
     onClose: () => void
@@ -22,9 +24,14 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
     const {allCurrencyList, getCurrencyList} = HistoryStore
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
         addWallet(values).then(res => {
-            console.log(res.data)
             if (!!res.data) {
                 onClose()
+            } else {
+                return createAlert({
+                    title: 'Ошибка',
+                    message: 'Ошибка, попробуйте позже',
+                    buttons: [{text: 'Закрыть', style: "cancel", onPress: () => console.log('')}]
+                })
             }
         })
     }
@@ -74,6 +81,7 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                     <Input
                                         style={styles.input}
                                         onChangeText={handleChange('name')}
+                                        labelStyle={{color: colors.gray}}
                                         placeholder={'введите имя кошелька'}
                                         value={values.name}
                                         autoCompleteType={true}
@@ -82,6 +90,7 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                         label={'Имя'}
                                     />
                                     <Input
+                                        keyboardType={'numeric'}
                                         style={styles.input}
                                         onChangeText={handleChange('balance')}
                                         placeholder={'введите баланс'}
@@ -90,23 +99,20 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                         value={values.balance}
                                         autoCompleteType={false}
                                         label={'Баланс'}
+                                        labelStyle={{color: colors.gray}}
                                     />
-                                    <Picker
-                                        placeholder={'Выберете валюту'}
-                                        style={styles.picker}
-                                        mode={'dialog'}
-                                        selectedValue={values.currency}
-                                        onBlur={handleBlur('currency')}
-                                        onValueChange={handleChange('currency')}>
-                                        <Picker.Item label={'Выберете валюту'} value={''}/>
-                                        {
-                                            allCurrencyList && allCurrencyList.map((list, index) => {
-                                                return <Picker.Item label={list.value} value={list._id}/>
-                                            })
-                                        }
-                                    </Picker>
+
+                                    <SelectPicker arrItem={allCurrencyList ? allCurrencyList : []}
+                                                  defaultLabel={'Выберете валюту'}
+                                                  onValueChange={handleChange('currency')}
+                                                  values={values.currency}
+                                                  styles={styles.picker}
+                                                  label={'Валюта'}
+                                                  onBlur={handleBlur('currency')}/>
                                     {errors.inValidCurrency && touched.currency &&
-                                        <Text style={{color: 'red'}}>Поля обязательно</Text>}
+                                        <Text style={styles.textError}>Поля
+                                            обязательно</Text>
+                                    }
                                     <View style={styles.buttonContainer}>
                                         <Button
                                             disabled={!!errors.inValidCurrency || !!errors.inValidName || !!errors.inValidBalance}
@@ -118,6 +124,7 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                             title={'Отмена'}
                                             onPress={() => onClose()}
                                             styleContainer={styles.buttonCancel}
+                                            styleText={styles.btnCancelText}
                                         />
                                     </View>
                                 </View>
@@ -129,6 +136,7 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
         </Modal>
     )
 }
+
 const styles = StyleSheet.create({
     formikContainer: {
         flex: 1,
@@ -147,12 +155,15 @@ const styles = StyleSheet.create({
         height: 120,
     },
     picker: {
-        width: '100%',
-        borderBottomWidth: 1,
-        borderColor: 'black'
     },
     buttonCancel: {
-        margin: 10
+        margin: 10,
+        backgroundColor: colors.white,
+        borderWidth: 1,
+        borderColor: colors.gray
+    },
+    btnCancelText: {
+        color: colors.black,
     },
     buttonSave: {
         margin: 10
@@ -163,7 +174,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     buttonContainer: {
-        marginTop: 40,
+        marginTop: 60,
         flexDirection: 'row'
     },
     logo: {
@@ -179,5 +190,13 @@ const styles = StyleSheet.create({
     },
     link: {
         marginTop: 30,
+    },
+    textError: {
+        color: 'red',
+        width: "100%",
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        fontSize: 12,
+        marginLeft: 30
     }
 });

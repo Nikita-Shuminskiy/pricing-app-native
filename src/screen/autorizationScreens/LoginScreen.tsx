@@ -13,7 +13,6 @@ import {colors} from "../../assets/colors/colors";
 import iconsEnum from "../../constants/ico-constants/icons-constants";
 import {Icon, Input} from 'react-native-elements';
 import regex from "../../helpers/regex";
-import {createAlert} from "../../common/components/alert";
 import {routerConstants} from "../../constants/router-constants/router-constants";
 
 type LoginScreenProps = {
