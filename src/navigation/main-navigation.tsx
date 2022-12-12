@@ -4,7 +4,7 @@ import {MainScreen} from "../screen/mainScreen/MainScreen";
 import {Icon} from "react-native-elements";
 import WalletsScreen from "../screen/mainScreen/WalletScreen";
 import {colors} from "../assets/colors/colors";
-import WalletNavigation from "./WalletNavigation";
+import WalletNavigation from "./wallet-navigation";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -33,7 +33,7 @@ const MainNavigation = () => {
                             name={iconName}
                             size={24}
                             color={color}
-                            tvParallaxProperties={undefined}/>
+                            tvParallaxProperties={null}/>
                     )
                 },
             })}

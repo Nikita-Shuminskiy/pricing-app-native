@@ -14,6 +14,7 @@ import {AddWalletModal} from "../../common/modals/add-wallet-modal";
 import logo from "../../assets/logo/logo-pony-web.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/router-constants/router-constants";
+import rootStore from "../../store/RootStore/root-store";
 
 
 type WalletScreenProps = {
@@ -21,10 +22,12 @@ type WalletScreenProps = {
 }
 const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     const [modalAddWallet, setModalAddWallet] = useState(false);
-    const {getWallets, userId, wallets, setChosenWallet} = WalletStore
+    const { userId, wallets, setChosenWallet} = WalletStore
 
     useEffect(() => {
-        getWallets(userId)
+        if(!wallets) {
+            rootStore.WalletStoreService.getWallets(userId)
+        }
     }, [])
 
     const onPressButton = () => {

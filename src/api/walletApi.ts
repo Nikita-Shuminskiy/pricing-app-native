@@ -5,36 +5,15 @@ import NotificationStore from "../store/NotificationStore/notification-store";
 
 export const walletApi = {
 
-    async getWallet(walletId: string, userId: string): Promise<AxiosResponse<WalletModelType>> {
-        NotificationStore.setIsLoading(LoadingEnum.fetching)
-        try {
-            return await instance.get<WalletModelType>(`wallet?walletId=${walletId}&userId=${userId}`);
-        } catch (e) {
-            return e
-        } finally {
-            NotificationStore.setIsLoading(LoadingEnum.success)
-        }
+    getWallet(walletId: string, userId: string) {
+        return instance.get<WalletModelType>(`wallet?walletId=${walletId}&userId=${userId}`);
     },
-     getWallets(userId: string): Promise<AxiosResponse<WalletModelType[]>> {
-        NotificationStore.setIsLoading(LoadingEnum.fetching)
-        try {
-            return instance.get(`wallet/wallets?userId=${userId}`);
-        } catch (e) {
-            return e
-        } finally {
-            NotificationStore.setIsLoading(LoadingEnum.success)
-        }
+    getWallets(userId: string) {
+        return instance.get<WalletModelType[]>(`wallet/wallets?userId=${userId}`)
     },
-   async addWallet(newWallet: NewWalletType): Promise<AxiosResponse<any>> {
+    addWallet(newWallet: NewWalletType) {
         const {userId, name, currency, balance} = newWallet;
-        NotificationStore.setIsLoading(LoadingEnum.fetching)
-        try {
-            return await instance.post(`wallet`, {userId, wallet: {name, currency, balance}});
-        } catch (e) {
-            return e
-        } finally {
-            NotificationStore.setIsLoading(LoadingEnum.success)
-        }
+        return instance.post(`wallet`, {userId, wallet: {name, currency, balance}});
     },
     async addSpendToWallet(walletId: string, spendingId: string): Promise<AxiosResponse<SpendingModel>> {
         NotificationStore.setIsLoading(LoadingEnum.fetching)
@@ -47,17 +26,17 @@ export const walletApi = {
         }
     },
     async removeWallet(userId: string, walletId: string): Promise<AxiosResponse<any>> {
-        NotificationStore.setIsLoading(LoadingEnum.fetching)
+        /*     NotificationStore.setIsLoading(LoadingEnum.fetching)*/
         try {
             return await instance.delete('history/wallet', {data: {userId, walletId}});
         } catch (e) {
             return e
         } finally {
-            NotificationStore.setIsLoading(LoadingEnum.success)
+            /*     NotificationStore.setIsLoading(LoadingEnum.success)*/
         }
     },
     //
-     getCurrencyList(): Promise<AxiosResponse<CurrencyType[]>> {
+    getCurrencyList(): Promise<AxiosResponse<CurrencyType[]>> {
         NotificationStore.setIsLoading(LoadingEnum.fetching)
         try {
             return instance.get<CurrencyType[]>('wallet/currency-list');
@@ -67,14 +46,8 @@ export const walletApi = {
             NotificationStore.setIsLoading(LoadingEnum.success)
         }
     },
-    async updateWallet(walletId: string, wallet: WalletModelType): Promise<AxiosResponse<WalletModelType>> {
-        NotificationStore.setIsLoading(LoadingEnum.fetching)
-        try {
-            return await instance.put<WalletModelType>('wallet', {walletId, wallet});
-        } catch (e) {
-            return e
-        } finally {
-            NotificationStore.setIsLoading(LoadingEnum.success)
-        }
+    updateWallet(walletId: string, wallet: WalletModelType): Promise<AxiosResponse<WalletModelType>> {
+        return instance.put<WalletModelType>('wallet', {walletId, wallet});
+
     },
 };

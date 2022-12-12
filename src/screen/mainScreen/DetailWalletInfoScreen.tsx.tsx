@@ -1,5 +1,5 @@
-import React from "react";
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import React, {useState} from "react";
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import SafeAreaView from "../../common/components/safe-area-view";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import WalletStore from "../../store/WalletStore/wallet-store";
@@ -7,6 +7,11 @@ import {colors} from "../../assets/colors/colors";
 // @ts-ignore
 import wallet from '../../assets/images/wallet.png';
 import {convertToDate, dateFormat} from "../../utils/utils";
+import {FontAwesome5} from '@expo/vector-icons';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {createAlert} from "../../common/components/alert";
+import RootStore from "../../store/RootStore/root-store";
+import {ChangeWalletModal} from "../../common/modals/change-wallet-modal";
 
 type DetailInfoWalletModalType = {
     navigation: NavigationProp<ParamListBase>
@@ -14,52 +19,73 @@ type DetailInfoWalletModalType = {
 //  топ 5 последний трат
 // топ 3 категории трат
 export const DetailInfoWalletScreen = ({navigation}: DetailInfoWalletModalType) => {
+    const [modalChangeWallet, setModalChangeWallet] = useState(false);
     const {chosenWallet} = WalletStore
-    const lastSpends =  chosenWallet?.history?.sort((a, b) => {
-        if (a.createdAt > b.createdAt) {
-            return 1
-        } else {
-            return -1
-        }
-    }).slice(0, 3)
+    const lastSpends = chosenWallet?.history?.sort((a, b) => a.createdAt > b.createdAt ? 1 : -1).slice(0, 3)
+    const confirmDeleteWallet = () => {
+        createAlert({
+            title: 'Удаление кошелька',
+            message: 'Вы действительно хотите удалить кошелек ?',
+            buttons: [
+                {text: 'Удалить', style: "cancel", onPress: onPressRemove},
+                {text: 'Не удалять', style: "destructive"}
+            ]
+        })
+    }
+    const onPressRemove = () => {
+        RootStore.WalletStoreService.removeWallet(chosenWallet.userId, chosenWallet._id)
+    }
+    const onPressChangeWallet = () => {
+        setModalChangeWallet(true)
+    }
     return (
         <ScrollView style={{width: '100%'}}>
             <SafeAreaView>
                 <View style={styles.container}>
-                    <View style={{alignItems: 'center'}}>
-                        <Image style={styles.logo} resizeMode={'contain'} source={wallet}/>
+
+                    <Image style={styles.logo} resizeMode={'contain'} source={wallet}/>
+                    <View style={styles.headerContainer}>
+                        <TouchableOpacity onPress={onPressChangeWallet}>
+                            <FontAwesome5 name={"edit"} size={24} color={colors.orange}/>
+                        </TouchableOpacity>
                         <Text style={styles.textHeader}>Мой кошелек</Text>
+                        <TouchableOpacity onPress={confirmDeleteWallet}>
+                            <MaterialIcons name={"delete-sweep"} size={30}
+                                           color={colors.red}/>
+                        </TouchableOpacity>
                     </View>
+
                     <View style={styles.body}>
                         <View style={styles.blockText}>
                             <Text style={styles.textName}>Имя:</Text>
-                            <Text style={styles.text}>{chosenWallet.name}</Text>
+                            <Text style={styles.text}>{chosenWallet?.name}</Text>
                         </View>
                         <View style={styles.blockText}>
                             <Text style={styles.textName}>Валюта:</Text>
-                            <Text style={styles.text}>{chosenWallet.currency}</Text>
+                            <Text style={styles.text}>{chosenWallet?.currency}</Text>
                         </View>
                         <View style={styles.blockText}>
                             <Text style={styles.textName}>Баланс:</Text>
-                            <Text style={styles.text}>{chosenWallet.balance}</Text>
+                            <Text style={styles.text}>{chosenWallet?.balance}</Text>
                         </View>
                         <View style={styles.blockText}>
                             <Text style={styles.textName}>Всего Трат:</Text>
-                            <Text style={styles.text}>{chosenWallet.totalSpends}</Text>
+                            <Text style={styles.text}>{chosenWallet?.totalSpends ? chosenWallet?.totalSpends : 0}</Text>
                         </View>
                         <View style={styles.blockText}>
                             <Text style={styles.textName}>Дата создания кошелька:</Text>
-                            <Text style={styles.text}>{dateFormat(convertToDate(chosenWallet.createdAt))}</Text>
+                            <Text style={styles.text}>{dateFormat(convertToDate(chosenWallet?.createdAt))}</Text>
                         </View>
                     </View>
                     <View style={styles.lastHistoryBlock}>
                         <Text style={styles.textHeader}>3 Последних траты</Text>
                         <View>
-                            
+
                         </View>
                     </View>
                 </View>
             </SafeAreaView>
+            <ChangeWalletModal visible={modalChangeWallet} onClose={() => setModalChangeWallet(false)}/>
         </ScrollView>
     )
 }
@@ -74,11 +100,17 @@ const styles = StyleSheet.create({
     textHeader: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: colors.white,
+    },
+    headerContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
         marginBottom: 20
     },
     lastHistoryBlock: {},
     body: {
+        margin: 20,
         flexDirection: 'column',
         alignItems: 'flex-start'
     },
@@ -88,8 +120,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     text: {
+        flexShrink: 1,
         fontSize: 18,
-        color: colors.white
     },
     textName: {
         fontSize: 18,

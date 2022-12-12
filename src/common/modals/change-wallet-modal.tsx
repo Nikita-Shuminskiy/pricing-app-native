@@ -14,19 +14,25 @@ import HistoryStore from "../../store/HistoryStore/history-store";
 import SelectPicker from "../components/picker";
 import {CurrencyType} from "../../store/Type/models";
 import rootStore from "../../store/RootStore/root-store";
+import {observer} from "mobx-react-lite";
 
-type ModalWindowType = {
+type ChangeWalletModalType = {
     onClose: () => void
     visible: boolean
 }
-export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
-    const { userId} = WalletStore
+export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModalType) => {
+    const {userId, chosenWallet} = WalletStore
     const {allCurrencyList, getCurrencyList} = HistoryStore
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
-        rootStore.WalletStoreService.addWallet(values)
+        rootStore.WalletStore.getWallet(chosenWallet?._id);
+        rootStore.WalletStoreService.updateWallet(chosenWallet._id, values, true).then((res) => {
+            if (res) {
+                onClose()
+            }
+        })
     }
     useEffect(() => {
-        if(!allCurrencyList) {
+        if (!allCurrencyList) {
             getCurrencyList()
         }
     }, [])
@@ -35,17 +41,14 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
             animationType="slide"
             transparent={false}
             visible={visible}
-            onRequestClose={() => {
-                onClose()
-            }}
         >
             <ScrollView style={{width: '100%'}}>
                 <SafeAreaView>
                     <Formik
                         initialValues={{
-                            name: '',
-                            balance: '',
-                            currency: '',
+                            name: chosenWallet?.name,
+                            balance: chosenWallet?.balance,
+                            currency: chosenWallet?.currency,
                             userId: userId
                         }}
                         validate={values => {
@@ -67,9 +70,8 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                         {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
                             <View style={styles.formikContainer}>
                                 <Image style={styles.img} source={wallet}/>
-                                <Text style={styles.textCreate}>Создание кошелька</Text>
+                                <Text style={styles.textCreate}>Редактирование кошелька</Text>
                                 <View style={styles.container}>
-
                                     <Input
                                         style={styles.input}
                                         onChangeText={handleChange('name')}
@@ -88,20 +90,19 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                         placeholder={'введите баланс'}
                                         onBlur={handleBlur('balance')}
                                         errorMessage={errors.inValidBalance && touched.balance && 'Поля обязательно'}
-                                        value={values.balance}
+                                        value={String(values.balance)}
                                         autoCompleteType={false}
                                         label={'Баланс'}
                                         labelStyle={{color: colors.gray}}
                                     />
-
                                     <SelectPicker<CurrencyType>
-                                                  arrItem={allCurrencyList ? allCurrencyList : []}
-                                                  defaultLabel={'Выберете валюту'}
-                                                  onValueChange={handleChange('currency')}
-                                                  values={values.currency}
-                                                  styles={styles.picker}
-                                                  label={'Валюта'}
-                                                  onBlur={handleBlur('currency')}/>
+                                        arrItem={allCurrencyList ? allCurrencyList : []}
+                                        defaultLabel={'Выберете валюту'}
+                                        onValueChange={handleChange('currency')}
+                                        values={values.currency}
+                                        styles={styles.picker}
+                                        label={'Валюта'}
+                                        onBlur={handleBlur('currency')}/>
                                     {errors.inValidCurrency && touched.currency &&
                                         <Text style={styles.textError}>Поля
                                             обязательно</Text>
@@ -128,7 +129,7 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
             </ScrollView>
         </Modal>
     )
-}
+})
 
 const styles = StyleSheet.create({
     formikContainer: {
@@ -147,8 +148,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
     },
-    picker: {
-    },
+    picker: {},
     buttonCancel: {
         margin: 10,
         backgroundColor: colors.white,
@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
     },
     textCreate: {
         marginTop: 40,
+        marginBottom: 20,
         fontSize: 24,
         fontWeight: '700',
     },

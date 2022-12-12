@@ -11,7 +11,7 @@ const WalletNavigation = () => {
             <WalletStack.Screen options={{headerShown: false, animation: 'flip'}}
                                 name={routerConstants.WALLETS}
                                 component={WalletsScreen}/>
-            <WalletStack.Screen options={{animation: 'flip', headerTitle: 'Информация о кошельке'}}
+            <WalletStack.Screen options={{animation: 'flip', headerTitle: 'Информация о кошельке',}}
                                 name={routerConstants.DETAIL_INFO_WALLET}
                                 component={DetailInfoWalletScreen}/>
         </WalletStack.Navigator>
