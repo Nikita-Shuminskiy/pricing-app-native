@@ -30,9 +30,3 @@ export const chartApi = {
         }
     },
 };
-
-export const spendingApi = {
-    addSpending(data: SpendDataType): Promise<AxiosResponse<SpendDataType>> {
-        return instance.post('history/spending', data);
-    },
-};
