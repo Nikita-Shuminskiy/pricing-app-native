@@ -2,7 +2,6 @@ import {createMaterialBottomTabNavigator} from '@react-navigation/material-botto
 import {routerConstants} from "../constants/router-constants/router-constants";
 import {MainScreen} from "../screen/mainScreen/MainScreen";
 import {Icon} from "react-native-elements";
-import WalletsScreen from "../screen/mainScreen/WalletScreen";
 import {colors} from "../assets/colors/colors";
 import WalletNavigation from "./wallet-navigation";
 

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import SafeAreaView from "../../common/components/safe-area-view";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
@@ -11,6 +11,8 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {createAlert} from "../../common/components/alert";
 import RootStore from "../../store/RootStore/root-store";
 import {ChangeWalletModal} from "../../common/modals/change-wallet-modal";
+import {HeaderBackButton} from "@react-navigation/elements";
+import rootStore from "../../store/RootStore/root-store";
 
 type DetailInfoWalletModalType = {
     navigation: NavigationProp<ParamListBase>
@@ -37,6 +39,21 @@ export const DetailInfoWalletScreen = ({navigation}: DetailInfoWalletModalType) 
     const onPressChangeWallet = () => {
         setModalChangeWallet(true)
     }
+
+    useEffect( () => {
+        navigation.setOptions({
+            headerLeft: (props) => (
+                <HeaderBackButton
+                    {...props}
+                    onPress={() => {
+                        navigation.goBack()
+                       rootStore.WalletStoreService.getWallets(chosenWallet.userId)
+                    }}
+                />
+            )
+        });
+    } );
+
     return (
         <ScrollView style={{width: '100%'}}>
             <SafeAreaView>

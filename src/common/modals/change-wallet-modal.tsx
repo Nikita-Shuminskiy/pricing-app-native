@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import SafeAreaView from "../components/safe-area-view";
 import {Formik} from "formik";
@@ -12,20 +12,23 @@ import SelectPicker from "../components/picker";
 import {CurrencyType} from "../../store/Type/models";
 import rootStore from "../../store/RootStore/root-store";
 import {observer} from "mobx-react-lite";
+import Loading from "../components/loading";
 
 type ChangeWalletModalType = {
     onClose: () => void
     visible: boolean
 }
 export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModalType) => {
-    const {userId, chosenWallet} = WalletStore
+    const {userId, chosenWallet, getWallet} = WalletStore
     const {allCurrencyList, getCurrencyList} = HistoryStore
+    const [loading, setLoading] = useState(false)
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
-        rootStore.WalletStore.getWallet(chosenWallet?._id);
+        setLoading(true)
         rootStore.WalletStoreService.updateWallet(chosenWallet._id, values, true).then((res) => {
             if (res) {
                 onClose()
             }
+            setLoading(false)
         })
     }
     useEffect(() => {
@@ -33,13 +36,15 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
             getCurrencyList()
         }
     }, [])
+
     return (
         <Modal
             animationType="slide"
             transparent={false}
             visible={visible}
         >
-            <ScrollView style={{width: '100%'}}>
+            {loading ? <Loading/> : <ScrollView style={{width: '100%'}}>
+
                 <SafeAreaView>
                     <Formik
                         initialValues={{
@@ -123,7 +128,7 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                         )}
                     </Formik>
                 </SafeAreaView>
-            </ScrollView>
+            </ScrollView>}
         </Modal>
     )
 })
