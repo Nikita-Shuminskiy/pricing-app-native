@@ -1,5 +1,28 @@
+declare module '*.scss';
 
-declare module "*.svg" {
-    const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+declare module '*.scss' {
+    const content: Record<string, string>;
     export default content;
+}
+
+declare module '*.jpg' {
+    const content: string;
+    export default content;
+}
+
+declare module '*.png' {
+    import { ImageSourcePropType } from 'react-native'
+
+    const content: ImageSourcePropType
+
+    export default content
+}
+
+declare module '*.svg' {
+    import React from 'react'
+    import { SvgProps } from 'react-native-svg'
+
+    const content: React.FC<SvgProps>
+
+    export default content
 }

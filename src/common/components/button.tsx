@@ -11,21 +11,19 @@ type ButtonProps = {
 }
 const Button = ({onPress, title, styleContainer, disabled, styleText, ...rest}: ButtonProps) => {
     return (
-        <TouchableOpacity style={[styles.button, styleContainer]} disabled={disabled} onPress={onPress} {...rest}>
-            <Text style={[styles.text, styleText]}>{title}</Text>
+        <TouchableOpacity style={{
+            backgroundColor: colors.orange,
+            padding: 10,
+            alignItems: "center",
+            width: 120,
+            ...styleContainer
+        }} disabled={disabled}
+                          onPress={onPress} {...rest}>
+            <Text style={{
+                color: colors.white,
+                ...styleText
+            }}>{title}</Text>
         </TouchableOpacity>
     );
 };
-const styles = StyleSheet.create({
-    button: {
-        backgroundColor: colors.orange,
-        padding: 10,
-        alignItems: "center",
-        width: 120,
-    },
-    text: {
-        color: colors.white
-    }
-})
-
 export default Button;

@@ -8,8 +8,9 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strict": false,
-    "useDefineForClassFields": true
+    "useDefineForClassFields": true,
+    "typeRoots" : ["node_modules/@types", "src/types"]
   },
-  "include": ["src", "src/custom.d.ts"],
+  "include": ["src", "declarations.d.ts"],
   "extends": "expo/tsconfig.base"
 }

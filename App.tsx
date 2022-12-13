@@ -1,10 +1,8 @@
-import {MainNavigation} from "./src/navigation/main-navigation";
-
+import {Navigations} from "./src/navigation/navigations";
+import * as React from 'react';
 const App = () => {
     return (
-        <>
-           <MainNavigation/>
-        </>
+           <Navigations/>
     );
 }
 
