@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Animated, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Animated, Button, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {observer} from "mobx-react-lite";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import SafeAreaView from "../../common/components/safe-area-view";
@@ -10,6 +10,7 @@ import {FontAwesome} from '@expo/vector-icons';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import {AddWalletModal} from "../../common/modals/add-wallet-modal";
 import logo from "../../assets/logo/logo-pony-web.png";
+import walletBlue from "../../assets/images/wallet-witch-cash-blue.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/router-constants/router-constants";
 import rootStore from "../../store/RootStore/root-store";
@@ -20,10 +21,10 @@ type WalletScreenProps = {
 }
 const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     const [modalAddWallet, setModalAddWallet] = useState(false);
-    const { userId, wallets, setChosenWallet} = WalletStore
+    const {userId, wallets, setChosenWallet} = WalletStore
 
     useEffect(() => {
-        if(!wallets) {
+        if (!wallets) {
             rootStore.WalletStoreService.getWallets(userId)
         }
     }, [])
@@ -75,10 +76,15 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
         <>
             <SafeAreaView>
                 <View style={styles.addWalletContainer}>
-                    <TouchableOpacity onPress={onPressButton}>
-                        <AntDesign style={styles.imgAddWallet} name={"pluscircleo"} size={40} color={colors.orange}/>
+                    <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}} onPress={onPressButton}>
+                        <AntDesign  name={"pluscircleo"} size={40} color={colors.orange}/>
+                        <Text style={styles.text}>Создать кошелек</Text>
                     </TouchableOpacity>
                     <Image style={styles.logo} resizeMode={'contain'} source={logo}/>
+                    <TouchableOpacity style={{alignItems: 'center', marginRight: 15}}>
+                        <Image style={styles.imgAddWallet} resizeMode={'contain'} source={walletBlue}/>
+                        <Text style={styles.text}>Добавить трату </Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.container}>
                     <FlatList
@@ -100,6 +106,12 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         marginLeft: 5,
+    },
+    text: {
+        marginTop: 5,
+        color: colors.gray,
+        fontSize: 12,
+        fontWeight: '800'
     },
     walletContainer: {
         backfaceVisibility: 'hidden',
@@ -134,8 +146,6 @@ const styles = StyleSheet.create({
     imgAddWallet: {
         width: 50,
         height: 50,
-        marginTop: 10,
-        marginLeft: 15,
     },
     walletName: {
         marginTop: 10,

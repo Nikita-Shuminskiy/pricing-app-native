@@ -4,7 +4,7 @@ import SafeAreaView from "../../common/components/safe-area-view";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import {colors} from "../../assets/colors/colors";
-import wallet from '../../assets/images/wallet.png';
+import wallet from '../../assets/images/wallet-witch-money.png';
 import {convertToDate, dateFormat} from "../../utils/utils";
 import {FontAwesome5} from '@expo/vector-icons';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
@@ -58,7 +58,6 @@ export const DetailInfoWalletScreen = ({navigation}: DetailInfoWalletModalType) 
         <ScrollView style={{width: '100%'}}>
             <SafeAreaView>
                 <View style={styles.container}>
-
                     <Image style={styles.logo} resizeMode={'contain'} source={wallet}/>
                     <View style={styles.headerContainer}>
                         <TouchableOpacity onPress={onPressChangeWallet}>
@@ -145,8 +144,7 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     logo: {
-        width: 100,
-        height: 100,
-        marginBottom: 20
+        width: 180,
+        height: 180,
     },
 });
