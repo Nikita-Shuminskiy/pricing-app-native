@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {Image, KeyboardAvoidingView, ScrollView, StyleSheet, View} from "react-native";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {Formik} from "formik";
-// @ts-ignore
 import logo from '../../assets/logo/logo-pony-web.png'
 import Link from "../../common/components/link";
 import Button from '../../common/components/button';

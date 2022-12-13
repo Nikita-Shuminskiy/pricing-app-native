@@ -5,12 +5,10 @@ import WalletStore from "../../store/WalletStore/wallet-store";
 import SafeAreaView from "../../common/components/safe-area-view";
 import {WalletModelType} from "../../store/Type/models";
 import {colors} from "../../assets/colors/colors";
-// @ts-ignore
 import wallet from '../../assets/images/wallet.png';
 import {FontAwesome} from '@expo/vector-icons';
 import AntDesign from "react-native-vector-icons/AntDesign";
 import {AddWalletModal} from "../../common/modals/add-wallet-modal";
-// @ts-ignore
 import logo from "../../assets/logo/logo-pony-web.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/router-constants/router-constants";

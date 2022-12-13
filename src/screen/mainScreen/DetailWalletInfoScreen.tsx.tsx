@@ -4,7 +4,6 @@ import SafeAreaView from "../../common/components/safe-area-view";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import {colors} from "../../assets/colors/colors";
-// @ts-ignore
 import wallet from '../../assets/images/wallet.png';
 import {convertToDate, dateFormat} from "../../utils/utils";
 import {FontAwesome5} from '@expo/vector-icons';

@@ -2,12 +2,9 @@ import React, {useEffect} from "react";
 import {Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import SafeAreaView from "../components/safe-area-view";
 import {Formik} from "formik";
-// @ts-ignore
-import logo from "../../assets/logo/logo-pony-web.png";
 import {Input} from "react-native-elements";
 import {colors} from "../../assets/colors/colors";
 import Button from "../components/button";
-// @ts-ignore
 import wallet from '../../assets/images/wallet.png';
 import WalletStore from "../../store/WalletStore/wallet-store";
 import HistoryStore from "../../store/HistoryStore/history-store";
