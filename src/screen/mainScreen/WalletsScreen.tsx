@@ -15,6 +15,7 @@ import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/router-constants/router-constants";
 import rootStore from "../../store/RootStore/root-store";
 import {AddSpendModal} from "../../common/modals/add-spend-modal";
+import HistoryStore from "../../store/HistoryStore/history-store";
 
 
 type WalletScreenProps = {
@@ -24,7 +25,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     const [modalAddWallet, setModalAddWallet] = useState(false);
     const [modalAddSpend, setModalAddSpend] = useState(false);
     const {userId, wallets, setChosenWallet} = WalletStore
-
+    const {getCurrentHistory} = HistoryStore
     useEffect(() => {
         if (!wallets) {
             rootStore.WalletStoreService.getWallets(userId)
@@ -44,6 +45,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     })
 
     const onPressTouchWallet = (wallet: WalletModelType) => {
+        getCurrentHistory(wallet._id)
         setChosenWallet(wallet)
         navigation.navigate(routerConstants.DETAIL_INFO_WALLET)
     }
