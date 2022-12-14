@@ -11,6 +11,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import {AddWalletModal} from "../../common/modals/add-wallet-modal";
 import logo from "../../assets/logo/logo-pony-web.png";
 import walletBlue from "../../assets/images/wallet-witch-cash-blue.png";
+import walletPlus from "../../assets/images/wallet-plus.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/router-constants/router-constants";
 import rootStore from "../../store/RootStore/root-store";
@@ -83,8 +84,9 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
             <SafeAreaView>
                 <View style={styles.addWalletContainer}>
                     <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}} onPress={onPressButtonAddWallet}>
-                        <AntDesign name={"pluscircleo"} size={40} color={colors.orange}/>
-                        <Text style={styles.text}>Создать кошелек</Text>
+                        {/*<AntDesign name={"pluscircleo"} size={40} color={colors.orange}/>*/}
+                        <Image resizeMode={'contain'} style={styles.imgAddWallet} source={walletPlus}/>
+                        <Text style={[styles.text, {marginTop: 0}]}>Создать кошелек</Text>
                     </TouchableOpacity>
                     <Image style={styles.logo} resizeMode={'contain'} source={logo}/>
                     <TouchableOpacity style={{alignItems: 'center', marginRight: 15}} onPress={onPressButtonAddSpend}>
