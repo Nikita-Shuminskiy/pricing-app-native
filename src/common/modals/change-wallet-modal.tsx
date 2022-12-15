@@ -102,13 +102,10 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                                         defaultLabel={'Выберете валюту'}
                                         onValueChange={handleChange('currency')}
                                         values={values.currency}
+                                        error={errors.inValidCurrency && touched.currency as boolean}
                                         styles={styles.picker}
                                         label={'Валюта'}
                                         onBlur={handleBlur('currency')}/>
-                                    {errors.inValidCurrency && touched.currency &&
-                                        <Text style={styles.textError}>Поля
-                                            обязательно</Text>
-                                    }
                                     <View style={styles.buttonContainer}>
                                         <Button
                                             disabled={!!errors.inValidCurrency || !!errors.inValidName || !!errors.inValidBalance}
@@ -179,6 +176,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     input: {
+        paddingLeft: 10,
         borderColor: colors.grayWhite,
     },
     error: {
@@ -186,13 +184,5 @@ const styles = StyleSheet.create({
     },
     link: {
         marginTop: 30,
-    },
-    textError: {
-        color: 'red',
-        width: "100%",
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        fontSize: 12,
-        marginLeft: 30
     }
 });

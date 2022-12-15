@@ -5,7 +5,7 @@ export const API_URL = 'https://pone-server-production.up.railway.app/api/';
 export const API_URL_PHILL = 'https://server-pricing-production.up.railway.app/api';
 export const local = 'http://192.168.100.10:3001/api';
 export const instance = axios.create({
-    baseURL: local,
+    baseURL: API_URL_PHILL,
 });
 
 // Request interceptor for API calls

@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {routerConstants} from "../constants/router-constants/router-constants";
-import WalletsScreen from "../screen/mainScreen/WalletScreen";
+import WalletsScreen from "../screen/mainScreen/WalletsScreen";
 import {DetailInfoWalletScreen} from "../screen/mainScreen/DetailWalletInfoScreen.tsx";
 import {observer} from "mobx-react-lite";
 import NotificationStore from "../store/NotificationStore/notification-store";

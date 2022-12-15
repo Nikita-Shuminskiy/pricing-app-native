@@ -17,13 +17,13 @@ type ModalWindowType = {
     visible: boolean
 }
 export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
-    const { userId} = WalletStore
+    const {userId} = WalletStore
     const {allCurrencyList, getCurrencyList} = HistoryStore
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
         rootStore.WalletStoreService.addWallet(values)
     }
     useEffect(() => {
-        if(!allCurrencyList) {
+        if (!allCurrencyList) {
             getCurrencyList()
         }
     }, [])
@@ -92,17 +92,14 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                     />
 
                                     <SelectPicker<CurrencyType>
-                                                  arrItem={allCurrencyList ? allCurrencyList : []}
-                                                  defaultLabel={'Выберете валюту'}
-                                                  onValueChange={handleChange('currency')}
-                                                  values={values.currency}
-                                                  styles={styles.picker}
-                                                  label={'Валюта'}
-                                                  onBlur={handleBlur('currency')}/>
-                                    {errors.inValidCurrency && touched.currency &&
-                                        <Text style={styles.textError}>Поля
-                                            обязательно</Text>
-                                    }
+                                        arrItem={allCurrencyList ? allCurrencyList : []}
+                                        defaultLabel={'Выберете валюту'}
+                                        onValueChange={handleChange('currency')}
+                                        values={values.currency}
+                                        styles={styles.picker}
+                                        label={'Валюта'}
+                                        error={errors.inValidCurrency && touched.currency as boolean}
+                                        onBlur={handleBlur('currency')}/>
                                     <View style={styles.buttonContainer}>
                                         <Button
                                             disabled={!!errors.inValidCurrency || !!errors.inValidName || !!errors.inValidBalance}
@@ -144,8 +141,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 120,
     },
-    picker: {
-    },
+    picker: {},
     buttonCancel: {
         margin: 10,
         backgroundColor: colors.white,
@@ -173,6 +169,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     input: {
+        paddingLeft: 10,
         borderColor: colors.grayWhite,
     },
     error: {
@@ -180,13 +177,5 @@ const styles = StyleSheet.create({
     },
     link: {
         marginTop: 30,
-    },
-    textError: {
-        color: 'red',
-        width: "100%",
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        fontSize: 12,
-        marginLeft: 30
     }
 });

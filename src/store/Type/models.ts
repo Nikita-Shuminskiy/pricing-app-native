@@ -45,7 +45,7 @@ export type NotificationType = 'success' | 'info' | 'warning' | 'error';
 export type CategoryModelType = {
 	_id: string;
 	value: string;
-	amount: number;
+	amount?: number;
 };
 export type SpendingModel = {
 	amount: number;

@@ -10,5 +10,5 @@ export const colors: { [key: string]: string } = {
     grayDarkLight: '#E8E8E8',
     red: '#FF0000',
     yellowUK: '#FFD800',
-    grayWhite: '#E6E7E9'
+    grayWhite: '#E6E7E9',
 }

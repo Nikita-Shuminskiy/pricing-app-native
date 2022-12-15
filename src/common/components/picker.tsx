@@ -4,14 +4,17 @@ import {NativeSyntheticEvent, StyleProp, TargetedEvent, Text, TextStyle, View} f
 import {colors} from "../../assets/colors/colors";
 
 type SelectPickerProps<T> = {
-    styles: StyleProp<TextStyle>
+    styles?: StyleProp<TextStyle>
     values: string | number
-    onBlur: (e: NativeSyntheticEvent<TargetedEvent>) => void
+    onBlur?: (e: NativeSyntheticEvent<TargetedEvent>) => void
     onValueChange: (e: string) => void
-    arrItem: T[]
+    arrItem: Array<T & { id?: string | number, value?: string, _id: string | number, name?: string }>
     defaultLabel: string
     label?: string
     mode?: 'dialog' | 'dropdown'
+    error?: boolean
+    textErrorStyles?: StyleProp<TextStyle>
+    onReturnValueId?: boolean
 }
 const SelectPicker = function <T>({
                                       arrItem,
@@ -21,13 +24,16 @@ const SelectPicker = function <T>({
                                       onValueChange,
                                       onBlur,
                                       label,
-                                      mode = 'dialog'
+                                      mode = 'dropdown',
+                                      error,
+                                      textErrorStyles,
+                                      onReturnValueId
                                   }: SelectPickerProps<T>) {
     return (
         <View style={{width: '94%'}}>
             {label && <Text style={{color: colors.gray, fontWeight: 'bold', fontSize: 16}}>{label}</Text>}
             <Picker
-                style={styles}
+                style={[styles, {marginBottom: error ? 0 : 20}]}
                 mode={mode}
                 selectedValue={values}
                 onBlur={onBlur}
@@ -35,11 +41,24 @@ const SelectPicker = function <T>({
                 <Picker.Item color={colors.gray} label={defaultLabel} value={''}/>
                 {
                     arrItem.map((list, index) => {
-                        // @ts-ignore
-                        return <Picker.Item key={index} color={colors.black} label={list.value} value={list.value}/>
+                        const currentValue = list.value ? list.value : list.name ? list.name : null
+                        const currentId = list.id ? list.id : list._id ? list._id : null
+
+                        return <Picker.Item key={index} color={colors.black} label={currentValue} value={onReturnValueId ? currentId : currentValue}/>
                     })
                 }
             </Picker>
+            {error &&
+                <Text style={[textErrorStyles, {
+                    marginBottom: 20,
+                    color: 'red',
+                    width: "100%",
+                    justifyContent: 'flex-start',
+                    alignItems: 'flex-start',
+                    fontSize: 12
+                }]}>Поля
+                    обязательно</Text>
+            }
         </View>
     );
 };
