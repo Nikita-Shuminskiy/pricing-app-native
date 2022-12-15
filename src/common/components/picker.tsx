@@ -6,7 +6,7 @@ import {colors} from "../../assets/colors/colors";
 type SelectPickerProps<T> = {
     styles?: StyleProp<TextStyle>
     values: string | number
-    onBlur: (e: NativeSyntheticEvent<TargetedEvent>) => void
+    onBlur?: (e: NativeSyntheticEvent<TargetedEvent>) => void
     onValueChange: (e: string) => void
     arrItem: Array<T & { id?: string | number, value?: string, _id: string | number, name?: string }>
     defaultLabel: string
@@ -24,7 +24,7 @@ const SelectPicker = function <T>({
                                       onValueChange,
                                       onBlur,
                                       label,
-                                      mode = 'dialog',
+                                      mode = 'dropdown',
                                       error,
                                       textErrorStyles,
                                       onReturnValueId

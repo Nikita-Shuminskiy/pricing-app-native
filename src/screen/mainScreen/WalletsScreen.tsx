@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Animated, Button, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Animated, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {observer} from "mobx-react-lite";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import SafeAreaView from "../../common/components/safe-area-view";
@@ -7,7 +7,6 @@ import {WalletModelType} from "../../store/Type/models";
 import {colors} from "../../assets/colors/colors";
 import wallet from '../../assets/images/wallet.png';
 import {FontAwesome} from '@expo/vector-icons';
-import AntDesign from "react-native-vector-icons/AntDesign";
 import {AddWalletModal} from "../../common/modals/add-wallet-modal";
 import logo from "../../assets/logo/logo-pony-web.png";
 import walletBlue from "../../assets/images/wallet-witch-cash-blue.png";
@@ -26,6 +25,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     const [modalAddWallet, setModalAddWallet] = useState(false);
     const [modalAddSpend, setModalAddSpend] = useState(false);
     const {userId, wallets, setChosenWallet} = WalletStore
+
     const {getCurrentHistory} = HistoryStore
     useEffect(() => {
         if (!wallets) {
@@ -42,7 +42,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     }
     const translateX = useRef(new Animated.Value(Dimensions.get("window").height)).current
     useEffect(() => {
-        Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 2000}).start();
+        Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1500 }).start();
     })
 
     const onPressTouchWallet = (wallet: WalletModelType) => {
@@ -50,7 +50,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
         setChosenWallet(wallet)
         navigation.navigate(routerConstants.DETAIL_INFO_WALLET)
     }
-    const WalletView = ({item}) => {
+    const walletView = ({item}) => {
         return (
             <Animated.View style={{transform: [{translateY: translateX}]}}>
                 <View style={styles.walletContainer}>
@@ -84,7 +84,6 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
             <SafeAreaView>
                 <View style={styles.addWalletContainer}>
                     <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}} onPress={onPressButtonAddWallet}>
-                        {/*<AntDesign name={"pluscircleo"} size={40} color={colors.orange}/>*/}
                         <Image resizeMode={'contain'} style={styles.imgAddWallet} source={walletPlus}/>
                         <Text style={[styles.text, {marginTop: 0}]}>Создать кошелек</Text>
                     </TouchableOpacity>
@@ -94,10 +93,10 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                         <Text style={styles.text}>Добавить трату </Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.container}>
+                <View style={styles.walletsContainer}>
                     <FlatList
                         data={wallets}
-                        renderItem={WalletView}
+                        renderItem={walletView}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={2}
                         /*contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}*/
@@ -111,10 +110,9 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
 });
 
 const styles = StyleSheet.create({
-    container: {
+    walletsContainer: {
         flex: 1,
         width: '100%',
-        marginLeft: 5,
     },
     text: {
         marginTop: 5,
@@ -131,7 +129,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 16,
         flex: 1,
-        shadowColor: "#000",
+        shadowColor: colors.black,
         shadowOffset: {
             width: 0,
             height: 5,
