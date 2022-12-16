@@ -22,8 +22,8 @@ const Switcher = ({onValueChange, label, valueBefore, valueAfter}: SwitcherType)
             <View style={styles.body}>
                 {valueBefore && <Text style={{color: isEnabled ? colors.white : colors.orange}}>{valueBefore}</Text>}
                 <Switch
-                    trackColor={{false: colors.white, true: colors.blueLight}}
-                    thumbColor={isEnabled ? colors.orange : colors.white}
+                    trackColor={{false: colors.gray, true: colors.blueLight}}
+                    thumbColor={isEnabled ? colors.orange : colors.grayLight}
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
                     value={isEnabled}

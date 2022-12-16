@@ -1,5 +1,5 @@
 import React from 'react';
-import {KeyboardAvoidingView, SafeAreaView, StyleSheet, View} from "react-native";
+import {KeyboardAvoidingView, StyleSheet, View} from "react-native";
 
 type LoginLayoutProps = {
     children: JSX.Element | JSX.Element[];

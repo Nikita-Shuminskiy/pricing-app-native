@@ -3,7 +3,7 @@ import {Animated, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacit
 import {observer} from "mobx-react-lite";
 import SafeAreaView from "../../common/components/safe-area-view";
 import HistoryStore from "../../store/HistoryStore/history-store";
-import {SpendingModel} from "../../store/Type/models";
+import {LoadingEnum, SpendingModel} from "../../store/Type/models";
 import {colors} from "../../assets/colors/colors";
 import {convertToDate, dateFormat, getDateFormatTime} from "../../utils/utils";
 import coinImage from '../../assets/images/cash.png'
@@ -11,11 +11,19 @@ import settingImage from "../../assets/images/setting.png";
 import logo from "../../assets/logo/logo-pony-web.png";
 import FilterHistoryModal from "../../common/modals/filter-history-modal";
 import WalletStore from "../../store/WalletStore/wallet-store";
+import rootStore from "../../store/RootStore/root-store";
+import Loading from "../../common/components/loading";
+import NotificationStore from "../../store/NotificationStore/notification-store";
+import {NavigationProp, ParamListBase} from "@react-navigation/native";
 
-type HistoryScreenProps = {}
-const HistoryScreen = observer(({}: HistoryScreenProps) => {
-    const {selectedWalletHistory, getAllHistory} = HistoryStore
+type HistoryScreenProps = {
+    navigation: NavigationProp<ParamListBase>
+}
+const HistoryScreen = observer(({navigation}: HistoryScreenProps) => {
+    const {selectedWalletHistory} = HistoryStore
+    const {HistoryStoreService} = rootStore
     const {chosenWallet} = WalletStore
+    const {isLoading} = NotificationStore;
     const onPressTouchStory = (story: SpendingModel) => {
     }
     const [modalFilterHistory, setModalFilterHistory] = useState(false);
@@ -24,11 +32,15 @@ const HistoryScreen = observer(({}: HistoryScreenProps) => {
         Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1500}).start();
     })
     useEffect(() => {
-        if(!selectedWalletHistory?.length) {
-            console.log(selectedWalletHistory)
-            getAllHistory()
+        if (navigation.isFocused() && !selectedWalletHistory?.length) {
+            HistoryStoreService.getAllHistory()
         }
-    })
+    }, [])
+
+
+    if (isLoading === LoadingEnum.fetching) {
+        return <Loading/>
+    }
     const storyView = ({item}) => {
         return (
             <Animated.View style={[{transform: [{translateY: translateX}]}, styles.storyContainer]}>
@@ -60,13 +72,17 @@ const HistoryScreen = observer(({}: HistoryScreenProps) => {
     const onPressButtonFilterHistory = () => {
         setModalFilterHistory(true)
     }
-
+const renderEmptyContainer = () => {
+        return <View style={styles.renderEmptyTextContainer}>
+            <Text style={styles.renderEmptyText}>У вас нет не одной траты в этом кошельке</Text>
+        </View>
+}
     return (
         <>
             <SafeAreaView>
                 <View style={styles.headerContainer}>
                     <Image style={styles.imgLogo} resizeMode={'contain'} source={logo}/>
-              {/*      <Text style={styles.textWalletName}>{selectedHistoryWalletName ? selectedHistoryWalletName : 'Вся история'}</Text>*/}
+                    <Text style={styles.textWalletName}>{chosenWallet?.name ? chosenWallet?.name : 'Вся история'}</Text>
                     <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}}
                                       onPress={onPressButtonFilterHistory}>
                         <Image resizeMode={'contain'} style={styles.imgFilter} source={settingImage}/>
@@ -74,11 +90,12 @@ const HistoryScreen = observer(({}: HistoryScreenProps) => {
                     </TouchableOpacity>
                 </View>
                 <FlatList
-                    data={selectedWalletHistory}
+                    data={selectedWalletHistory ? selectedWalletHistory : []}
                     renderItem={storyView}
                     keyExtractor={(item, index) => index.toString()}
                     numColumns={1}
                     style={{width: '100%'}}
+                    ListEmptyComponent={renderEmptyContainer()}
                 />
             </SafeAreaView>
             {modalFilterHistory &&
@@ -92,7 +109,18 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 5
     },
+    renderEmptyTextContainer: {
+        flex: 1,
+        alignItems: 'center',
+
+    },
+    renderEmptyText: {
+        marginTop: 100,
+        color: colors.gray,
+        fontSize: 20
+    },
     text: {
+        width: '100%',
         marginTop: 5,
         color: colors.gray,
         fontSize: 12,
@@ -100,12 +128,11 @@ const styles = StyleSheet.create({
     },
     textWalletName: {
         fontWeight: '800',
-        fontSize: 16,
-        color: colors.grayWhite,
+        fontSize: 20,
+        color: colors.gray,
     },
     headerContainer: {
         width: '100%',
-        flexGrow: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: "center",

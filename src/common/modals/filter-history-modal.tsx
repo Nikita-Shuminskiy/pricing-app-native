@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Image, Modal, StyleSheet, View, Text, Switch} from "react-native";
+import React, {useState} from 'react';
+import {Image, Modal, StyleSheet, Text, View} from "react-native";
 import SafeAreaView from "../components/safe-area-view";
 import HistoryStore from "../../store/HistoryStore/history-store";
 import {observer} from "mobx-react-lite";
@@ -11,35 +11,42 @@ import {colors} from "../../assets/colors/colors";
 import Switcher from "../components/switcher";
 import Button from "../components/button";
 import rootStore from "../../store/RootStore/root-store";
+import Loading from "../components/loading";
 
 type FilterHistoryModalType = {
     visible: boolean
     onClose: () => void
 }
-const filteredBy: any = [
-    {id: 1, value: 'Сортировка по дате'},
-    {id: 2, value: 'Сортировка по сумме траты'},
-    {id: 3, value: 'Сортировка по имени категории'}
+const filteredBy = [
+    {id: 'date', value: 'Сортировка по дате'},
+    {id: 'amount', value: 'Сортировка по сумме траты'},
+    {id: 'category', value: 'Сортировка по имени категории'}
 ]
 const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType) => {
-    const {selectedWalletHistory, getCurrentHistory} = HistoryStore
-    const {wallets, getWallet} = WalletStore
-    const {WalletStoreService} = rootStore
+    const {sortSelectedWalletHistory} = HistoryStore
+    const {HistoryStoreService} = rootStore
+    const {wallets} = WalletStore
     const [walletId, setWalletId] = useState('')
-    const [sortBy, setSortBy] = useState('')
+    const [sortByName, setSortByName] = useState('')
+    const [toggleSortBy, setToggleSortBy] = useState(false)
 
     const onValueChangeSwitcher = (value: boolean) => {
-
+        setToggleSortBy(value)
     }
     const onWalletValueChange = (value: string) => {
         setWalletId(value)
     }
     const onValueChangeSortBy = (value) => {
-        setSortBy(value)
+        setSortByName(value)
     }
     const onPressSave = () => {
-        getCurrentHistory(walletId)
-        onClose()
+        HistoryStoreService.getCurrentHistory(walletId).then((res) => {
+            if (res) {
+                sortSelectedWalletHistory(sortByName, toggleSortBy)
+                onClose()
+            }
+        })
+
     }
     return (
         <Modal
@@ -49,46 +56,47 @@ const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType)
             onRequestClose={() => {
                 onClose()
             }}
-        >
-            <SafeAreaView>
-                <View style={styles.container}>
-                    <Image style={styles.logoSetting} source={imageSetting}/>
-                    <Text style={styles.textHeader}>Настройки фильтрации для истории</Text>
-                    <View style={styles.body}>
-                        <SelectPicker<WalletModelType>
-                            arrItem={wallets ? wallets : []}
-                            defaultLabel={'выберете кошелек'}
-                            onValueChange={onWalletValueChange}
-                            values={walletId}
-                            label={'Выберете кошелек для просмотра истории'}
-                            onReturnValueId={true}
-                        />
-                        <SelectPicker
-                            arrItem={filteredBy}
-                            defaultLabel={'выберете сортировку'}
-                            onValueChange={onValueChangeSortBy}
-                            values={sortBy}
-                            label={'Сортировка истории'}
-                            onReturnValueId={true}
-                        />
-                        <Switcher label={'Сортировка по'} valueBefore={'Возрастанию'} valueAfter={'Убыванию'}
-                                  onValueChange={onValueChangeSwitcher}/>
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            title={'Сохранить'}
-                            onPress={onPressSave}
-                            styleContainer={styles.buttonSave}
-                        />
-                        <Button
-                            title={'Отмена'}
-                            onPress={() => onClose()}
-                            styleContainer={styles.buttonCancel}
-                            styleText={styles.btnCancelText}
-                        />
-                    </View>
+        ><SafeAreaView>
+            <View style={styles.container}>
+                <Image style={styles.logoSetting} source={imageSetting}/>
+                <Text style={styles.textHeader}>Настройки фильтрации для истории</Text>
+                <View style={styles.body}>
+                    <SelectPicker<WalletModelType>
+                        arrItem={wallets ? wallets : []}
+                        defaultLabel={'выберете кошелек'}
+                        onValueChange={onWalletValueChange}
+                        values={walletId}
+                        label={'Выберете кошелек для просмотра истории'}
+                        onReturnValueId={true}
+                    />
+                    <SelectPicker<any>
+                        arrItem={filteredBy}
+                        defaultLabel={'выберете сортировку'}
+                        onValueChange={onValueChangeSortBy}
+                        values={sortByName}
+                        label={'Сортировка истории'}
+                        onReturnValueId={true}
+                    />
+                    <Switcher label={'Сортировка по'} valueBefore={'Возрастанию'} valueAfter={'Убыванию'}
+                              onValueChange={onValueChangeSwitcher}/>
                 </View>
-            </SafeAreaView>
+                <View style={styles.buttonContainer}>
+                    <Button
+                        disabled={!walletId}
+                        title={'Сохранить'}
+                        onPress={onPressSave}
+                        styleContainer={styles.buttonSave}
+                    />
+                    <Button
+                        title={'Отмена'}
+                        onPress={() => onClose()}
+                        styleContainer={styles.buttonCancel}
+                        styleText={styles.btnCancelText}
+                    />
+                </View>
+            </View>
+        </SafeAreaView>
+
         </Modal>
     );
 })

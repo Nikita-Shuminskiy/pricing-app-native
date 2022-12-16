@@ -19,7 +19,7 @@ type ChangeWalletModalType = {
     visible: boolean
 }
 export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModalType) => {
-    const {userId, chosenWallet, getWallet} = WalletStore
+    const {userId, chosenWallet} = WalletStore
     const {allCurrencyList, getCurrencyList} = HistoryStore
     const [loading, setLoading] = useState(false)
     const onSubmit = (values, {setFieldError, setSubmitting}) => {

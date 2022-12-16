@@ -90,7 +90,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                     <Image style={styles.logo} resizeMode={'contain'} source={logo}/>
                     <TouchableOpacity style={{alignItems: 'center', marginRight: 15}} onPress={onPressButtonAddSpend}>
                         <Image style={styles.imgAddWallet} resizeMode={'contain'} source={walletBlue}/>
-                        <Text style={styles.text}>Добавить трату </Text>
+                        <Text style={styles.text}>Добавить трату</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.walletsContainer}>
