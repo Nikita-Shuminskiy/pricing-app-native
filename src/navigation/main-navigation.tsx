@@ -5,6 +5,7 @@ import {Icon} from "react-native-elements";
 import {colors} from "../assets/colors/colors";
 import WalletNavigation from "./wallet-navigation";
 import HistoryScreen from "../screen/mainScreen/HistoryScreen";
+import ChartScreen from "../screen/mainScreen/ChartScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -50,7 +51,7 @@ const MainNavigation = () => {
                         component={HistoryScreen}/>
             <Tab.Screen options={{tabBarLabel: 'График'}}
                         name={routerConstants.CHART}
-                        component={MainScreen}/>
+                        component={ChartScreen}/>
             <Tab.Screen options={{tabBarLabel: 'Настройки'}}
                         name={routerConstants.SETTINGS}
                         component={MainScreen}/>

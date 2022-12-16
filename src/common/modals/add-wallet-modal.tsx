@@ -8,9 +8,10 @@ import Button from "../components/button";
 import wallet from '../../assets/images/wallet.png';
 import WalletStore from "../../store/WalletStore/wallet-store";
 import HistoryStore from "../../store/HistoryStore/history-store";
+import rootStore from "../../store/RootStore/root-store";
+import PickerIos from "../components/pickerIOS";
 import SelectPicker from "../components/picker";
 import {CurrencyType} from "../../store/Type/models";
-import rootStore from "../../store/RootStore/root-store";
 
 type ModalWindowType = {
     onClose: () => void
@@ -36,7 +37,7 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                 onClose()
             }}
         >
-            <ScrollView style={{width: '100%'}}>
+            <ScrollView bounces={true} style={{width: '100%'}}>
                 <SafeAreaView>
                     <Formik
                         initialValues={{

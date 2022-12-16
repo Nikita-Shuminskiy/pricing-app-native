@@ -73,8 +73,8 @@ const HistoryScreen = observer(({navigation}: HistoryScreenProps) => {
         setModalFilterHistory(true)
     }
 const renderEmptyContainer = () => {
-        return <View style={styles.renderEmptyTextContainer}>
-            <Text style={styles.renderEmptyText}>У вас нет не одной траты в этом кошельке</Text>
+        return <View>
+            <Text style={styles.renderEmptyText}>У вас нет не одной траты</Text>
         </View>
 }
     return (
@@ -89,14 +89,17 @@ const renderEmptyContainer = () => {
                         <Text style={[styles.text, {marginTop: 0}]}>Фильтры</Text>
                     </TouchableOpacity>
                 </View>
+                <View style={styles.historyContainer}>
                 <FlatList
-                    data={selectedWalletHistory ? selectedWalletHistory : []}
+                    data={selectedWalletHistory}
                     renderItem={storyView}
                     keyExtractor={(item, index) => index.toString()}
                     numColumns={1}
                     style={{width: '100%'}}
                     ListEmptyComponent={renderEmptyContainer()}
+                    contentContainerStyle={!selectedWalletHistory?.length && styles.contentContainerStyle}
                 />
+                </View>
             </SafeAreaView>
             {modalFilterHistory &&
                 <FilterHistoryModal visible={modalFilterHistory} onClose={() => setModalFilterHistory(false)}/>}
@@ -109,13 +112,13 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 5
     },
-    renderEmptyTextContainer: {
+    historyContainer: {
         flex: 1,
+        width: '100%',
         alignItems: 'center',
-
     },
+    contentContainerStyle: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5},
     renderEmptyText: {
-        marginTop: 100,
         color: colors.gray,
         fontSize: 20
     },

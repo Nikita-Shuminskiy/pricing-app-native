@@ -42,7 +42,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     }
     const translateX = useRef(new Animated.Value(Dimensions.get("window").height)).current
     useEffect(() => {
-        Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1500 }).start();
+        Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1500}).start();
     })
 
     const onPressTouchWallet = (wallet: WalletModelType) => {
@@ -61,8 +61,6 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                             <FontAwesome style={styles.icoInfo} name="info-circle" size={20} color={colors.orange}/>
                         </TouchableOpacity>
                     </View>
-
-
                     <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                         <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.walletName}>
                             Имя: {item?.name}
@@ -78,6 +76,11 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
 
         );
     };
+    const renderEmptyContainer = () => {
+        return <View>
+            <Text style={styles.renderEmptyText}>У вас нет кошельков</Text>
+        </View>
+    }
 
     return (
         <>
@@ -99,7 +102,9 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                         renderItem={walletView}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={2}
-                        /*contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}*/
+                        style={{width: '100%'}}
+                        ListEmptyComponent={renderEmptyContainer}
+                        contentContainerStyle={!wallets && styles.contentContainerStyle}
                     />
                 </View>
             </SafeAreaView>
@@ -113,6 +118,12 @@ const styles = StyleSheet.create({
     walletsContainer: {
         flex: 1,
         width: '100%',
+        alignItems: 'center',
+    },
+    contentContainerStyle: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5},
+    renderEmptyText: {
+        color: colors.gray,
+        fontSize: 20
     },
     text: {
         marginTop: 5,
