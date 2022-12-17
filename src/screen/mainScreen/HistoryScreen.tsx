@@ -73,11 +73,11 @@ const HistoryScreen = observer(({navigation}: HistoryScreenProps) => {
     const onPressButtonFilterHistory = () => {
         setModalFilterHistory(true)
     }
-const renderEmptyContainer = () => {
+    const renderEmptyContainer = () => {
         return <View>
             <Text style={styles.renderEmptyText}>У вас нет не одной траты</Text>
         </View>
-}
+    }
     return (
         <>
             <SafeAreaView>
@@ -86,20 +86,20 @@ const renderEmptyContainer = () => {
                     <Text style={styles.textWalletName}>{chosenWallet?.name ? chosenWallet?.name : 'Вся история'}</Text>
                     <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}}
                                       onPress={onPressButtonFilterHistory}>
-                        <Ionicons name={"filter"} size={24} color={colors.black} />
+                        <Ionicons name={"filter"} size={24} color={colors.black}/>
                         <Text style={[styles.text]}>Фильтры</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.historyContainer}>
-                <FlatList
-                    data={selectedWalletHistory}
-                    renderItem={storyView}
-                    keyExtractor={(item, index) => index.toString()}
-                    numColumns={1}
-                    style={{width: '100%'}}
-                    ListEmptyComponent={renderEmptyContainer()}
-                    contentContainerStyle={!selectedWalletHistory?.length && styles.contentContainerStyle}
-                />
+                    <FlatList
+                        data={selectedWalletHistory}
+                        renderItem={storyView}
+                        keyExtractor={(item, index) => index.toString()}
+                        numColumns={1}
+                        style={{width: '100%'}}
+                        ListEmptyComponent={renderEmptyContainer()}
+                        contentContainerStyle={!selectedWalletHistory?.length && styles.contentContainerStyle}
+                    />
                 </View>
             </SafeAreaView>
             {modalFilterHistory &&

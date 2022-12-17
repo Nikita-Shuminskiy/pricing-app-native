@@ -15,6 +15,7 @@ import rootStore from "../../store/RootStore/root-store";
 import {AddSpendModal} from "../../common/modals/add-spend-modal";
 import HistoryStore from "../../store/HistoryStore/history-store";
 import AntDesign from "react-native-vector-icons/AntDesign";
+import {createAlert} from "../../common/components/alert";
 
 
 type WalletScreenProps = {
@@ -31,9 +32,16 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
             rootStore.WalletStoreService.getWallets(userId)
         }
     }, [])
-
     const onPressButtonAddWallet = () => {
-        setModalAddWallet(true)
+        if(wallets.length >= 6) {
+            return createAlert({
+                title: 'Сообщение',
+                message: 'На данный момент у вас максимальное количество кошельков',
+                buttons: [{text: 'Закрыть', style: "cancel", onPress: () => console.log('')}]
+            })
+        } else {
+            setModalAddWallet(true)
+        }
     }
 
     const onPressButtonAddSpend = () => {
@@ -86,12 +94,12 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
             <SafeAreaView>
                 <View style={styles.addWalletContainer}>
                     <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}} onPress={onPressButtonAddWallet}>
-                        <AntDesign name={"pluscircleo"} size={24} color={colors.black} />
+                        <AntDesign name={"pluscircleo"} size={24} color={colors.black}/>
                         <Text style={[styles.text]}>Создать кошелек</Text>
                     </TouchableOpacity>
                     <Image style={styles.logo} resizeMode={'contain'} source={logo}/>
                     <TouchableOpacity style={{alignItems: 'center', marginRight: 15}} onPress={onPressButtonAddSpend}>
-                        <FontAwesome name={"cart-plus"} size={24} color={colors.black} />
+                        <FontAwesome name={"cart-plus"} size={24} color={colors.black}/>
                         <Text style={styles.text}>Добавить трату</Text>
                     </TouchableOpacity>
                 </View>
@@ -103,7 +111,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                         numColumns={2}
                         style={{width: '100%'}}
                         ListEmptyComponent={renderEmptyContainer}
-                        contentContainerStyle={!wallets && styles.contentContainerStyle}
+                        contentContainerStyle={!wallets?.length && styles.contentContainerStyle}
                     />
                 </View>
             </SafeAreaView>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input} from "native-base";
+import {Box, Center, FormControl, Input, WarningOutlineIcon} from "native-base";
 import {KeyboardTypeOptions, StyleProp, Text, TextStyle, View} from "react-native";
 import {colors} from "../../assets/colors/colors";
 
@@ -14,6 +14,8 @@ type InputCustomProps = {
     onBlur?: (value) => void
     style?: StyleProp<TextStyle>
     value: string
+    isRequired?: boolean
+    isInvalid?: boolean
 }
 const InputCustom = ({
                          label,
@@ -25,33 +27,27 @@ const InputCustom = ({
                          keyboardType,
                          onBlur,
                          style,
-                         value
+                         value,
+                         isRequired,
+                         isInvalid
                      }: InputCustomProps) => {
     return (
-        <View style={{width: '100%', flex: 1, alignItems: 'center', marginBottom: 10}}>
-            {label && <Text style={{
-                color: colors.gray,
-                fontWeight: 'bold',
-                fontSize: 16,
-                alignItems: 'flex-start',
-                paddingBottom: 10,
-                flex: 1,
-                width: '100%'
-            }}>{label}</Text>}
-            <Input placeholderTextColor={colors.gray} value={value} style={style} keyboardType={keyboardType} onBlur={onBlur} onChangeText={onChangeText}
-                   mx="3"
-                   placeholder={placeholder} w="100%"/>
-            {error &&
-                <Text style={[textErrorStyles, {
-                    color: 'red',
-                    width: "100%",
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    fontSize: 12
-                }]}>Поля
-                    обязательно</Text>
-            }
-        </View>
+        <Box mt={2} width={'100%'}>
+            <FormControl isInvalid={isInvalid} isRequired={isRequired}>
+                <FormControl.Label>{label}</FormControl.Label>
+                <Input value={value}
+                       style={style}
+                       keyboardType={keyboardType}
+                       onBlur={onBlur}
+                       onChangeText={onChangeText}
+                       placeholder={placeholder}
+                       mt={1}
+                />
+                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs"/>}>
+                    Поля являеться обязательным
+                </FormControl.ErrorMessage>
+            </FormControl>
+        </Box>
     );
 };
 

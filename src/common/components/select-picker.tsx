@@ -1,56 +1,70 @@
 import React from 'react';
 import {NativeSyntheticEvent, StyleProp, TargetedEvent, Text, TextStyle, View} from "react-native";
-import {CheckIcon, Select} from "native-base";
+import {Center, CheckIcon, FormControl, Select, WarningOutlineIcon} from "native-base";
+import {colors} from "../../assets/colors/colors";
 
-type SelectPickerProps = {
-    styles?: any
+type SelectPickerProps<T> = {
     values: string
-    onBlur?: (e: NativeSyntheticEvent<TargetedEvent>) => void
     onValueChange: (e: string) => void
-    arrItem: any[]
+    onBlur?: (e: any) => void
+    arrItem: Array<T & { id?: string, value?: string, _id?: string, name?: string }>
     defaultLabel: string
     label?: string
-    mode?: 'dialog' | 'dropdown'
-    error?: boolean
+    isInvalid?: boolean
     textErrorStyles?: StyleProp<TextStyle>
     onReturnValueId?: boolean
+    isRequired?: boolean
 }
-const SelectPicker = ({
-                          arrItem,
-                          defaultLabel,
-                          styles,
-                          values,
-                          onValueChange,
-                          onBlur,
-                          label,
-                          mode = 'dropdown',
-                          error,
-                          textErrorStyles,
-                          onReturnValueId
-                      }: SelectPickerProps) => {
-    const [service, setService] = React.useState("");
+const SelectPicker = function <T>({
+                                      arrItem,
+                                      defaultLabel,
+                                      values,
+                                      onBlur,
+                                      label,
+                                      isInvalid,
+                                      textErrorStyles,
+                                      isRequired,
+                                      onReturnValueId,
+                                      onValueChange,
+                                      ...rest
+                                  }: SelectPickerProps<T>) {
     return (
-        <View>
-            <Select onValueChange={onValueChange}
-                    defaultValue={values} selectedValue={service} minWidth="200" accessibilityLabel={defaultLabel}
-                    placeholder={defaultLabel} mt={1}>
-                <Select.Item label="UX Research" value="ux"/>
-                <Select.Item label="Web Development" value="web"/>
-                <Select.Item label="Cross Platform Development" value="cross"/>
-                <Select.Item label="UI Designing" value="ui"/>
-                <Select.Item label="Backend Development" value="backend"/>
-            </Select>
-            {error &&
-                <Text style={[textErrorStyles, {
-                    color: 'red',
-                    width: "100%",
-                    justifyContent: 'flex-start',
-                    alignItems: 'flex-start',
-                    fontSize: 12
-                }]}>Поля
-                    обязательно</Text>
-            }
-        </View>
+        <Center mt={2} style={{width: '100%'}}>
+            <FormControl isRequired={isRequired} isInvalid={isInvalid}>
+                <FormControl.Label>{label}</FormControl.Label>
+                <Select {...rest}
+                        onClose={() => {
+                            onBlur && onBlur(true)
+                        }}
+                        onValueChange={onValueChange}
+                        defaultValue={values}
+                        placeholder={defaultLabel}
+                        height={35}
+                        width={'100%'}
+                        accessibilityLabel="Choose Service"
+                        variant={'outline'}
+                        _selectedItem={{
+                            bg: 'teal.600',
+                            endIcon: <CheckIcon size="5"/>,
+                        }}
+                        mt={1}
+                >
+                    {
+                        arrItem.map((list, index) => {
+                            const currentValue = list.value ? list.value : list.name ? list.name : null
+                            const currentId = list.id ? list.id : list._id ? list._id : null
+                            return <Select.Item key={index}
+                                                color={colors.black}
+                                                label={currentValue}
+                                                value={onReturnValueId ? currentId : currentValue}/>
+                        })
+                    }
+                </Select>
+                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon/>}>
+                    Поля являеться обязательным
+                </FormControl.ErrorMessage>
+            </FormControl>
+        </Center>
     );
 };
 

@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
-import {Image, Modal, StyleSheet, Text, View} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Box, Modal} from "native-base";
 import SafeAreaView from "../components/safe-area-view";
 import HistoryStore from "../../store/HistoryStore/history-store";
 import {observer} from "mobx-react-lite";
-import SelectPicker from "../components/picker";
 import {WalletModelType} from "../../store/Type/models";
 import WalletStore from "../../store/WalletStore/wallet-store";
-import imageSetting from '../../assets/images/settingBig.png'
 import {colors} from "../../assets/colors/colors";
 import Switcher from "../components/switcher";
 import Button from "../components/button";
 import rootStore from "../../store/RootStore/root-store";
-import Loading from "../components/loading";
+import SelectPicker from "../components/select-picker";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import settingsImage from '../../assets/images/settings.png'
 
 type FilterHistoryModalType = {
     visible: boolean
@@ -29,6 +30,7 @@ const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType)
     const [walletId, setWalletId] = useState('')
     const [sortByName, setSortByName] = useState('')
     const [toggleSortBy, setToggleSortBy] = useState(false)
+    const [invalidWallet, setInvalidWallet] = useState(false)
 
     const onValueChangeSwitcher = (value: boolean) => {
         setToggleSortBy(value)
@@ -50,26 +52,35 @@ const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType)
     }
     return (
         <Modal
-            animationType="fade"
-            transparent={false}
-            visible={visible}
-            onRequestClose={() => {
-                onClose()
-            }}
-        ><SafeAreaView>
+            isOpen={visible}
+            backdropVisible={true}
+            background={'white'}
+        >
+            <SafeAreaView>
             <View style={styles.container}>
-                <Image style={styles.logoSetting} source={imageSetting}/>
+                <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
+                    <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
+                </TouchableOpacity>
+                <Image style={styles.logoSetting} source={settingsImage}/>
                 <Text style={styles.textHeader}>Настройки фильтрации для истории</Text>
                 <View style={styles.body}>
                     <SelectPicker<WalletModelType>
                         arrItem={wallets ? wallets : []}
                         defaultLabel={'выберете кошелек'}
-                        onValueChange={onWalletValueChange}
+                        onValueChange={(e) => {
+                            onWalletValueChange(e)
+                            setInvalidWallet(false)
+                        }}
                         values={walletId}
                         label={'Выберете кошелек для просмотра истории'}
                         onReturnValueId={true}
+                        isRequired={true}
+                        onBlur={() => {
+                            !walletId && setInvalidWallet(true)
+                        }}
+                        isInvalid={invalidWallet}
                     />
-                    <SelectPicker<any>
+                    <SelectPicker<{ id: string, value: string }>
                         arrItem={filteredBy}
                         defaultLabel={'выберете сортировку'}
                         onValueChange={onValueChangeSortBy}
@@ -77,8 +88,12 @@ const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType)
                         label={'Сортировка истории'}
                         onReturnValueId={true}
                     />
-                    <Switcher label={'Сортировка по'} valueBefore={'Возрастанию'} valueAfter={'Убыванию'}
-                              onValueChange={onValueChangeSwitcher}/>
+                    <Box mt={2} flex={1}>
+                        <Switcher label={'Сортировка по'}
+                                  valueBefore={'Возрастанию'}
+                                  valueAfter={'Убыванию'}
+                                  onValueChange={onValueChangeSwitcher}/>
+                    </Box>
                 </View>
                 <View style={styles.buttonContainer}>
                     <Button
@@ -86,12 +101,6 @@ const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType)
                         title={'Сохранить'}
                         onPress={onPressSave}
                         styleContainer={styles.buttonSave}
-                    />
-                    <Button
-                        title={'Отмена'}
-                        onPress={() => onClose()}
-                        styleContainer={styles.buttonCancel}
-                        styleText={styles.btnCancelText}
                     />
                 </View>
             </View>
@@ -102,13 +111,15 @@ const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType)
 })
 const styles = StyleSheet.create({
     logoSetting: {
+        width: 150,
+        height: 150,
         marginTop: 20,
-        marginBottom: 30
+        marginBottom: 60
     },
-    buttonCancel: {
-        backgroundColor: colors.white,
-        borderWidth: 1,
-        borderColor: colors.gray
+    closeIco: {
+        position: 'absolute',
+        right: 20,
+        top: 20
     },
     buttonSave: {
         margin: 10
