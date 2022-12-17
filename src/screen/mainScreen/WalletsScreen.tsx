@@ -9,13 +9,12 @@ import wallet from '../../assets/images/wallet.png';
 import {FontAwesome} from '@expo/vector-icons';
 import {AddWalletModal} from "../../common/modals/add-wallet-modal";
 import logo from "../../assets/logo/logo-pony-web.png";
-import walletBlue from "../../assets/images/wallet-witch-cash-blue.png";
-import walletPlus from "../../assets/images/wallet-plus.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/router-constants/router-constants";
 import rootStore from "../../store/RootStore/root-store";
 import {AddSpendModal} from "../../common/modals/add-spend-modal";
 import HistoryStore from "../../store/HistoryStore/history-store";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
 
 type WalletScreenProps = {
@@ -87,12 +86,12 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
             <SafeAreaView>
                 <View style={styles.addWalletContainer}>
                     <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}} onPress={onPressButtonAddWallet}>
-                        <Image resizeMode={'contain'} style={styles.imgAddWallet} source={walletPlus}/>
-                        <Text style={[styles.text, {marginTop: 0}]}>Создать кошелек</Text>
+                        <AntDesign name={"pluscircleo"} size={24} color={colors.black} />
+                        <Text style={[styles.text]}>Создать кошелек</Text>
                     </TouchableOpacity>
                     <Image style={styles.logo} resizeMode={'contain'} source={logo}/>
                     <TouchableOpacity style={{alignItems: 'center', marginRight: 15}} onPress={onPressButtonAddSpend}>
-                        <Image style={styles.imgAddWallet} resizeMode={'contain'} source={walletBlue}/>
+                        <FontAwesome name={"cart-plus"} size={24} color={colors.black} />
                         <Text style={styles.text}>Добавить трату</Text>
                     </TouchableOpacity>
                 </View>
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
     },
     text: {
         marginTop: 5,
-        color: colors.gray,
+        color: colors.black,
         fontSize: 12,
         fontWeight: '800'
     },
@@ -150,8 +149,8 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 70,
+        height: 70,
         marginRight: 5,
     },
     addWalletContainer: {
@@ -160,10 +159,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: "center"
 
-    },
-    imgAddWallet: {
-        width: 50,
-        height: 50,
     },
     walletName: {
         marginTop: 10,

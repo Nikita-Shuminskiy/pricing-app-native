@@ -2,7 +2,6 @@ import React from 'react';
 import {Picker} from "@react-native-picker/picker";
 import {NativeSyntheticEvent, Platform, StyleProp, TargetedEvent, Text, TextStyle, View} from "react-native";
 import {colors} from "../../assets/colors/colors";
-import { BottomSheet } from 'react-native-btr';
 import PickerIos from "./pickerIOS";
 
 export type SelectPickerProps<T> = {
@@ -34,7 +33,7 @@ const SelectPicker = function <T>({
 
 
     return (
-        <View style={{width: '94%'}}>
+        <View style={{width: '100%', marginBottom: 10}}>
             {label && <Text style={{color: colors.gray, fontWeight: 'bold', fontSize: 16}}>{label}</Text>}
             {
                 Platform.OS === 'ios' ? (
@@ -47,12 +46,12 @@ const SelectPicker = function <T>({
                                       onBlur={onBlur} />
                     ) :
                     <Picker
-                        style={[styles, {marginBottom: error ? 0 : 20}]}
+                        style={[styles, {marginBottom: error ? 0 : 20, borderWidth: 2, borderColor: 'gray'}]}
                         mode={mode}
                         selectedValue={values}
                         onBlur={onBlur}
                         onValueChange={onValueChange}>
-                        <Picker.Item color={colors.gray} label={defaultLabel} value={''}/>
+                        <Picker.Item style={{fontSize: 12 }} color={colors.gray} label={defaultLabel} value={''}/>
                         {
                             arrItem.map((list, index) => {
                                 const currentValue = list.value ? list.value : list.name ? list.name : null
@@ -66,7 +65,6 @@ const SelectPicker = function <T>({
             }
             {error &&
                 <Text style={[textErrorStyles, {
-                    marginBottom: 20,
                     color: 'red',
                     width: "100%",
                     justifyContent: 'flex-start',

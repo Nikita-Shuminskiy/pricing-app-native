@@ -67,7 +67,6 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                 <Image style={styles.img} source={wallet}/>
                                 <Text style={styles.textCreate}>Создание кошелька</Text>
                                 <View style={styles.container}>
-
                                     <Input
                                         style={styles.input}
                                         onChangeText={handleChange('name')}
@@ -94,7 +93,7 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
 
                                     <SelectPicker<CurrencyType>
                                         arrItem={allCurrencyList ? allCurrencyList : []}
-                                        defaultLabel={'Выберете валюту'}
+                                        defaultLabel={'выберете валюту'}
                                         onValueChange={handleChange('currency')}
                                         values={values.currency}
                                         styles={styles.picker}

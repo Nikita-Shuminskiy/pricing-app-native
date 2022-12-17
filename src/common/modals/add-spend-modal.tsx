@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import {Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
 import SafeAreaView from "../components/safe-area-view";
 import {Formik} from "formik";
-import {Input} from "react-native-elements";
 import {colors} from "../../assets/colors/colors";
 import Button from "../components/button";
 import spend from '../../assets/images/spend.png';
@@ -13,6 +12,9 @@ import rootStore from "../../store/RootStore/root-store";
 import CategoriesStore from "../../store/CategoriesStore/categories-store";
 import AuthStore from "../../store/AuthStore/auth-store";
 import Loading from "../components/loading";
+import TextArea from "../components/text-area";
+import Input from "../components/input";
+
 
 type ModalWindowType = {
     onClose: () => void
@@ -87,7 +89,7 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
                                         <SelectPicker<CategoryModelType>
                                             styles={styles.picker}
                                             arrItem={categories ? categories : []}
-                                            defaultLabel={'Выберете категорию'}
+                                            defaultLabel={'выберете категорию'}
                                             onValueChange={handleChange('categories')}
                                             values={values.categories}
                                             label={'Категория'}
@@ -112,22 +114,14 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
                                             onBlur={handleBlur('amount')}
                                             errorMessage={errors.inValidAmount && touched.amount && 'Поля обязательно'}
                                             value={values.amount}
-                                            autoCompleteType={false}
                                             label={'Сумма которую вы потратили'}
-                                            labelStyle={{color: colors.gray}}
                                         />
+                                        <SelectPicker arrItem={categories} label={'sss'} values={values.categories}
+                                                      defaultLabel={'qqqq'} onValueChange={handleChange('categories')}/>
 
-                                        <Input
-                                            multiline={true}
-                                            numberOfLines={4}
-                                            style={styles.description}
-                                            onChangeText={handleChange('description')}
-                                            placeholder={'введите коментарий'}
-                                            value={values.description}
-                                            autoCompleteType={false}
-                                            label={'Комментарий к трате'}
-                                            labelStyle={{color: colors.gray}}
-                                        />
+                                        <TextArea value={values.description} label={'Комментарий к трате'}
+                                                  onChange={handleChange('description')}
+                                                  placeholder={'введите коммментарий'}/>
                                         <View style={styles.buttonContainer}>
                                             <Button
                                                 disabled={!!errors.inValidAmount || !!errors.inValidCategories || !!errors.inValidWallet}

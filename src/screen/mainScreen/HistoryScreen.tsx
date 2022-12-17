@@ -15,6 +15,7 @@ import rootStore from "../../store/RootStore/root-store";
 import Loading from "../../common/components/loading";
 import NotificationStore from "../../store/NotificationStore/notification-store";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 type HistoryScreenProps = {
     navigation: NavigationProp<ParamListBase>
@@ -85,8 +86,8 @@ const renderEmptyContainer = () => {
                     <Text style={styles.textWalletName}>{chosenWallet?.name ? chosenWallet?.name : 'Вся история'}</Text>
                     <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}}
                                       onPress={onPressButtonFilterHistory}>
-                        <Image resizeMode={'contain'} style={styles.imgFilter} source={settingImage}/>
-                        <Text style={[styles.text, {marginTop: 0}]}>Фильтры</Text>
+                        <Ionicons name={"filter"} size={24} color={colors.black} />
+                        <Text style={[styles.text]}>Фильтры</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.historyContainer}>
@@ -125,14 +126,14 @@ const styles = StyleSheet.create({
     text: {
         width: '100%',
         marginTop: 5,
-        color: colors.gray,
+        color: colors.black,
         fontSize: 12,
         fontWeight: '800'
     },
     textWalletName: {
         fontWeight: '800',
         fontSize: 20,
-        color: colors.gray,
+        color: colors.black,
     },
     headerContainer: {
         width: '100%',

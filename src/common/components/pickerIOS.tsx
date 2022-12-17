@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import {SafeAreaView, StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
+import {SafeAreaView, StyleSheet, View} from "react-native";
 import {SelectPickerProps} from "./picker";
 import {Picker} from "@react-native-picker/picker";
 import {colors} from "../../assets/colors/colors";
 import {Input} from "react-native-elements";
 import {BottomSheet} from "react-native-btr";
-import Button from "./button";
 import Link from "./link";
 
 interface PickerIosProps extends SelectPickerProps<any> {
@@ -43,7 +42,8 @@ const PickerIos = ({
                 onBackdropPress={toggleBottomNavigationView}
             >
                 <View style={styles.bottomNavigationView}>
-                        <Link style={styles.linkContainer} styleText={styles.link} onPress={() => setVisible(false)} text={'Сохранить'}/>
+                    <Link style={styles.linkContainer} styleText={styles.link} onPress={() => setVisible(false)}
+                          text={'Сохранить'}/>
                     <Picker
                         style={styles.picker}
                         selectedValue={values}
