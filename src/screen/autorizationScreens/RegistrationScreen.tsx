@@ -6,7 +6,6 @@ import logo from '../../assets/logo/logo-pony-web.png'
 import Link from "../../common/components/link";
 import Button from '../../common/components/button';
 import AuthStore from "../../store/AuthStore/auth-store";
-import {Input} from "react-native-elements";
 import {colors} from "../../assets/colors/colors";
 import regex from "../../helpers/regex";
 import {createAlert} from "../../common/components/alert";
@@ -16,6 +15,7 @@ import {Center, ScrollView} from "native-base";
 import {Feather} from "@expo/vector-icons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Input from "../../common/components/input";
 
 type PasswordScreenProps = {
     navigation: NavigationProp<ParamListBase>
@@ -78,57 +78,53 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
                                         onChangeText={handleChange('name')}
                                         placeholder={'введите имя'}
                                         value={values.name}
-                                        autoCompleteType={true}
                                         label={'Имя'}
-                                        rightIcon={
+                                      /*  rightIcon={
                                             <Ionicons name={"person-outline"} size={24}  color={colors.gray} />
-                                        }
+                                        }*/
                                     />
                                     <Input
                                         style={styles.input}
                                         onChangeText={handleChange('email')}
                                         placeholder={'введите логин'}
                                         value={values.email}
-                                        rightIcon={
+                                       /* rightIcon={
                                             <MaterialCommunityIcons name={"email-edit-outline"} size={24}  color={colors.gray}  />
-                                        }
-                                        autoCompleteType={true}
+                                        }*/
                                         onBlur={handleBlur('email')}
                                         errorMessage={touched.email && errors.inValidEmail && 'Некорректно введен емейл'}
                                         label={'Емайл*'}
                                     />
                                     <Input
-                                        rightIcon={
+                                      /*  rightIcon={
                                             <Feather onPress={() => setShowPassword(prevState => !prevState)}
                                                      name={showPassword ? 'eye' : 'eye-off'} size={24}
                                                      color={colors.gray}/>
-                                        }
+                                        }*/
                                         style={styles.input}
                                         onChangeText={handleChange('password')}
                                         placeholder={'введите пароль'}
-                                        secureTextEntry={showPassword}
+                                       /* secureTextEntry={showPassword}*/
                                         value={values.password}
-                                        autoCompleteType={true}
                                         onBlur={handleBlur('password')}
                                         errorMessage={errors.inValidPassword && touched.password && 'Пароль должен содержать не меньше 4-рех символов'}
                                         label={'Пароль*'}
                                     />
                                     <Input
-                                        rightIcon={
+                                       /* rightIcon={
                                             <Feather onPress={() => setShowPassword(prevState => !prevState)}
                                                      name={showPassword ? 'eye' : 'eye-off'} size={24}
                                                      color={colors.gray}/>
-                                        }
+                                        }*/
                                         style={styles.input}
                                         onChangeText={handleChange('confirmPassword')}
                                         placeholder={'подтвердждение пароля'}
-                                        secureTextEntry={showPassword}
+                                     /*   secureTextEntry={showPassword}*/
                                         value={values.confirmPassword}
-                                        autoCompleteType={true}
-                                        renderErrorMessage={true}
+                                 /*       renderErrorMessage={true}*/
                                         onBlur={handleBlur('confirmPassword')}
                                         errorMessage={errors.inValidConfirmPassword && touched.confirmPassword && 'Пароли не совпадают'}
-                                    />
+                                 />
                                     <Button
                                         disabled={!!errors.inValidConfirmPassword || !!errors.inValidPassword || !!errors.inValidPassword}
                                         styleContainer={styles.button}

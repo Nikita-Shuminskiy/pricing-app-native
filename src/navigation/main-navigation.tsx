@@ -1,11 +1,11 @@
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {routerConstants} from "../constants/router-constants/router-constants";
 import {MainScreen} from "../screen/mainScreen/MainScreen";
-import {Icon} from "react-native-elements";
 import {colors} from "../assets/colors/colors";
 import WalletNavigation from "./wallet-navigation";
 import HistoryScreen from "../screen/mainScreen/HistoryScreen";
 import ChartScreen from "../screen/mainScreen/ChartScreen";
+import { Icon } from 'native-base';
 
 const Tab = createMaterialBottomTabNavigator();
 

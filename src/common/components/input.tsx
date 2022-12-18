@@ -1,12 +1,11 @@
 import React from 'react';
-import {Box, Center, FormControl, Input, WarningOutlineIcon} from "native-base";
-import {KeyboardTypeOptions, StyleProp, Text, TextStyle, View} from "react-native";
-import {colors} from "../../assets/colors/colors";
+import {Box, FormControl, Input, WarningOutlineIcon} from "native-base";
+import {KeyboardTypeOptions, StyleProp, TextStyle} from "react-native";
 
 type InputCustomProps = {
     placeholder: string
-    label: string
-    errorMessage: string
+    label?: string
+    errorMessage?: string
     onChangeText: (value) => void
     error?: boolean
     textErrorStyles?: StyleProp<TextStyle>
@@ -34,7 +33,7 @@ const InputCustom = ({
     return (
         <Box mt={2} width={'100%'}>
             <FormControl isInvalid={isInvalid} isRequired={isRequired}>
-                <FormControl.Label>{label}</FormControl.Label>
+                { label && <FormControl.Label>{label}</FormControl.Label>}
                 <Input value={value}
                        style={style}
                        keyboardType={keyboardType}

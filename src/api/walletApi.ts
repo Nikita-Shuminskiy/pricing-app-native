@@ -15,16 +15,6 @@ export const walletApi = {
         const {userId, name, currency, balance} = newWallet;
         return instance.post(`wallet`, {userId, wallet: {name, currency, balance}});
     },
-    async addSpendToWallet(walletId: string, spendingId: string): Promise<AxiosResponse<SpendingModel>> {
-        NotificationStore.setIsLoading(LoadingEnum.fetching)
-        try {
-            return await instance.post<SpendingModel>('wallet/spending', {walletId, spendingId});
-        } catch (e) {
-            return e
-        } finally {
-            NotificationStore.setIsLoading(LoadingEnum.success)
-        }
-    },
     async removeWallet(userId: string, walletId: string): Promise<AxiosResponse<any>> {
         /*     NotificationStore.setIsLoading(LoadingEnum.fetching)*/
         try {
