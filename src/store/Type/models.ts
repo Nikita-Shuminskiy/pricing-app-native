@@ -87,4 +87,9 @@ export type CurrencyType = {
 	value: string;
 	_id: string;
 };
-export type ChartDataType = { label: string; data: { x: number; y: number }[] };
+export type ChartDataType = {
+	name: string,
+	population: number,
+	color: string,
+	legendFontColor: string,
+}

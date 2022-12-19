@@ -1,31 +1,25 @@
-import React, {useEffect} from 'react';
-import {Dimensions, StyleSheet} from "react-native";
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, TouchableOpacity} from "react-native";
 import SafeAreaView from "../../common/components/safe-area-view";
 import {observer} from "mobx-react-lite";
-import {BarChart, LineChart, PieChart, ProgressChart, StackedBarChart} from "react-native-chart-kit";
+import {PieChart} from "react-native-chart-kit";
 import rootStore from "../../store/RootStore/root-store";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import CategoriesStore from "../../store/CategoriesStore/categories-store";
-import {ChartData, Dataset} from "react-native-chart-kit/dist/HelperTypes";
-import {Box} from "native-base";
+import {Box, Image} from "native-base";
 import {generateColor} from "../../utils/utils";
-
+import filterImage from '../../assets/images/filter.png'
+import FilterChartModal from "../../common/modals/filter-chart-modal";
 
 const ChartScreen = observer(() => {
     const {CategoryStoreService} = rootStore
     const {chosenWallet} = WalletStore
     const {chartData, labels, walletChartId} = CategoriesStore
-      useEffect(() => {
-          CategoryStoreService.getChartData('639e2e063bd3108c8b756de0', '2022')
-      }, [])
-    const category =  chartData && chartData?.map((item, index) => {
-        return {
-            name: item.label[index],
-            population: item?.data[index]?.x,
-            color: generateColor(),
-            legendFontSize: 15
-        }
-    })
+    const [modalFilterChart, setModalFilterChart] = useState(false);
+ /*   useEffect(() => {
+        CategoryStoreService.getChartData('639e2e063bd3108c8b756de0', '2022')
+    }, [])*/
+    console.log(chartData)
     const chartConf = {
         backgroundColor: "#e26a00",
         backgroundGradientFrom: "#fb8c00",
@@ -42,25 +36,41 @@ const ChartScreen = observer(() => {
             stroke: "#ffa726"
         }
     }
+    const onPressFilter = () => {
+        setModalFilterChart(true)
+    }
     return (
-        <SafeAreaView>
-            <Box flex={1}
-                 width={'100%'}
-                 alignItems={'center'}
-                 justifyContent={'center'}>
-                <PieChart
-                    data={[]}
-                    width={220}
-                    height={220}
-                    chartConfig={chartConf}
-                    accessor={"population"}
-                    backgroundColor={"transparent"}
-                    paddingLeft={"15"}
-                    center={[10, 50]}
-                    absolute
-                />
-            </Box>
-        </SafeAreaView>
+        <>
+            <SafeAreaView>
+                <Box flex={1} width={'100%'} alignItems={'center'} justifyContent={'center'}>
+                    <Box right={10} position={'absolute'} bottom={10}>
+                        <TouchableOpacity onPress={onPressFilter}>
+                            <Image alt={'filter for chart'} w={50} height={50} source={filterImage}/>
+                        </TouchableOpacity>
+                    </Box>
+                    <Box flex={1}
+                         width={'100%'}
+                         alignItems={'center'}
+                         justifyContent={'center'}>
+                        <PieChart
+                            data={chartData}
+                            width={320}
+                            height={320}
+                            chartConfig={chartConf}
+                            accessor={"population"}
+                            backgroundColor={"transparent"}
+                            paddingLeft={"15"}
+                            center={[10, 50]}
+                            hasLegend={true}
+                            absolute={true}
+                            avoidFalseZero={true}
+                        />
+                    </Box>
+                </Box>
+            </SafeAreaView>
+            {modalFilterChart &&
+                <FilterChartModal visible={modalFilterChart} onClose={() => setModalFilterChart(false)}/>}
+        </>
     );
 });
 
