@@ -5,7 +5,7 @@ import {colors} from "../assets/colors/colors";
 import WalletNavigation from "./wallet-navigation";
 import HistoryScreen from "../screen/mainScreen/HistoryScreen";
 import ChartScreen from "../screen/mainScreen/ChartScreen";
-import { Icon } from 'native-base';
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -19,22 +19,18 @@ const MainNavigation = () => {
 
                     if (route.name === 'wallets') {
                         iconName = focused
-                            ? 'account-balance-wallet'
-                            : 'account-balance-wallet'
+                            ? 'wallet'
+                            : 'wallet-outline'
                     } else if (route.name === 'work-space') {
-                        iconName = focused ? 'tablet-android' : 'tablet-android';
+                        iconName = focused ? 'analytics' : 'analytics-outline';
                     } else if (route.name === 'chart') {
-                        iconName = focused ? 'bar-chart' : 'bar-chart';
+                        iconName = focused ? 'bar-chart' : 'bar-chart-outline';
                     } else if (route.name === 'settings') {
-                        iconName = focused ? 'app-settings-alt' : 'app-settings-alt';
+                        iconName = focused ? 'settings' : 'settings-outline';
                     }
 
                     return (
-                        <Icon
-                            name={iconName}
-                            size={24}
-                            color={color}
-                            tvParallaxProperties={null}/>
+                        <Ionicons name={iconName} size={24} color={color}/>
                     )
                 },
             })}

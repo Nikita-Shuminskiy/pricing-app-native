@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Modal} from "native-base";
 import SafeAreaView from "../components/safe-area-view";
 import filterImage from '../../assets/images/filterWichBorder.png'
-import {StyleSheet, Text, TouchableOpacity, View, Image} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {colors} from "../../assets/colors/colors";
 import SelectPicker from "../components/select-picker";
@@ -10,20 +10,25 @@ import {WalletModelType} from "../../store/Type/models";
 import Button from "../components/button";
 import rootStore from "../../store/RootStore/root-store";
 import WalletStore from "../../store/WalletStore/wallet-store";
-import CategoriesStore from "../../store/CategoriesStore/categories-store";
 
 type FilterChartModalProps = {
     visible: boolean
     onClose: () => void
 }
 const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
-    const {setWalletChartId} = CategoriesStore
     const {CategoryStoreService} = rootStore
     const {wallets} = WalletStore
-    const [data, setData] = useState('')
+    const [walletId, setWalletId] = useState('')
 
     const onPressSave = () => {
-        CategoryStoreService.getChartData(data, '2022')
+        CategoryStoreService.getChartData({
+            walletId: walletId,
+            typeChart: 'pie'
+        })
+        CategoryStoreService.getChartData({
+            walletId: walletId,
+            typeChart: 'line'
+        })
     }
     return (
         <Modal
@@ -43,9 +48,9 @@ const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
                             arrItem={wallets ? wallets : []}
                             defaultLabel={'выберете кошелек'}
                             onValueChange={(e) => {
-                                setData(e)
+                                setWalletId(e)
                             }}
-                            values={data}
+                            values={walletId}
                             label={'Выберете кошелек'}
                             onReturnValueId={true}
                             isRequired={true}
@@ -53,7 +58,7 @@ const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
                     </View>
                     <View style={styles.buttonContainer}>
                         <Button
-                            disabled={!data}
+                            disabled={!walletId}
                             title={'Сохранить'}
                             onPress={onPressSave}
                             styleContainer={styles.buttonSave}

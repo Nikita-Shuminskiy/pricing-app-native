@@ -80,16 +80,24 @@ export type SpendDataType = {
 
 export type ParamsToChartDate = {
 	year?: string;
-	walletId?: string;
+	walletId: string;
+	isMobile?: boolean,
+	typeChart: 'pie' | 'line'
 };
 
 export type CurrencyType = {
 	value: string;
 	_id: string;
 };
-export type ChartDataType = {
+export type ChartDatasetPieType = {
 	name: string,
 	population: number,
 	color: string,
 	legendFontColor: string,
+}
+export type ChartDatasetLineType = {
+	data: number[]
+	strokeWidth: 2,
+	color: (opacity: number) => string
+	key: string
 }
