@@ -41,15 +41,10 @@ const FilterHistoryModal = ({visible, onClose}: FilterHistoryModalType) => {
     const onValueChangeSortBy = (value) => {
         setSortByName(value)
     }
-    const onPressSave = () => {
-        console.log(13131)
-     /*   getWallet(walletId)
-        HistoryStoreService.getCurrentHistory(walletId).then((res) => {
-            if (res) {
-                sortSelectedWalletHistory(sortByName, toggleSortBy)
-                onClose()
-            }
-        })*/
+    const onPressSave = async () => {
+        await HistoryStoreService.getCurrentHistory(walletId)
+        sortSelectedWalletHistory(sortByName, toggleSortBy)
+        onClose()
 
     }
     return (

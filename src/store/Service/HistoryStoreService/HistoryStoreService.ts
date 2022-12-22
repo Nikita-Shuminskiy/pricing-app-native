@@ -14,7 +14,6 @@ export class HistoryStoreService {
             await this.rootStore.HistoryStore.getCurrentHistory(walletId);
             this.rootStore.Notification.setNotification('success', true);
             await this.rootStore.WalletStore.getWallet(walletId)
-            return true
         } catch (e) {
             this.rootStore.Notification.setNotification('error', true, e?.response?.data?.message);
         } finally {

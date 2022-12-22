@@ -10,25 +10,45 @@ import {WalletModelType} from "../../store/Type/models";
 import Button from "../components/button";
 import rootStore from "../../store/RootStore/root-store";
 import WalletStore from "../../store/WalletStore/wallet-store";
+import Loading from "../components/loading";
 
 type FilterChartModalProps = {
     visible: boolean
     onClose: () => void
 }
+const arrYear = [
+    {id: '2022', value: '2022'},
+    {id: '2023', value: '2023'},
+    {id: '2024', value: '2024'},
+    {id: '2025', value: '2025'},
+    {id: '2026', value: '2026'},
+    {id: '2027', value: '2027'},
+    {id: '2028', value: '2028'},
+    {id: '2029', value: '2029'},
+    {id: '2030', value: '2030'},
+]
 const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
     const {CategoryStoreService} = rootStore
-    const {wallets} = WalletStore
-    const [walletId, setWalletId] = useState('')
+    const {wallets, getWallet} = WalletStore
 
-    const onPressSave = () => {
-        CategoryStoreService.getChartData({
-            walletId: walletId,
+    const [data, setData] = useState({
+        year: '',
+        walletId: ''
+    })
+
+    const [loading, setLoading] = useState(false)
+
+
+    const onPressSave = async () => {
+        setLoading(true)
+        await getWallet(data.walletId)
+        await CategoryStoreService.getChartData({
+            walletId: data.walletId,
+            year: data.year ? data.year : null,
             typeChart: 'pie'
         })
-        CategoryStoreService.getChartData({
-            walletId: walletId,
-            typeChart: 'line'
-        })
+        onClose()
+        setLoading(false)
     }
     return (
         <Modal
@@ -36,36 +56,54 @@ const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
             backdropVisible={true}
             background={'white'}
         >
-            <SafeAreaView>
-                <View style={styles.container}>
-                    <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
-                        <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
-                    </TouchableOpacity>
-                    <Image style={styles.logoSetting} source={filterImage}/>
-                    <Text style={styles.textHeader}>Настройки для графика</Text>
-                    <View style={styles.body}>
-                        <SelectPicker<WalletModelType>
-                            arrItem={wallets ? wallets : []}
-                            defaultLabel={'выберете кошелек'}
-                            onValueChange={(e) => {
-                                setWalletId(e)
-                            }}
-                            values={walletId}
-                            label={'Выберете кошелек'}
-                            onReturnValueId={true}
-                            isRequired={true}
-                        />
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            disabled={!walletId}
-                            title={'Сохранить'}
-                            onPress={onPressSave}
-                            styleContainer={styles.buttonSave}
-                        />
-                    </View>
-                </View>
-            </SafeAreaView>
+            {
+                loading ? (
+                        <Loading/>
+                    )
+                    : (
+                        <SafeAreaView>
+                            <View style={styles.container}>
+                                <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
+                                    <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
+                                </TouchableOpacity>
+                                <Image style={styles.logoSetting} source={filterImage}/>
+                                <Text style={styles.textHeader}>Настройки для графика</Text>
+                                <View style={styles.body}>
+                                    <SelectPicker<WalletModelType>
+                                        arrItem={wallets ? wallets : []}
+                                        defaultLabel={'выберете кошелек'}
+                                        onValueChange={(e) => {
+                                            setData({...data, walletId: e})
+                                        }}
+                                        values={data.walletId}
+                                        label={'Выберете кошелек'}
+                                        onReturnValueId={true}
+                                        isRequired={true}
+                                    />
+                                    <SelectPicker<{ id: string, value: string }>
+                                        arrItem={arrYear}
+                                        defaultLabel={'выберете год'}
+                                        onValueChange={(e) => {
+                                            setData({...data, year: e})
+                                        }}
+                                        values={data.year}
+                                        label={'Выберете год'}
+                                        onReturnValueId={true}
+                                        isRequired={false}
+                                    />
+                                </View>
+                                <View style={styles.buttonContainer}>
+                                    <Button
+                                        disabled={!data.walletId}
+                                        title={'Сохранить'}
+                                        onPress={onPressSave}
+                                        styleContainer={styles.buttonSave}
+                                    />
+                                </View>
+                            </View>
+                        </SafeAreaView>
+                    )
+            }
 
         </Modal>
     );
