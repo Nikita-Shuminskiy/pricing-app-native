@@ -1,5 +1,5 @@
 import {AxiosResponse} from "axios";
-import {CurrencyType, LoadingEnum, NewWalletType, SpendingModel, WalletModelType} from "../store/Type/models";
+import {CurrencyType, LoadingEnum, NewWalletType, WalletModelType} from "../store/Type/models";
 import {instance} from "./config";
 import NotificationStore from "../store/NotificationStore/notification-store";
 
@@ -16,16 +16,12 @@ export const walletApi = {
         return instance.post(`wallet`, {userId, wallet: {name, currency, balance}});
     },
     async removeWallet(userId: string, walletId: string): Promise<AxiosResponse<any>> {
-        /*     NotificationStore.setIsLoading(LoadingEnum.fetching)*/
         try {
             return await instance.delete('history/wallet', {data: {userId, walletId}});
         } catch (e) {
             return e
-        } finally {
-            /*     NotificationStore.setIsLoading(LoadingEnum.success)*/
         }
     },
-    //
     getCurrencyList(): Promise<AxiosResponse<CurrencyType[]>> {
         NotificationStore.setIsLoading(LoadingEnum.fetching)
         try {

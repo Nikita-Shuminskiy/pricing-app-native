@@ -53,8 +53,7 @@ const SelectPicker = function <T>({
                         arrItem.map((list, index) => {
                             const currentValue = list.value ? list.value : list.name ? list.name : null
                             const currentId = list.id ? list.id : list._id ? list._id : null
-                            return <Select.Item key={index}
-                                                color={colors.black}
+                            return <Select.Item key={index} color={colors.black}
                                                 label={currentValue}
                                                 value={onReturnValueId ? currentId : currentValue}/>
                         })

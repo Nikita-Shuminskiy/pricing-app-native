@@ -23,10 +23,10 @@ const filteredBy = [
     {id: 'amount', value: 'Сортировка по сумме траты'},
     {id: 'category', value: 'Сортировка по имени категории'}
 ]
-const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType) => {
+const FilterHistoryModal = ({visible, onClose}: FilterHistoryModalType) => {
     const {sortSelectedWalletHistory} = HistoryStore
     const {HistoryStoreService} = rootStore
-    const {wallets} = WalletStore
+    const {wallets, getWallet} = WalletStore
     const [walletId, setWalletId] = useState('')
     const [sortByName, setSortByName] = useState('')
     const [toggleSortBy, setToggleSortBy] = useState(false)
@@ -42,12 +42,14 @@ const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType)
         setSortByName(value)
     }
     const onPressSave = () => {
+        console.log(13131)
+     /*   getWallet(walletId)
         HistoryStoreService.getCurrentHistory(walletId).then((res) => {
             if (res) {
                 sortSelectedWalletHistory(sortByName, toggleSortBy)
                 onClose()
             }
-        })
+        })*/
 
     }
     return (
@@ -57,58 +59,58 @@ const FilterHistoryModal = observer(({visible, onClose}: FilterHistoryModalType)
             background={'white'}
         >
             <SafeAreaView>
-            <View style={styles.container}>
-                <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
-                    <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
-                </TouchableOpacity>
-                <Image style={styles.logoSetting} source={settingsImage}/>
-                <Text style={styles.textHeader}>Настройки фильтрации для истории</Text>
-                <View style={styles.body}>
-                    <SelectPicker<WalletModelType>
-                        arrItem={wallets ? wallets : []}
-                        defaultLabel={'выберете кошелек'}
-                        onValueChange={(e) => {
-                            onWalletValueChange(e)
-                            setInvalidWallet(false)
-                        }}
-                        values={walletId}
-                        label={'Выберете кошелек для просмотра истории'}
-                        onReturnValueId={true}
-                        isRequired={true}
-                        onBlur={() => {
-                            !walletId && setInvalidWallet(true)
-                        }}
-                        isInvalid={invalidWallet}
-                    />
-                    <SelectPicker<{ id: string, value: string }>
-                        arrItem={filteredBy}
-                        defaultLabel={'выберете сортировку'}
-                        onValueChange={onValueChangeSortBy}
-                        values={sortByName}
-                        label={'Сортировка истории'}
-                        onReturnValueId={true}
-                    />
-                    <Box mt={2} flex={1}>
-                        <Switcher label={'Сортировка по'}
-                                  valueBefore={'Возрастанию'}
-                                  valueAfter={'Убыванию'}
-                                  onValueChange={onValueChangeSwitcher}/>
-                    </Box>
+                <View style={styles.container}>
+                    <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
+                        <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
+                    </TouchableOpacity>
+                    <Image style={styles.logoSetting} source={settingsImage}/>
+                    <Text style={styles.textHeader}>Настройки фильтрации для истории</Text>
+                    <View style={styles.body}>
+                        <SelectPicker<WalletModelType>
+                            arrItem={wallets ? wallets : []}
+                            defaultLabel={'выберете кошелек'}
+                            onValueChange={(e) => {
+                                onWalletValueChange(e)
+                                setInvalidWallet(false)
+                            }}
+                            values={walletId}
+                            label={'Выберете кошелек для просмотра истории'}
+                            onReturnValueId={true}
+                            isRequired={true}
+                            onBlur={() => {
+                                !walletId && setInvalidWallet(true)
+                            }}
+                            isInvalid={invalidWallet}
+                        />
+                        <SelectPicker<{ id: string, value: string }>
+                            arrItem={filteredBy}
+                            defaultLabel={'выберете сортировку'}
+                            onValueChange={onValueChangeSortBy}
+                            values={sortByName}
+                            label={'Сортировка истории'}
+                            onReturnValueId={true}
+                        />
+                        <Box mt={2} flex={1}>
+                            <Switcher label={'Сортировка по'}
+                                      valueBefore={'Возрастанию'}
+                                      valueAfter={'Убыванию'}
+                                      onValueChange={onValueChangeSwitcher}/>
+                        </Box>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            disabled={!walletId}
+                            title={'Сохранить'}
+                            onPress={onPressSave}
+                            styleContainer={styles.buttonSave}
+                        />
+                    </View>
                 </View>
-                <View style={styles.buttonContainer}>
-                    <Button
-                        disabled={!walletId}
-                        title={'Сохранить'}
-                        onPress={onPressSave}
-                        styleContainer={styles.buttonSave}
-                    />
-                </View>
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
 
         </Modal>
     );
-})
+}
 const styles = StyleSheet.create({
     logoSetting: {
         width: 150,

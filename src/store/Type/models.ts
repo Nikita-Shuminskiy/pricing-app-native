@@ -17,6 +17,7 @@ export type NewUserType = { email: string; password: string; name: string; lastN
 export type CategoryType = {
 	_id: string;
 	value: string;
+	color: string
 };
 
 export type WalletModelType = {
@@ -89,11 +90,18 @@ export type CurrencyType = {
 	value: string;
 	_id: string;
 };
+export type StatisticsDataEveryMonthTheYearType = {
+	monthName: string
+	category: string
+	totalSum: number
+
+}
 export type ChartDatasetPieType = {
 	name: string,
 	population: number,
 	color: string,
 	legendFontColor: string,
+	statisticsDataEveryMonthTheYear: StatisticsDataEveryMonthTheYearType[]
 }
 export type ChartDatasetLineType = {
 	data: number[]

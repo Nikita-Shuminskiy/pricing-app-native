@@ -7,7 +7,7 @@ import {colors} from "../../assets/colors/colors";
 import Button from "../components/button";
 import spend from '../../assets/images/spend.png';
 import WalletStore from "../../store/WalletStore/wallet-store";
-import {CategoryModelType, WalletModelType} from "../../store/Type/models";
+import {CategoryModelType, CategoryType, WalletModelType} from "../../store/Type/models";
 import rootStore from "../../store/RootStore/root-store";
 import CategoriesStore from "../../store/CategoriesStore/categories-store";
 import AuthStore from "../../store/AuthStore/auth-store";
@@ -104,7 +104,7 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
                                             <Image style={styles.img} source={spend}/>
                                             <Text style={styles.textCreate}>Добавление траты</Text>
                                             <View style={styles.container}>
-                                                <SelectPicker<CategoryModelType>
+                                                <SelectPicker<CategoryType>
                                                     arrItem={categories ? categories : []}
                                                     label={'Категория'}
                                                     values={values.categories}
