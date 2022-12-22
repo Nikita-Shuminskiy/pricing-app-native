@@ -1,15 +1,15 @@
 import React from 'react';
-import {ActivityIndicator, Image, StyleSheet, View} from "react-native";
-import {colors} from "../../assets/colors/colors";
+import {Image, StyleSheet, View} from "react-native";
 import logo from "../../assets/logo/logo-pony-web.png";
 import SafeAreaView from "./safe-area-view";
+import {Spinner} from "native-base";
 
 const Loading = () => {
     return (
         <SafeAreaView>
             <View style={style.container}>
                 <Image style={style.logo} resizeMode={'contain'} source={logo}/>
-                <ActivityIndicator size="large" color={colors.orange}/>
+                <Spinner size={'lg'} color="warning.500"/>
             </View>
         </SafeAreaView>
     );

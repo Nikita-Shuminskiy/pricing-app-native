@@ -1,18 +1,23 @@
 import React, {useState} from "react";
-import {Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Modal} from "native-base";
 import SafeAreaView from "../components/safe-area-view";
 import {Formik} from "formik";
-import {Input} from "react-native-elements";
 import {colors} from "../../assets/colors/colors";
 import Button from "../components/button";
 import spend from '../../assets/images/spend.png';
 import WalletStore from "../../store/WalletStore/wallet-store";
-import SelectPicker from "../components/picker";
-import {CategoryModelType, WalletModelType} from "../../store/Type/models";
+import {CategoryModelType, CategoryType, WalletModelType} from "../../store/Type/models";
 import rootStore from "../../store/RootStore/root-store";
 import CategoriesStore from "../../store/CategoriesStore/categories-store";
 import AuthStore from "../../store/AuthStore/auth-store";
 import Loading from "../components/loading";
+import TextArea from "../components/text-area";
+import Input from "../components/input";
+import SelectPicker from "../components/select-picker";
+import {ScrollView} from "native-base";
+import {KeyboardAvoidingView} from "native-base";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 type ModalWindowType = {
     onClose: () => void
@@ -46,110 +51,109 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
 
     return (
         <Modal
-            animationType="slide"
-            transparent={false}
-            visible={visible}
-            onRequestClose={() => {
-                onClose()
-            }}
+            isOpen={visible}
+            backdropVisible={true}
+            background={'white'}
         >
             {
-                loading ? <Loading/> : <ScrollView style={{width: '100%'}}>
+                loading ? <Loading/>
+                    :
                     <SafeAreaView>
-                        <Formik
-                            initialValues={{
-                                categories: '',
-                                amount: '',
-                                wallet: '',
-                                description: '',
-                            }}
-                            validate={values => {
-                                const errors = {};
-                                if (!values.categories) {
-                                    errors['inValidCategories'] = true
-                                }
-                                if (!values.amount) {
-                                    errors['inValidAmount'] = true
-                                }
+                        <KeyboardAvoidingView h={{
+                            base: "600px",
+                            lg: "auto"
+                        }} alignItems={'center'} flex={1} enabled={true}
+                                              behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                            <ScrollView w={["110%", "100%"]}>
+                                <Formik
+                                    initialValues={{
+                                        categories: '',
+                                        amount: '',
+                                        wallet: '',
+                                        description: '',
+                                    }}
+                                    validate={values => {
+                                        const errors = {};
+                                        if (!values.categories) {
+                                            errors['inValidCategories'] = true
+                                        }
+                                        if (!values.amount) {
+                                            errors['inValidAmount'] = true
+                                        }
 
-                                if (!values.wallet) {
-                                    errors['inValidWallet'] = true
-                                }
-                                return errors;
-                            }}
-                            onSubmit={onSubmit}
-                        >
-                            {({handleChange, handleBlur, handleSubmit, values, errors, touched, isSubmitting}) => (
-                                <View style={styles.formikContainer}>
-                                    <Image style={styles.img} source={spend}/>
-                                    <Text style={styles.textCreate}>Добавление траты</Text>
-                                    <View style={styles.container}>
-                                        <SelectPicker<CategoryModelType>
-                                            styles={styles.picker}
-                                            arrItem={categories ? categories : []}
-                                            defaultLabel={'Выберете категорию'}
-                                            onValueChange={handleChange('categories')}
-                                            values={values.categories}
-                                            label={'Категория'}
-                                            onBlur={handleBlur('categories')}
-                                            error={errors.inValidCategories && touched.categories as boolean}
-                                        />
-                                        <SelectPicker<WalletModelType>
-                                            error={errors.inValidWallet && touched.wallet as boolean}
-                                            styles={styles.picker}
-                                            arrItem={wallets ? wallets : []}
-                                            defaultLabel={'выберете кошелек'}
-                                            onValueChange={handleChange('wallet')}
-                                            values={values.wallet}
-                                            label={'Кошелек в который вы хотите внести трату'}
-                                            onReturnValueId={true}
-                                            onBlur={handleBlur('wallet')}/>
-                                        <Input
-                                            keyboardType={'numeric'}
-                                            style={styles.input}
-                                            onChangeText={handleChange('amount')}
-                                            placeholder={'введите сумму'}
-                                            onBlur={handleBlur('amount')}
-                                            errorMessage={errors.inValidAmount && touched.amount && 'Поля обязательно'}
-                                            value={values.amount}
-                                            autoCompleteType={false}
-                                            label={'Сумма которую вы потратили'}
-                                            labelStyle={{color: colors.gray}}
-                                        />
+                                        if (!values.wallet) {
+                                            errors['inValidWallet'] = true
+                                        }
+                                        return errors;
+                                    }}
+                                    onSubmit={onSubmit}
+                                >
+                                    {({
+                                          handleChange,
+                                          handleBlur,
+                                          handleSubmit,
+                                          values,
+                                          errors,
+                                          touched,
+                                          isSubmitting
+                                      }) => (
+                                        <View style={styles.formikContainer}>
+                                            <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
+                                                <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
+                                            </TouchableOpacity>
+                                            <Image style={styles.img} source={spend}/>
+                                            <Text style={styles.textCreate}>Добавление траты</Text>
+                                            <View style={styles.container}>
+                                                <SelectPicker<CategoryType>
+                                                    arrItem={categories ? categories : []}
+                                                    label={'Категория'}
+                                                    values={values.categories}
+                                                    defaultLabel={'выберете категорию'}
+                                                    onValueChange={handleChange('categories')}
+                                                    isRequired={true}
+                                                    isInvalid={!!(errors.invalidCategory && touched.category)}
+                                                />
+                                                <SelectPicker<WalletModelType>
+                                                    isInvalid={!!(errors.inValidWallet && touched.wallet)}
+                                                    isRequired={true}
+                                                    arrItem={wallets ? wallets : []}
+                                                    defaultLabel={'выберете кошелек'}
+                                                    onValueChange={handleChange('wallet')}
+                                                    values={values.wallet}
+                                                    label={'Кошелек в который вы хотите внести трату'}
+                                                    onReturnValueId={true}/>
+                                                <Input
+                                                    keyboardType={'numeric'}
+                                                    style={styles.input}
+                                                    onChangeText={handleChange('amount')}
+                                                    placeholder={'введите сумму'}
+                                                    onBlur={handleBlur('amount')}
+                                                    isInvalid={!!(errors.inValidAmount && touched.amount)}
+                                                    isRequired={true}
+                                                    errorMessage={errors.inValidAmount && touched.amount && 'Поля обязательно'}
+                                                    value={values.amount}
+                                                    label={'Сумма которую вы потратили'}
+                                                />
 
-                                        <Input
-                                            multiline={true}
-                                            numberOfLines={4}
-                                            style={styles.description}
-                                            onChangeText={handleChange('description')}
-                                            placeholder={'введите коментарий'}
-                                            value={values.description}
-                                            autoCompleteType={false}
-                                            label={'Комментарий к трате'}
-                                            labelStyle={{color: colors.gray}}
-                                        />
-                                        <View style={styles.buttonContainer}>
-                                            <Button
-                                                disabled={!!errors.inValidAmount || !!errors.inValidCategories || !!errors.inValidWallet}
-                                                title={'Внести трату'}
-                                                onPress={handleSubmit}
-                                                styleContainer={styles.buttonSave}
-                                            />
-                                            <Button
-                                                title={'Выйти'}
-                                                onPress={() => onClose()}
-                                                styleContainer={styles.buttonCancel}
-                                                styleText={styles.btnCancelText}
-                                            />
+                                                <TextArea value={values.description} label={'Комментарий к трате'}
+                                                          onChange={handleChange('description')}
+                                                          placeholder={'введите коммментарий'}/>
+                                                <View style={styles.buttonContainer}>
+                                                    <Button
+                                                        disabled={!!errors.inValidAmount || !!errors.inValidCategories || !!errors.inValidWallet}
+                                                        title={'Внести трату'}
+                                                        onPress={handleSubmit}
+                                                        styleContainer={styles.buttonSave}
+                                                    />
+                                                </View>
+                                            </View>
                                         </View>
-                                    </View>
-                                </View>
-                            )}
-                        </Formik>
+                                    )}
+                                </Formik>
+                            </ScrollView>
+                        </KeyboardAvoidingView>
                     </SafeAreaView>
-                </ScrollView>
             }
-
         </Modal>
     )
 }
@@ -158,6 +162,12 @@ const styles = StyleSheet.create({
     formikContainer: {
         flex: 1,
         alignItems: 'center'
+    },
+
+    closeIco: {
+        position: 'absolute',
+        right: 20,
+        top: 20
     },
     container: {
         padding: 15,
@@ -171,12 +181,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: 160,
         height: 160,
-    },
-    buttonCancel: {
-        margin: 10,
-        backgroundColor: colors.white,
-        borderWidth: 1,
-        borderColor: colors.gray
     },
     btnCancelText: {
         color: colors.black,

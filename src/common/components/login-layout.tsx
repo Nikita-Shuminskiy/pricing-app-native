@@ -1,26 +1,25 @@
 import React from 'react';
-import {KeyboardAvoidingView, SafeAreaView, StyleSheet, View} from "react-native";
+import {Platform, SafeAreaView} from "react-native";
+import {KeyboardAvoidingView} from "native-base";
 
 type LoginLayoutProps = {
     children: JSX.Element | JSX.Element[];
 }
 const LoginLayout = ({children}: LoginLayoutProps) => {
     return (
-        <KeyboardAvoidingView style={{flex: 1}}>
-               <View style={styles.container}>
-                   {children}
-               </View>
-        </KeyboardAvoidingView>
+        <SafeAreaView style={{flex: 1, paddingTop: '25%'}}>
+            <KeyboardAvoidingView h={{
+                base: "500px",
+                lg: "auto"
+            }}
+                                  alignItems={'center'}
+                                  flex={1}
+                                  justifyContent={'space-evenly'}
+                                  behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                {children}
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 };
-const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 32,
-        paddingBottom: 8,
-        flex: 1,
-        justifyContent: 'space-around',
-        alignItems: 'center'
-    },
-});
 
 export default LoginLayout;

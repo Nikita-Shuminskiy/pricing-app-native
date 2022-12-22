@@ -1,10 +1,11 @@
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {routerConstants} from "../constants/router-constants/router-constants";
 import {MainScreen} from "../screen/mainScreen/MainScreen";
-import {Icon} from "react-native-elements";
 import {colors} from "../assets/colors/colors";
 import WalletNavigation from "./wallet-navigation";
 import HistoryScreen from "../screen/mainScreen/HistoryScreen";
+import ChartScreen from "../screen/mainScreen/ChartScreen";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -18,22 +19,18 @@ const MainNavigation = () => {
 
                     if (route.name === 'wallets') {
                         iconName = focused
-                            ? 'account-balance-wallet'
-                            : 'account-balance-wallet'
+                            ? 'wallet'
+                            : 'wallet-outline'
                     } else if (route.name === 'work-space') {
-                        iconName = focused ? 'tablet-android' : 'tablet-android';
+                        iconName = focused ? 'analytics' : 'analytics-outline';
                     } else if (route.name === 'chart') {
-                        iconName = focused ? 'bar-chart' : 'bar-chart';
+                        iconName = focused ? 'bar-chart' : 'bar-chart-outline';
                     } else if (route.name === 'settings') {
-                        iconName = focused ? 'app-settings-alt' : 'app-settings-alt';
+                        iconName = focused ? 'settings' : 'settings-outline';
                     }
 
                     return (
-                        <Icon
-                            name={iconName}
-                            size={24}
-                            color={color}
-                            tvParallaxProperties={null}/>
+                        <Ionicons name={iconName} size={24} color={color}/>
                     )
                 },
             })}
@@ -50,7 +47,7 @@ const MainNavigation = () => {
                         component={HistoryScreen}/>
             <Tab.Screen options={{tabBarLabel: 'График'}}
                         name={routerConstants.CHART}
-                        component={MainScreen}/>
+                        component={ChartScreen}/>
             <Tab.Screen options={{tabBarLabel: 'Настройки'}}
                         name={routerConstants.SETTINGS}
                         component={MainScreen}/>

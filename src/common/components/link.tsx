@@ -6,11 +6,12 @@ type LinkProps = {
     onPress: () => void
     text: string
     style?: StyleProp<any>
+    styleText?: StyleProp<any>
 }
-const Link = ({onPress, text, style, ...rest}: LinkProps) => {
+const Link = ({onPress, text, style, styleText, ...rest}: LinkProps) => {
     return (
         <TouchableOpacity style={style} onPress={onPress} {...rest}>
-            <Text style={{color: colors.blue}}>{text}</Text>
+            <Text style={[styleText, {color: colors.blue}]}>{text}</Text>
         </TouchableOpacity>
     );
 };

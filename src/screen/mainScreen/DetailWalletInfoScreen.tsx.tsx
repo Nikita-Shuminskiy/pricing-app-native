@@ -31,8 +31,8 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
             title: 'Удаление кошелька',
             message: 'Вы действительно хотите удалить кошелек ?',
             buttons: [
-                {text: 'Удалить', style: "cancel", onPress: onPressRemove},
-                {text: 'Не удалять', style: "destructive"}
+                {text: 'Удалить', style: "default", onPress: onPressRemove},
+                {text: 'Не удалять', style: "cancel"}
             ]
         })
     }

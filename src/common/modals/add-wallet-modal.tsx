@@ -1,16 +1,18 @@
 import React, {useEffect} from "react";
-import {Image, Modal, ScrollView, StyleSheet, Text, View} from "react-native";
+import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Modal} from "native-base";
 import SafeAreaView from "../components/safe-area-view";
 import {Formik} from "formik";
-import {Input} from "react-native-elements";
 import {colors} from "../../assets/colors/colors";
 import Button from "../components/button";
 import wallet from '../../assets/images/wallet.png';
 import WalletStore from "../../store/WalletStore/wallet-store";
 import HistoryStore from "../../store/HistoryStore/history-store";
-import SelectPicker from "../components/picker";
-import {CurrencyType} from "../../store/Type/models";
 import rootStore from "../../store/RootStore/root-store";
+import {CurrencyType} from "../../store/Type/models";
+import SelectPicker from "../components/select-picker";
+import Input from "../components/input";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 type ModalWindowType = {
     onClose: () => void
@@ -29,14 +31,11 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
     }, [])
     return (
         <Modal
-            animationType="slide"
-            transparent={false}
-            visible={visible}
-            onRequestClose={() => {
-                onClose()
-            }}
+            isOpen={visible}
+            backdropVisible={true}
+            background={'white'}
         >
-            <ScrollView style={{width: '100%'}}>
+            <ScrollView bounces={true} style={{width: '100%'}}>
                 <SafeAreaView>
                     <Formik
                         initialValues={{
@@ -45,6 +44,8 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                             currency: '',
                             userId: userId
                         }}
+                        validateOnChange={true}
+                        validateOnMount={true}
                         validate={values => {
                             const errors = {};
                             if (!values.name) {
@@ -61,21 +62,23 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                         }}
                         onSubmit={onSubmit}
                     >
-                        {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
+                        {({handleChange, handleBlur, handleSubmit, values, errors, touched, validateOnChange}) => (
                             <View style={styles.formikContainer}>
+                                <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
+                                    <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
+                                </TouchableOpacity>
                                 <Image style={styles.img} source={wallet}/>
                                 <Text style={styles.textCreate}>Создание кошелька</Text>
                                 <View style={styles.container}>
-
                                     <Input
                                         style={styles.input}
                                         onChangeText={handleChange('name')}
-                                        labelStyle={{color: colors.gray}}
                                         placeholder={'введите имя кошелька'}
                                         value={values.name}
-                                        autoCompleteType={true}
                                         onBlur={handleBlur('name')}
                                         errorMessage={touched.name && errors.inValidName && 'Поля обязательно'}
+                                        isInvalid={!!(touched.name && errors.inValidName)}
+                                        isRequired={true}
                                         label={'Имя'}
                                     />
                                     <Input
@@ -83,35 +86,26 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                         style={styles.input}
                                         onChangeText={handleChange('balance')}
                                         placeholder={'введите баланс'}
-                                        onBlur={handleBlur('balance')}
                                         errorMessage={errors.inValidBalance && touched.balance && 'Поля обязательно'}
                                         value={values.balance}
-                                        autoCompleteType={false}
+                                        isInvalid={!!(errors.inValidBalance && touched.balance)}
+                                        isRequired={true}
                                         label={'Баланс'}
-                                        labelStyle={{color: colors.gray}}
                                     />
-
                                     <SelectPicker<CurrencyType>
                                         arrItem={allCurrencyList ? allCurrencyList : []}
-                                        defaultLabel={'Выберете валюту'}
+                                        isRequired={true}
+                                        defaultLabel={'выберете валюту'}
                                         onValueChange={handleChange('currency')}
                                         values={values.currency}
-                                        styles={styles.picker}
                                         label={'Валюта'}
-                                        error={errors.inValidCurrency && touched.currency as boolean}
-                                        onBlur={handleBlur('currency')}/>
+                                        isInvalid={!!(errors.inValidCurrency && touched.currency)}/>
                                     <View style={styles.buttonContainer}>
                                         <Button
                                             disabled={!!errors.inValidCurrency || !!errors.inValidName || !!errors.inValidBalance}
                                             title={'Сохранить'}
                                             onPress={handleSubmit}
                                             styleContainer={styles.buttonSave}
-                                        />
-                                        <Button
-                                            title={'Отмена'}
-                                            onPress={() => onClose()}
-                                            styleContainer={styles.buttonCancel}
-                                            styleText={styles.btnCancelText}
                                         />
                                     </View>
                                 </View>
@@ -129,6 +123,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center'
     },
+    closeIco: {
+        position: 'absolute',
+        right: 20,
+        top: 20
+    },
     container: {
         padding: 15,
         flex: 1,
@@ -136,17 +135,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+
     img: {
         marginTop: 40,
         width: 120,
         height: 120,
-    },
-    picker: {},
-    buttonCancel: {
-        margin: 10,
-        backgroundColor: colors.white,
-        borderWidth: 1,
-        borderColor: colors.gray
     },
     btnCancelText: {
         color: colors.black,

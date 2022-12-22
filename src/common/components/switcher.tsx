@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Switch, Text, View} from "react-native";
 import {colors} from "../../assets/colors/colors";
+import {Box} from "native-base";
 
 type SwitcherType = {
     onValueChange: (value: boolean) => void
@@ -17,27 +18,25 @@ const Switcher = ({onValueChange, label, valueBefore, valueAfter}: SwitcherType)
         onValueChange(!isEnabled)
     }
     return (
-        <View style={styles.container}>
+        <Box mt={2} flex={1}>
             {label && <Text style={styles.text}>{label}</Text>}
             <View style={styles.body}>
-                {valueBefore && <Text style={{color: isEnabled ? colors.white : colors.orange}}>{valueBefore}</Text>}
+                {valueBefore &&
+                    <Text style={[styles.text, {color: isEnabled ? colors.gray : colors.orange}]}>{valueBefore}</Text>}
                 <Switch
-                    trackColor={{false: colors.white, true: colors.blueLight}}
-                    thumbColor={isEnabled ? colors.orange : colors.white}
+                    trackColor={{false: colors.gray, true: colors.grayLight}}
+                    thumbColor={isEnabled ? colors.orange : colors.grayLight}
                     ios_backgroundColor="#3e3e3e"
                     onValueChange={toggleSwitch}
                     value={isEnabled}
                 />
-                {valueAfter && <Text style={{color: isEnabled ? colors.orange : colors.white}}>{valueAfter}</Text>}
+                {valueAfter &&
+                    <Text style={[styles.text, {color: isEnabled ? colors.orange : colors.gray}]}>{valueAfter}</Text>}
             </View>
-        </View>
+        </Box>
     );
 };
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        width: '100%'
-    },
     text: {
         fontSize: 16,
         fontWeight: '700',
@@ -46,7 +45,6 @@ const styles = StyleSheet.create({
     body: {
         flexDirection: 'row',
         alignItems: 'center',
-        width: '100%'
     }
 })
 export default Switcher;

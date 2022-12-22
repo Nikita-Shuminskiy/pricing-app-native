@@ -13,7 +13,6 @@ const WalletNavigation = observer(() => {
     const {isLoading} = NotificationStore;
 
     if (isLoading === LoadingEnum.fetching) {
-        console.log(isLoading)
         return <Loading/>
     }
     return (

@@ -1,12 +1,6 @@
 import {instance} from './config';
 import {AxiosResponse} from 'axios';
-import {
-    ChartDataType,
-    ParamsToChartDate,
-    SpendDataType,
-    SpendingModel,
-} from '../store/Type/models';
-
+import {ParamsToChartDate, SpendingModel,} from '../store/Type/models';
 
 
 export const historyApi = {
@@ -19,14 +13,13 @@ export const historyApi = {
 };
 
 export const chartApi = {
-    getChartData(params: ParamsToChartDate): Promise<AxiosResponse<ChartDataType[]>> {
+    getChartData(params: ParamsToChartDate) {
         try {
             return instance.get('chart/getChartData', {
-                params: {...params},
+                params: {...params, isMobile: true},
             });
         } catch (err) {
             console.log(err);
-            throw err;
         }
     },
 };

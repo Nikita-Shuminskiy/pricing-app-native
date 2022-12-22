@@ -9,13 +9,13 @@ import wallet from '../../assets/images/wallet.png';
 import {FontAwesome} from '@expo/vector-icons';
 import {AddWalletModal} from "../../common/modals/add-wallet-modal";
 import logo from "../../assets/logo/logo-pony-web.png";
-import walletBlue from "../../assets/images/wallet-witch-cash-blue.png";
-import walletPlus from "../../assets/images/wallet-plus.png";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/router-constants/router-constants";
 import rootStore from "../../store/RootStore/root-store";
 import {AddSpendModal} from "../../common/modals/add-spend-modal";
 import HistoryStore from "../../store/HistoryStore/history-store";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import {createAlert} from "../../common/components/alert";
 
 
 type WalletScreenProps = {
@@ -32,9 +32,16 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
             rootStore.WalletStoreService.getWallets(userId)
         }
     }, [])
-
     const onPressButtonAddWallet = () => {
-        setModalAddWallet(true)
+        if(wallets.length >= 6) {
+            return createAlert({
+                title: 'Сообщение',
+                message: 'На данный момент у вас максимальное количество кошельков',
+                buttons: [{text: 'Закрыть', style: "cancel", onPress: () => console.log('')}]
+            })
+        } else {
+            setModalAddWallet(true)
+        }
     }
 
     const onPressButtonAddSpend = () => {
@@ -42,7 +49,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     }
     const translateX = useRef(new Animated.Value(Dimensions.get("window").height)).current
     useEffect(() => {
-        Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1500 }).start();
+        Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1500}).start();
     })
 
     const onPressTouchWallet = (wallet: WalletModelType) => {
@@ -61,8 +68,6 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                             <FontAwesome style={styles.icoInfo} name="info-circle" size={20} color={colors.orange}/>
                         </TouchableOpacity>
                     </View>
-
-
                     <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
                         <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.walletName}>
                             Имя: {item?.name}
@@ -78,19 +83,24 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
 
         );
     };
+    const renderEmptyContainer = () => {
+        return <View>
+            <Text style={styles.renderEmptyText}>У вас нет кошельков</Text>
+        </View>
+    }
 
     return (
         <>
             <SafeAreaView>
                 <View style={styles.addWalletContainer}>
                     <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}} onPress={onPressButtonAddWallet}>
-                        <Image resizeMode={'contain'} style={styles.imgAddWallet} source={walletPlus}/>
-                        <Text style={[styles.text, {marginTop: 0}]}>Создать кошелек</Text>
+                        <AntDesign name={"pluscircleo"} size={24} color={colors.black}/>
+                        <Text style={[styles.text]}>Создать кошелек</Text>
                     </TouchableOpacity>
                     <Image style={styles.logo} resizeMode={'contain'} source={logo}/>
                     <TouchableOpacity style={{alignItems: 'center', marginRight: 15}} onPress={onPressButtonAddSpend}>
-                        <Image style={styles.imgAddWallet} resizeMode={'contain'} source={walletBlue}/>
-                        <Text style={styles.text}>Добавить трату </Text>
+                        <FontAwesome name={"cart-plus"} size={24} color={colors.black}/>
+                        <Text style={styles.text}>Добавить трату</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.walletsContainer}>
@@ -99,7 +109,9 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                         renderItem={walletView}
                         keyExtractor={(item, index) => index.toString()}
                         numColumns={2}
-                        /*contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}*/
+                        style={{width: '100%'}}
+                        ListEmptyComponent={renderEmptyContainer}
+                        contentContainerStyle={!wallets?.length && styles.contentContainerStyle}
                     />
                 </View>
             </SafeAreaView>
@@ -113,10 +125,16 @@ const styles = StyleSheet.create({
     walletsContainer: {
         flex: 1,
         width: '100%',
+        alignItems: 'center',
+    },
+    contentContainerStyle: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5},
+    renderEmptyText: {
+        color: colors.gray,
+        fontSize: 20
     },
     text: {
         marginTop: 5,
-        color: colors.gray,
+        color: colors.black,
         fontSize: 12,
         fontWeight: '800'
     },
@@ -139,8 +157,8 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 70,
+        height: 70,
         marginRight: 5,
     },
     addWalletContainer: {
@@ -149,10 +167,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: "center"
 
-    },
-    imgAddWallet: {
-        width: 50,
-        height: 50,
     },
     walletName: {
         marginTop: 10,
