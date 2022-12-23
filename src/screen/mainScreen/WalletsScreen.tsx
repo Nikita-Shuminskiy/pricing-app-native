@@ -49,7 +49,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     }
     const translateX = useRef(new Animated.Value(Dimensions.get("window").height)).current
     useEffect(() => {
-        Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1500}).start();
+        Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1000}).start();
     })
 
     const onPressTouchWallet = (wallet: WalletModelType) => {

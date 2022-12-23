@@ -3,7 +3,6 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Box, Modal} from "native-base";
 import SafeAreaView from "../components/safe-area-view";
 import HistoryStore from "../../store/HistoryStore/history-store";
-import {observer} from "mobx-react-lite";
 import {WalletModelType} from "../../store/Type/models";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import {colors} from "../../assets/colors/colors";
@@ -26,7 +25,7 @@ const filteredBy = [
 const FilterHistoryModal = ({visible, onClose}: FilterHistoryModalType) => {
     const {sortSelectedWalletHistory} = HistoryStore
     const {HistoryStoreService} = rootStore
-    const {wallets, getWallet} = WalletStore
+    const {wallets} = WalletStore
     const [walletId, setWalletId] = useState('')
     const [sortByName, setSortByName] = useState('')
     const [toggleSortBy, setToggleSortBy] = useState(false)
