@@ -86,10 +86,10 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
                             <Text style={styles.textName}>Баланс:</Text>
                             <Text style={styles.text}>{chosenWallet?.balance}</Text>
                         </View>
-                        <View style={styles.blockText}>
+                        {/*  <View style={styles.blockText}>
                             <Text style={styles.textName}>Всего Трат:</Text>
                             <Text style={styles.text}>{chosenWallet?.totalSpends ? chosenWallet?.totalSpends : 0}</Text>
-                        </View>
+                        </View>*/}
                         <View style={styles.blockText}>
                             <Text style={styles.textName}>Дата создания кошелька:</Text>
                             <Text style={styles.text}>{dateFormat(convertToDate(chosenWallet?.createdAt))}</Text>

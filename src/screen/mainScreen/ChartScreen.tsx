@@ -89,7 +89,6 @@ const ChartScreen = observer(() => {
                                     <Box flex={1}>
                                         <Box alignItems={'center'}>
                                             <Text fontSize={20} fontWeight={'700'} color={colors.gray}>
-
                                                 Статистика
                                                 за {chartFilterDate.month ? `${chartFilterDate.month} ${chartFilterDate.year} года` : `${chartFilterDate.year} год`}
                                             </Text>
@@ -107,11 +106,11 @@ const ChartScreen = observer(() => {
                                                 chartConfig={chartConf}
                                                 accessor={"population"}
                                                 backgroundColor={"none"}
-                                                center={[20, 0]}
+                                                center={[32, 0]}
                                                 hasLegend={true}
                                                 avoidFalseZero={true}
                                                 style={{
-                                                    paddingRight: 10,
+                                                    paddingRight: 30,
                                                     marginVertical: 10,
                                                     borderRadius: 16,
                                                     backgroundColor: 'rgba(91,85,75,0.27)',
@@ -119,7 +118,7 @@ const ChartScreen = observer(() => {
                                                     alignItems: 'center',
                                                     width: width
                                                 }}
-                                                paddingLeft={'-10'}/>
+                                                paddingLeft={'-20'}/>
                                         </Box>
 
                                         <Box mb={4}>

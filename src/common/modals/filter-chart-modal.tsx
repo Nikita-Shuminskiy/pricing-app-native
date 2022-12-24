@@ -11,36 +11,13 @@ import Button from "../components/button";
 import rootStore from "../../store/RootStore/root-store";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import Loading from "../components/loading";
+import {arrMonth, arrYear} from "../constants/constants";
 
 type FilterChartModalProps = {
     visible: boolean
     onClose: () => void
 }
-const arrYear = [
-    {id: '2022', value: '2022'},
-    {id: '2023', value: '2023'},
-    {id: '2024', value: '2024'},
-    {id: '2025', value: '2025'},
-    {id: '2026', value: '2026'},
-    {id: '2027', value: '2027'},
-    {id: '2028', value: '2028'},
-    {id: '2029', value: '2029'},
-    {id: '2030', value: '2030'},
-]
-export const arrMonth = [
-    {id: '0', value: 'Январь'},
-    {id: '1', value: 'Февраль'},
-    {id: '2', value: 'Март'},
-    {id: '3', value: 'Апрель'},
-    {id: '4', value: 'Май'},
-    {id: '5', value: 'Июнь'},
-    {id: '6', value: 'Июль'},
-    {id: '7', value: 'Август'},
-    {id: '8', value: 'Сентябрь'},
-    {id: '9', value: 'Октябрь'},
-    {id: '10', value: 'Ноябрь'},
-    {id: '11', value: 'Декабрь'},
-]
+
 const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
     const {CategoryStoreService} = rootStore
     const {wallets, getWallet} = WalletStore

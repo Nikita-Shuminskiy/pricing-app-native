@@ -25,7 +25,7 @@ export const DetailSpendModal = observer(({visible, onClose}: DetailSpendModalTy
                     <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
                         <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
                     </TouchableOpacity>
-                    <View style={styles.body}>
+                    <View>
                         <View style={styles.blockSpendText}>
                             <Text style={styles.textName}>Имя категории</Text>
                             <Text style={[styles.blockSpendTextValue, {
@@ -63,35 +63,10 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         minWidth: '100%'
     },
-    img: {
-        width: 100,
-        height: 100
-    },
     closeIco: {
         position: 'absolute',
         right: 20,
         top: 20
-    },
-    body: {
-    },
-    text: {
-        width: '100%',
-        marginTop: 5,
-        color: colors.black,
-        fontSize: 14,
-        fontWeight: '800'
-    },
-    textWalletName: {
-        fontWeight: '800',
-        fontSize: 20,
-        color: colors.black,
-    },
-    blockSpend: {
-        borderColor: colors.gray,
-        borderRadius: 16,
-        padding: 10,
-        marginBottom: 5,
-        flexDirection: 'row'
     },
     blockSpendText: {
         paddingTop: 5,

@@ -1,6 +1,9 @@
-import React from 'react';
-import {Box, FormControl, Input, WarningOutlineIcon} from "native-base";
-import {KeyboardTypeOptions, StyleProp, TextStyle} from "react-native";
+import React, {useState} from 'react';
+import {Box, FormControl, Icon, Input, Pressable, WarningOutlineIcon} from "native-base";
+import {KeyboardTypeOptions, StyleProp, TextStyle, TouchableOpacity} from "react-native";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import {Feather} from "@expo/vector-icons";
+import {colors} from "../../assets/colors/colors";
 
 type InputCustomProps = {
     placeholder: string
@@ -15,6 +18,8 @@ type InputCustomProps = {
     value: string
     isRequired?: boolean
     isInvalid?: boolean
+    type?: 'text' | 'password'
+    icon?: JSX.Element
 }
 const InputCustom = ({
                          label,
@@ -28,12 +33,16 @@ const InputCustom = ({
                          style,
                          value,
                          isRequired,
-                         isInvalid
+                         isInvalid,
+                         type = 'text',
+                         icon,
+                         ...rest
                      }: InputCustomProps) => {
+    const [showPassword, setShowPassword] = useState(false)
     return (
         <Box mt={2} width={'100%'}>
             <FormControl isInvalid={isInvalid} isRequired={isRequired}>
-                { label && <FormControl.Label>{label}</FormControl.Label>}
+                {label && <FormControl.Label>{label}</FormControl.Label>}
                 <Input value={value}
                        style={style}
                        keyboardType={keyboardType}
@@ -41,6 +50,24 @@ const InputCustom = ({
                        onChangeText={onChangeText}
                        placeholder={placeholder}
                        mt={1}
+                       InputRightElement={
+                           type === 'text' ?
+                               (
+                                   <Box mr={2}>
+                                       {icon}
+                                   </Box>
+                               )
+                               :
+                               (
+                                   <TouchableOpacity style={{marginRight: 10}} onPress={() => setShowPassword(!showPassword)}>
+                                       <Feather
+                                           name={!showPassword ? 'eye' : 'eye-off'} size={24}
+                                           color={colors.gray}/>
+                                   </TouchableOpacity>
+                               )
+                       }
+                       type={type === 'text' ? 'text' : showPassword ? 'text' : 'password'}
+                       {...rest}
                 />
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs"/>}>
                     Поля являеться обязательным

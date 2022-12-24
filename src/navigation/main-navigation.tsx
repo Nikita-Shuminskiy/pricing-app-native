@@ -1,11 +1,11 @@
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {routerConstants} from "../constants/router-constants/router-constants";
-import {MainScreen} from "../screen/mainScreen/MainScreen";
 import {colors} from "../assets/colors/colors";
 import WalletNavigation from "./wallet-navigation";
 import HistoryScreen from "../screen/mainScreen/HistoryScreen";
 import ChartScreen from "../screen/mainScreen/ChartScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import SettingScreen from "../screen/mainScreen/SettingScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -50,7 +50,7 @@ const MainNavigation = () => {
                         component={ChartScreen}/>
             <Tab.Screen options={{tabBarLabel: 'Настройки'}}
                         name={routerConstants.SETTINGS}
-                        component={MainScreen}/>
+                        component={SettingScreen}/>
         </Tab.Navigator>
     );
 };
