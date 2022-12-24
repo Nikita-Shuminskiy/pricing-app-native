@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "pony-web-native",
+    "name": "pony-money",
     "slug": "pony-web-native",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,8 +8,7 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/logo-pony-web.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "contain"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,18 +21,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo-pony-web.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/logo-pony-web.png"
       },
       "package": "com.nicknick1995.ponywebnative"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo-pony-web.png"
     },
     "extra": {
       "eas": {
         "projectId": "f16cfde1-ee3c-48c6-a3ab-f59a08450f50"
       }
-    }
+    },
+    "githubUrl" : "https://github.com/Nikita-Shuminskiy/pricing-app-native"
   }
 }
