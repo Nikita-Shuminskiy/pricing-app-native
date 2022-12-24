@@ -7,8 +7,7 @@
     "icon": "./assets/logo-pony-web.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/logo-pony-web.png",
-      "resizeMode": "contain"
+      "backgroundColor": "#25292e"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -32,6 +31,9 @@
       "eas": {
         "projectId": "f16cfde1-ee3c-48c6-a3ab-f59a08450f50"
       }
+    },
+    "androidStatusBar": {
+      "translucent": true
     },
     "githubUrl" : "https://github.com/Nikita-Shuminskiy/pricing-app-native"
   }
