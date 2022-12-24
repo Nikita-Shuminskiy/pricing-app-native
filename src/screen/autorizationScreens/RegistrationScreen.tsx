@@ -44,107 +44,97 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
         navigation.navigate(routerConstants.LOGIN)
     }
     return (
-            <LoginLayout>
-                <ScrollView w={["100%", "100%"]}>
-                    <Formik
-                        initialValues={{
-                            email: '',
-                            password: '',
-                            confirmPassword: '',
-                            name: '',
-                            lastName: ''
-                        }}
-                        validate={values => {
-                            const errors = {};
-                            if (!regex.email.test(values.email.trim())) {
-                                errors['inValidEmail'] = true;
-                            }
-                            if (values.password.length < 5) {
-                                errors['inValidPassword'] = true;
-                            }
-                            if (values.password !== values.confirmPassword) {
-                                errors['inValidConfirmPassword'] = true;
-                            }
-                            return errors;
-                        }}
-                        onSubmit={onSubmit}
-                    >
-                        {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
-                            <Center>
-                                <Image style={styles.logo} source={logo}/>
-                                <View style={styles.inputContainer}>
-                                    <Input
-                                        style={styles.input}
-                                        onChangeText={handleChange('name')}
-                                        placeholder={'введите имя'}
-                                        value={values.name}
-                                        label={'Имя'}
-                                      /*  rightIcon={
-                                            <Ionicons name={"person-outline"} size={24}  color={colors.gray} />
-                                        }*/
-                                    />
-                                    <Input
-                                        style={styles.input}
-                                        onChangeText={handleChange('email')}
-                                        placeholder={'введите логин'}
-                                        value={values.email}
-                                       /* rightIcon={
-                                            <MaterialCommunityIcons name={"email-edit-outline"} size={24}  color={colors.gray}  />
-                                        }*/
-                                        onBlur={handleBlur('email')}
-                                        errorMessage={touched.email && errors.inValidEmail && 'Некорректно введен емейл'}
-                                        label={'Емайл*'}
-                                    />
-                                    <Input
-                                      /*  rightIcon={
-                                            <Feather onPress={() => setShowPassword(prevState => !prevState)}
-                                                     name={showPassword ? 'eye' : 'eye-off'} size={24}
-                                                     color={colors.gray}/>
-                                        }*/
-                                        style={styles.input}
-                                        onChangeText={handleChange('password')}
-                                        placeholder={'введите пароль'}
-                                       /* secureTextEntry={showPassword}*/
-                                        value={values.password}
-                                        onBlur={handleBlur('password')}
-                                        errorMessage={errors.inValidPassword && touched.password && 'Пароль должен содержать не меньше 4-рех символов'}
-                                        label={'Пароль*'}
-                                    />
-                                    <Input
-                                       /* rightIcon={
-                                            <Feather onPress={() => setShowPassword(prevState => !prevState)}
-                                                     name={showPassword ? 'eye' : 'eye-off'} size={24}
-                                                     color={colors.gray}/>
-                                        }*/
-                                        style={styles.input}
-                                        onChangeText={handleChange('confirmPassword')}
-                                        placeholder={'подтвердждение пароля'}
-                                     /*   secureTextEntry={showPassword}*/
-                                        value={values.confirmPassword}
-                                 /*       renderErrorMessage={true}*/
-                                        onBlur={handleBlur('confirmPassword')}
-                                        errorMessage={errors.inValidConfirmPassword && touched.confirmPassword && 'Пароли не совпадают'}
-                                 />
-                                    <Button
-                                        disabled={!!errors.inValidConfirmPassword || !!errors.inValidPassword || !!errors.inValidPassword}
-                                        styleContainer={styles.button}
-                                        title={'Регистрация'}
-                                        onPress={handleSubmit}
-                                    />
-                                    <Link style={styles.link} text={'Логин'} onPress={onPressLink}/>
-                                </View>
-                            </Center>
-                        )}
-                    </Formik>
-                </ScrollView>
-            </LoginLayout>
+        <LoginLayout>
+            <ScrollView w={["100%", "100%"]}>
+                <Formik
+                    initialValues={{
+                        email: '',
+                        password: '',
+                        confirmPassword: '',
+                        name: '',
+                        lastName: ''
+                    }}
+                    validate={values => {
+                        const errors = {};
+                        if (!regex.email.test(values.email.trim())) {
+                            errors['inValidEmail'] = true;
+                        }
+                        if (values.password.length < 5) {
+                            errors['inValidPassword'] = true;
+                        }
+                        if (values.password !== values.confirmPassword) {
+                            errors['inValidConfirmPassword'] = true;
+                        }
+                        return errors;
+                    }}
+                    onSubmit={onSubmit}
+                >
+                    {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
+                        <Center>
+                            <Image style={styles.logo} source={logo}/>
+                            <View style={styles.inputContainer}>
+                                <Input
+                                    style={styles.input}
+                                    onChangeText={handleChange('name')}
+                                    placeholder={'введите имя'}
+                                    value={values.name}
+                                    label={'Имя'}
+                                    icon={
+                                        <Ionicons name={"person-outline"} size={24} color={colors.gray}/>
+                                    }
+                                />
+                                <Input
+                                    style={styles.input}
+                                    onChangeText={handleChange('email')}
+                                    placeholder={'введите логин'}
+                                    value={values.email}
+                                    icon={
+                                        <MaterialCommunityIcons name={"email-edit-outline"} size={24}
+                                                                color={colors.gray}/>
+                                    }
+                                    onBlur={handleBlur('email')}
+                                    errorMessage={touched.email && errors.inValidEmail && 'Некорректно введен емейл'}
+                                    label={'Емайл*'}
+                                />
+                                <Input
+                                    style={styles.input}
+                                    onChangeText={handleChange('password')}
+                                    placeholder={'введите пароль'}
+                                    value={values.password}
+                                    onBlur={handleBlur('password')}
+                                    errorMessage={errors.inValidPassword && touched.password && 'Пароль должен содержать не меньше 4-рех символов'}
+                                    label={'Пароль*'}
+                                    type={'password'}
+                                />
+                                <Input
+                                    type={'password'}
+                                    style={styles.input}
+                                    onChangeText={handleChange('confirmPassword')}
+                                    placeholder={'подтвердждение пароля'}
+                                    value={values.confirmPassword}
+                                    onBlur={handleBlur('confirmPassword')}
+                                    errorMessage={errors.inValidConfirmPassword && touched.confirmPassword && 'Пароли не совпадают'}
+                                />
+                                <Button
+                                    disabled={!!errors.inValidConfirmPassword || !!errors.inValidPassword || !!errors.inValidPassword}
+                                    styleContainer={styles.button}
+                                    title={'Регистрация'}
+                                    onPress={handleSubmit}
+                                />
+                                <Link style={styles.link} text={'Логин'} onPress={onPressLink}/>
+                            </View>
+                        </Center>
+                    )}
+                </Formik>
+            </ScrollView>
+        </LoginLayout>
     );
 };
 const styles = StyleSheet.create({
     inputContainer: {
         width: '100%',
         alignItems: 'center',
-        paddingHorizontal: 10
+        paddingHorizontal: 20
     },
     logo: {
         width: 120,

@@ -3,21 +3,18 @@ import {Animated, Dimensions, FlatList, StyleSheet, TouchableOpacity} from "reac
 import SafeAreaView from "../../common/components/safe-area-view";
 import {observer} from "mobx-react-lite";
 import {PieChart} from "react-native-chart-kit";
-import rootStore from "../../store/RootStore/root-store";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import CategoriesStore from "../../store/CategoriesStore/categories-store";
 import {Box, Image, ScrollView, Text} from "native-base";
 import filterImage from '../../assets/images/filter.png'
 import FilterChartModal from "../../common/modals/filter-chart-modal";
 import {colors} from "../../assets/colors/colors";
-import {StatisticsDataEveryMonthTheYearType} from "../../store/Type/models";
 import {convertToDate, dateFormat} from "../../utils/utils";
 import {FontAwesome} from "@expo/vector-icons";
 
 const ChartScreen = observer(() => {
-    const {CategoryStoreService} = rootStore
     const {chosenWallet} = WalletStore
-    const {chartDataPie, walletChartId} = CategoriesStore
+    const {chartDataPie, chartFilterDate} = CategoriesStore
     const [modalFilterChart, setModalFilterChart] = useState(false);
 
     const chartConf = {
@@ -37,7 +34,6 @@ const ChartScreen = observer(() => {
             stroke: "#ffa726"
         }
     }
-
     const onPressFilter = () => {
         setModalFilterChart(true)
     }
@@ -50,55 +46,6 @@ const ChartScreen = observer(() => {
         Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1500}).start();
     })
 
-    const chartView = ({item}) => {
-        return (
-            <Animated.View style={{transform: [{translateY: translateX}]}}>
-                <Box style={styles.walletContainer}>
-                    {/* <View style={styles.imagesContainer}>
-                        <TouchableOpacity style={styles.imagesOpacity}>
-                            <Image style={styles.img} source={wallet}/>
-                            <FontAwesome style={styles.icoInfo} name="info-circle" size={20} color={colors.orange}/>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-                        <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.walletName}>
-                            Имя: {item?.name}
-                        </Text>
-                        <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                            Баланс: {item?.balance} {item?.currency}
-                        </Text>
-                    </View>*/}
-                    <PieChart
-                        data={item.statisticsDataEveryMonthTheYear?.map((data: StatisticsDataEveryMonthTheYearType) => ({
-                            name: data.category,
-                            population: data.totalSum,
-                            legendFontColor: 'white',
-                        })) ?? []}
-                        width={100}
-                        height={100}
-                        chartConfig={chartConf}
-                        accessor={"population"}
-                        backgroundColor={"none"}
-                        center={[20, 0]}
-                        hasLegend={true}
-                        avoidFalseZero={true}
-                        style={{
-                            paddingRight: 10,
-                            marginVertical: 10,
-                            borderRadius: 16,
-                            backgroundColor: 'rgba(91,85,75,0.27)',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: 100
-                        }}
-                        paddingLeft={'-10'}/>
-
-                </Box>
-            </Animated.View>
-
-
-        );
-    };
     const categoryView = ({item}) => {
         const {color} = item
         return <Box mt={2} flex={1} width={'100%'} flexDirection={'row'} alignItems={'center'}
@@ -139,11 +86,11 @@ const ChartScreen = observer(() => {
                                                   fontSize={18}>{dateFormat(convertToDate(chosenWallet?.createdAt))}</Text>
                                         </Box>
                                     </Box>
-
                                     <Box flex={1}>
                                         <Box alignItems={'center'}>
                                             <Text fontSize={20} fontWeight={'700'} color={colors.gray}>
-                                                Статистика за 2022 год
+                                                Статистика
+                                                за {chartFilterDate.month ? `${chartFilterDate.month} ${chartFilterDate.year} года` : `${chartFilterDate.year} год`}
                                             </Text>
                                         </Box>
                                         <Box alignItems={'center'}>
@@ -159,11 +106,11 @@ const ChartScreen = observer(() => {
                                                 chartConfig={chartConf}
                                                 accessor={"population"}
                                                 backgroundColor={"none"}
-                                                center={[20, 0]}
+                                                center={[32, 0]}
                                                 hasLegend={true}
                                                 avoidFalseZero={true}
                                                 style={{
-                                                    paddingRight: 10,
+                                                    paddingRight: 30,
                                                     marginVertical: 10,
                                                     borderRadius: 16,
                                                     backgroundColor: 'rgba(91,85,75,0.27)',
@@ -171,10 +118,10 @@ const ChartScreen = observer(() => {
                                                     alignItems: 'center',
                                                     width: width
                                                 }}
-                                                paddingLeft={'-10'}/>
+                                                paddingLeft={'-20'}/>
                                         </Box>
 
-                                        <Box  mb={4}>
+                                        <Box mb={4}>
                                             <Box mb={2} alignItems={'center'}>
                                                 <Text fontSize={20} color={colors.gray} fontWeight={'700'}>
                                                     Все категории с полной суммой трат
@@ -187,20 +134,6 @@ const ChartScreen = observer(() => {
                                                 ListEmptyComponent={renderEmptyContainer}
                                                 contentContainerStyle={!chartDataPie?.length && styles.contentContainerStyle}/>
                                         </Box>
-
-                                        {/* <Box marginTop={10}>
-                                <Text fontSize={20} fontWeight={'700'} color={colors.gray}>
-                                    Динамика по месяцам
-                                </Text>
-                            </Box>
-                            <FlatList
-                                horizontal={true}
-                                data={chartDataPie}
-                                renderItem={chartView}
-                                keyExtractor={(item, index) => index.toString()}
-                                ListEmptyComponent={renderEmptyContainer}
-                                contentContainerStyle={!chartDataPie?.length && styles.contentContainerStyle}
-                            />*/}
                                     </Box>
                                 </>
                             ) : (
@@ -227,81 +160,7 @@ const ChartScreen = observer(() => {
 });
 
 const styles = StyleSheet.create({
-    walletsContainer: {
-        flex: 1,
-        width: '100%',
-        alignItems: 'center',
-    },
     contentContainerStyle: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5},
-    renderEmptyText: {
-        color: colors.gray,
-        fontSize: 20
-    },
-    text: {
-        marginTop: 5,
-        color: colors.black,
-        fontSize: 12,
-        fontWeight: '800'
-    },
-    walletContainer: {
-        backfaceVisibility: 'hidden',
-        alignItems: 'center',
-        backgroundColor: colors.white,
-        width: 170,
-        margin: 10,
-        padding: 10,
-        borderRadius: 16,
-        flex: 1,
-        shadowColor: colors.black,
-        shadowOffset: {
-            width: 0,
-            height: 5,
-        },
-        shadowOpacity: 0.34,
-        shadowRadius: 6.27,
-        elevation: 10
-    },
-    logo: {
-        width: 70,
-        height: 70,
-        marginRight: 5,
-    },
-    addWalletContainer: {
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: "center"
-
-    },
-    walletName: {
-        marginTop: 10,
-        marginBottom: 5
-    },
-    wallet: {
-        padding: 10,
-        fontSize: 18,
-        height: 44,
-    },
-    img: {
-        width: 40,
-        height: 40,
-    },
-    icoInfo: {
-        position: 'absolute',
-        right: 0
-    },
-    imagesContainer: {
-        flex: 1,
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    imagesOpacity: {
-        flex: 1,
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'center',
-    }
 });
 
 

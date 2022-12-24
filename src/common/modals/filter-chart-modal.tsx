@@ -11,29 +11,20 @@ import Button from "../components/button";
 import rootStore from "../../store/RootStore/root-store";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import Loading from "../components/loading";
+import {arrMonth, arrYear} from "../constants/constants";
 
 type FilterChartModalProps = {
     visible: boolean
     onClose: () => void
 }
-const arrYear = [
-    {id: '2022', value: '2022'},
-    {id: '2023', value: '2023'},
-    {id: '2024', value: '2024'},
-    {id: '2025', value: '2025'},
-    {id: '2026', value: '2026'},
-    {id: '2027', value: '2027'},
-    {id: '2028', value: '2028'},
-    {id: '2029', value: '2029'},
-    {id: '2030', value: '2030'},
-]
+
 const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
     const {CategoryStoreService} = rootStore
     const {wallets, getWallet} = WalletStore
-
     const [data, setData] = useState({
         year: '',
-        walletId: ''
+        walletId: '',
+        monthId: ''
     })
 
     const [loading, setLoading] = useState(false)
@@ -45,6 +36,7 @@ const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
         await CategoryStoreService.getChartData({
             walletId: data.walletId,
             year: data.year ? data.year : null,
+            month: data.monthId ? data.monthId : null,
             typeChart: 'pie'
         })
         onClose()
@@ -88,6 +80,17 @@ const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
                                         }}
                                         values={data.year}
                                         label={'Выберете год'}
+                                        onReturnValueId={true}
+                                        isRequired={false}
+                                    />
+                                    <SelectPicker<{ id: string, value: string }>
+                                        arrItem={arrMonth}
+                                        defaultLabel={'выберете месяц'}
+                                        onValueChange={(e) => {
+                                            setData({...data, monthId: e})
+                                        }}
+                                        values={data.monthId}
+                                        label={'Выберете месяц'}
                                         onReturnValueId={true}
                                         isRequired={false}
                                     />
