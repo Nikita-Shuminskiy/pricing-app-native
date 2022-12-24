@@ -157,8 +157,8 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     logo: {
-        width: 70,
-        height: 70,
+        width: 80,
+        height: 80,
         marginRight: 5,
     },
     addWalletContainer: {

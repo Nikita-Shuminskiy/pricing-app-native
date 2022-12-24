@@ -8,16 +8,24 @@ import {convertToDate, dateFormat} from "../../utils/utils";
 import {colors} from "../../assets/colors/colors";
 import {Feather} from "@expo/vector-icons";
 import rootStore from "../../store/RootStore/root-store";
+import {LoadingEnum} from "../../store/Type/models";
+import Loading from "../../common/components/loading";
+import NotificationStore from "../../store/NotificationStore/notification-store";
+import {observer} from "mobx-react-lite";
 
 type SettingScreenProps = {
     navigation: NavigationProp<ParamListBase>
 }
-const SettingScreen = ({navigation}: SettingScreenProps) => {
+const SettingScreen = observer(({navigation}: SettingScreenProps) => {
     const {user} = AuthStore
+    const {isLoading} = NotificationStore
     const {AuthStoreService} = rootStore
     const {email, createdAt, firstName, lastName} = user
     const onPressExit = () => {
         AuthStoreService.logOutUser()
+    }
+    if (isLoading === LoadingEnum.fetching) {
+        return <Loading/>
     }
     return (
         <SafeAreaView>
@@ -49,6 +57,6 @@ const SettingScreen = ({navigation}: SettingScreenProps) => {
             </Box>
         </SafeAreaView>
     );
-};
+})
 
 export default SettingScreen;

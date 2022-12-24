@@ -195,8 +195,8 @@ const styles = StyleSheet.create({
         height: 40,
     },
     imgLogo: {
-        width: 70,
-        height: 70,
+        width: 80,
+        height: 80,
     },
 });
 

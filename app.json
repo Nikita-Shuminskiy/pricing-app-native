@@ -4,9 +4,11 @@
     "slug": "pony-web-native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo-pony-web.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
       "backgroundColor": "#25292e"
     },
     "updates": {
@@ -20,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo-pony-web.png"
+        "foregroundImage": "./assets/adaptive-icon.png"
       },
       "package": "com.nicknick1995.ponywebnative"
     },
