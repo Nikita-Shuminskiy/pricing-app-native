@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nik1995.pony-ios"
     },
     "android": {
       "adaptiveIcon": {
@@ -37,6 +38,6 @@
     "androidStatusBar": {
       "translucent": true
     },
-    "githubUrl" : "https://github.com/Nikita-Shuminskiy/pricing-app-native"
+    "githubUrl": "https://github.com/Nikita-Shuminskiy/pricing-app-native"
   }
 }

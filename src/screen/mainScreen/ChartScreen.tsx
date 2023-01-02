@@ -11,6 +11,7 @@ import FilterChartModal from "../../common/modals/filter-chart-modal";
 import {colors} from "../../assets/colors/colors";
 import {convertToDate, dateFormat} from "../../utils/utils";
 import {FontAwesome} from "@expo/vector-icons";
+import Link from "../../common/components/link";
 
 const ChartScreen = observer(() => {
     const {chosenWallet} = WalletStore
@@ -62,12 +63,25 @@ const ChartScreen = observer(() => {
             <Text fontSize={18} fontWeight={'700'} color={colors.gray}> Лист категорий пуст </Text>
         </Box>
     }
+    const onPressLink = () => {
+        setModalFilterChart(true)
+    }
 
     return (
         <>
             <ScrollView contentContainerStyle={!chartDataPie?.length && {flex: 1, alignItems: 'center'}}>
                 <SafeAreaView>
                     <Box marginTop={10} paddingLeft={5} paddingRight={5} flex={1} width={'100%'}>
+                        {
+                            !!chartDataPie?.length &&
+                            <Box alignItems={'center'} marginBottom={5}>
+                                <TouchableOpacity onPress={onPressFilter}>
+                                    <Image alt={'filter for chart'} w={10} height={10} source={filterImage}/>
+                                </TouchableOpacity>
+                            </Box>
+
+                        }
+
                         {
                             chartDataPie?.length ? (
                                 <>
@@ -90,7 +104,7 @@ const ChartScreen = observer(() => {
                                         <Box alignItems={'center'}>
                                             <Text fontSize={20} fontWeight={'700'} color={colors.gray}>
                                                 Статистика
-                                                за {chartFilterDate.month ? `${chartFilterDate.month} ${chartFilterDate.year} года` : `${chartFilterDate.year} год`}
+                                                за {chartFilterDate?.month ? `${chartFilterDate?.month} ${chartFilterDate?.year} года` : `${chartFilterDate?.year} год`}
                                             </Text>
                                         </Box>
                                         <Box alignItems={'center'}>
@@ -141,15 +155,14 @@ const ChartScreen = observer(() => {
                                     <Text fontSize={24}
                                           color={colors.gray}
                                           fontWeight={'700'}>Пусто</Text>
+                                    <Box alignItems={'center'}>
+                                        <Link styleText={styles.linkWallet} style={styles.link} text={'Выбрать кошелек'}
+                                              onPress={onPressLink}/>
+                                    </Box>
                                 </Box>
                             )
 
                         }
-                        <Box right={5} position={'absolute'} top={0}>
-                            <TouchableOpacity onPress={onPressFilter}>
-                                <Image alt={'filter for chart'} w={50} height={50} source={filterImage}/>
-                            </TouchableOpacity>
-                        </Box>
                     </Box>
                 </SafeAreaView>
             </ScrollView>
@@ -160,6 +173,12 @@ const ChartScreen = observer(() => {
 });
 
 const styles = StyleSheet.create({
+    link: {
+        marginTop: 10,
+    },
+    linkWallet: {
+        fontSize: 18
+    },
     contentContainerStyle: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5},
 });
 

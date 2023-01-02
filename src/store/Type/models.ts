@@ -87,6 +87,14 @@ export type ParamsToChartDate = {
     month?: string
     typeChart: 'pie' | 'line'
 };
+export type ChartDataType = {
+    chartData: ChartDatasetPieType[],
+    date: ChartDataDateType
+}
+export type ChartDataDateType = {
+    year: string,
+    month: number
+}
 
 export type CurrencyType = {
     value: string;

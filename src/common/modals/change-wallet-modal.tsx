@@ -50,22 +50,15 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                 <SafeAreaView>
                     <Formik
                         initialValues={{
-                            name: '',
-                            balance: '',
-                            currency: '',
+                            name: chosenWallet?.name,
+                            balance: chosenWallet?.balance,
+                            currency: chosenWallet?.currency,
                             userId: userId
                         }}
                         validate={values => {
                             const errors = {};
-                            if (!values.name) {
-                                errors['inValidName'] = true
-                            }
-                            if (!values.balance) {
-                                errors['inValidBalance'] = true
-                            }
-
-                            if (!values.currency) {
-                                errors['inValidCurrency'] = true
+                            if (!values.currency && !values.currency && !values.balance) {
+                                errors['inValidFields'] = true
                             }
                             return errors;
                         }}
@@ -85,9 +78,7 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                                         placeholder={'введите имя кошелька'}
                                         value={values.name}
                                         onBlur={handleBlur('name')}
-                                        isInvalid={!!(touched.name && errors.inValidName)}
-                                        errorMessage={touched.name && errors.inValidName && 'Поля обязательно'}
-                                        label={`Имя: ${chosenWallet?.name}`}
+                                        label={'Имя'}
                                     />
                                     <Input
                                         keyboardType={'numeric'}
@@ -95,21 +86,18 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                                         onChangeText={handleChange('balance')}
                                         placeholder={'введите баланс'}
                                         onBlur={handleBlur('balance')}
-                                        isInvalid={!!(errors.inValidBalance && touched.balance)}
-                                        errorMessage={errors.inValidBalance && touched.balance && 'Поля обязательно'}
                                         value={String(values.balance)}
-                                        label={`Баланс: ${chosenWallet?.balance}`}
+                                        label={'Баланс'}
                                     />
                                     <SelectPicker<CurrencyType>
                                         arrItem={allCurrencyList ? allCurrencyList : []}
                                         defaultLabel={'Выберете валюту'}
                                         onValueChange={handleChange('currency')}
                                         values={values.currency}
-                                        isInvalid={!!(errors.inValidCurrency && touched.currency)}
-                                        label={`Валюта: ${chosenWallet?.currency}`}/>
+                                        label={'Валюта'}/>
                                     <View style={styles.buttonContainer}>
                                         <Button
-                                            disabled={!!errors.inValidCurrency || !!errors.inValidName || !!errors.inValidBalance}
+                                            disabled={!!errors.inValidFields}
                                             title={'Сохранить'}
                                             onPress={handleSubmit}
                                             styleContainer={styles.buttonSave}

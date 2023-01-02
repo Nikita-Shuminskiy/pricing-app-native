@@ -23,8 +23,8 @@ type DetailInfoWalletModalType = {
 // топ 3 категории трат
 export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletModalType) => {
     const [modalChangeWallet, setModalChangeWallet] = useState(false);
-    const {chosenWallet} = WalletStore
-    const { lastSpendsWallet} = HistoryStore
+    const {chosenWallet, clearChosenWallet} = WalletStore
+    const {lastSpendsWallet, clearSelectedWalletHistory} = HistoryStore
 
     const confirmDeleteWallet = () => {
         createAlert({
@@ -38,7 +38,7 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
     }
 
     const onPressRemove = () => {
-        RootStore.WalletStoreService.removeWallet(chosenWallet.userId, chosenWallet._id)
+        RootStore.WalletStoreService.removeWallet(chosenWallet?.userId, chosenWallet._id)
     }
     const onPressChangeWallet = () => {
         setModalChangeWallet(true)
@@ -51,7 +51,9 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
                     {...props}
                     onPress={() => {
                         navigation.goBack()
-                        rootStore.WalletStoreService.getWallets(chosenWallet.userId)
+                        clearSelectedWalletHistory()
+                        clearChosenWallet()
+                        rootStore.WalletStoreService.getWallets(chosenWallet?.userId)
                     }}
                 />
             )
@@ -108,11 +110,13 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
                                         </View>
                                         <View style={styles.blockSpendText}>
                                             <Text style={styles.textName}>Дата</Text>
-                                            <Text style={styles.blockSpendTextValue}> {dateFormat(convertToDate(spend.createdAt))} в {getDateFormatTime(convertToDate(spend.createdAt))}</Text>
+                                            <Text
+                                                style={styles.blockSpendTextValue}> {dateFormat(convertToDate(spend.createdAt))} в {getDateFormatTime(convertToDate(spend.createdAt))}</Text>
                                         </View>
                                         <View style={styles.blockSpendText}>
                                             <Text style={styles.textName}>Сумма</Text>
-                                            <Text style={styles.blockSpendTextValue}>{spend.amount} {spend.currency}</Text>
+                                            <Text
+                                                style={styles.blockSpendTextValue}>{spend.amount} {spend.currency}</Text>
                                         </View>
                                         <View style={styles.blockSpendText}>
                                             <Text style={styles.textName}>Коментарий</Text>

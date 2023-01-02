@@ -43,6 +43,7 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
             }
         }).then((res) => {
             if (res) {
+                rootStore.WalletStoreService.getWallets(user._id)
                 resetForm()
             }
             setLoading(false)
@@ -135,8 +136,9 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
                                                     label={'Сумма которую вы потратили'}
                                                 />
 
-                                                <TextArea value={values.description} label={'Комментарий к трате'}
-                                                          onChange={handleChange('description')}
+                                                <TextArea value={values.description}
+                                                          label={'Комментарий к трате'}
+                                                          onChangeText={handleChange('description')}
                                                           placeholder={'введите коммментарий'}/>
                                                 <View style={styles.buttonContainer}>
                                                     <Button

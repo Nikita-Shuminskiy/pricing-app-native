@@ -5,7 +5,6 @@ import {Formik} from "formik";
 import logo from '../../assets/logo/logo-pony-web.png'
 import Link from "../../common/components/link";
 import Button from "../../common/components/button";
-import AuthStore from "../../store/AuthStore/auth-store";
 import LoginLayout from "../../common/components/login-layout";
 import {colors} from "../../assets/colors/colors";
 import regex from "../../helpers/regex";
@@ -13,16 +12,16 @@ import {routerConstants} from "../../constants/router-constants/router-constants
 import {Center, ScrollView} from "native-base";
 import Input from '../../common/components/input';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import {Feather} from "@expo/vector-icons";
+import rootStore from "../../store/RootStore/root-store";
 
 type LoginScreenProps = {
     navigation: NavigationProp<ParamListBase>
 }
 const LoginScreen = ({navigation}: LoginScreenProps) => {
-    const {login} = AuthStore
+    const {AuthStoreService} = rootStore
 
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
-        login({email: values.email.trim(), password: values.password})
+        AuthStoreService.login({email: values.email.trim(), password: values.password})
     }
     const onPressLink = () => {
         navigation.navigate(routerConstants.REGISTRATION)
@@ -39,6 +38,9 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                         const errors = {};
                         if (!regex.email.test(values.email.trim())) {
                             errors['inValidEmail'] = true;
+                        }
+                        if (!regex.email.test(values.email.trim())) {
+                            errors['inValidPassword'] = true;
                         }
                         return errors;
                     }}
@@ -59,6 +61,8 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                                     }
                                     onBlur={handleBlur('email')}
                                     errorMessage={touched.email && errors.inValidEmail && 'Некорректно введен емейл'}
+                                    isInvalid={!!(errors.inValidEmail && touched.email)}
+                                    isRequired={true}
                                     label={'Емайл'}
                                 />
                                 <Input
@@ -66,9 +70,10 @@ const LoginScreen = ({navigation}: LoginScreenProps) => {
                                     onChangeText={handleChange('password')}
                                     placeholder={'введите пароль'}
                                     onBlur={handleBlur('password')}
-                                    errorMessage={errors.inValidPassword && touched.password && 'Пароль должен содержать не меньше 4-рех символов'}
+                                    isInvalid={!!(errors.inValidPassword && touched.password)}
                                     value={values.password}
                                     label={'Пароль'}
+                                    isRequired={true}
                                     type={'password'}
                                 />
                                 <View style={styles.btnBlock}>

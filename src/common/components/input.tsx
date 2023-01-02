@@ -59,7 +59,8 @@ const InputCustom = ({
                                )
                                :
                                (
-                                   <TouchableOpacity style={{marginRight: 10}} onPress={() => setShowPassword(!showPassword)}>
+                                   <TouchableOpacity style={{marginRight: 10}}
+                                                     onPress={() => setShowPassword(!showPassword)}>
                                        <Feather
                                            name={!showPassword ? 'eye' : 'eye-off'} size={24}
                                            color={colors.gray}/>
@@ -70,7 +71,7 @@ const InputCustom = ({
                        {...rest}
                 />
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs"/>}>
-                    Поля являеться обязательным
+                    {errorMessage ? errorMessage : ' Поля являеться обязательным'}
                 </FormControl.ErrorMessage>
             </FormControl>
         </Box>

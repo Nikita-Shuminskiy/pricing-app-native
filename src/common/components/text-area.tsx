@@ -7,20 +7,21 @@ type TextAreaProps = {
     value: string
     placeholder: string
     label: string
-    onChange: (value) => void
+    onChangeText: (value) => void
     error?: boolean
     textErrorStyles?: StyleProp<TextStyle>
     isRequired?: boolean
 }
-const TextAreaCustom = ({value, onChange, placeholder, label, isRequired, textErrorStyles, error}: TextAreaProps) => {
+const TextAreaCustom = ({value, onChangeText, placeholder, label, isRequired, textErrorStyles, error}: TextAreaProps) => {
     return (
         <Box mt={2} width={'100%'} flex={1} alignItems={'center'}>
             <FormControl isRequired={isRequired} isInvalid={error}>
                 <FormControl.Label>{label}</FormControl.Label>
-                <TextArea mt={1} placeholderTextColor={colors.gray}
+                <TextArea mt={1}
+                          placeholderTextColor={colors.gray}
                           placeholder={placeholder}
                           value={value}
-                          onChange={onChange}
+                          onChangeText={onChangeText}
                           autoCompleteType={true}/>
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs"/>}>
                     Поля

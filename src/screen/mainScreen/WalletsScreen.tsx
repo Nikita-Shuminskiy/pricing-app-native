@@ -36,7 +36,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
         if(wallets.length >= 6) {
             return createAlert({
                 title: 'Сообщение',
-                message: 'На данный момент у вас максимальное количество кошельков',
+                message: 'У вас максимальное количество кошельков',
                 buttons: [{text: 'Закрыть', style: "cancel", onPress: () => console.log('')}]
             })
         } else {

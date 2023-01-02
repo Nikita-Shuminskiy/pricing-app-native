@@ -10,19 +10,19 @@ import coinImage from '../../assets/images/cash.png'
 import logo from "../../assets/logo/logo-pony-web.png";
 import FilterHistoryModal from "../../common/modals/filter-history-modal";
 import WalletStore from "../../store/WalletStore/wallet-store";
-import rootStore from "../../store/RootStore/root-store";
 import Loading from "../../common/components/loading";
 import NotificationStore from "../../store/NotificationStore/notification-store";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {DetailSpendModal} from "../../common/modals/detail-spend-modal";
+import Link from "../../common/components/link";
+import {Box} from "native-base";
 
 type HistoryScreenProps = {
     navigation: NavigationProp<ParamListBase>
 }
 const HistoryScreen = observer(({navigation}: HistoryScreenProps) => {
     const {selectedWalletHistory, setChosenSpend} = HistoryStore
-    const {HistoryStoreService} = rootStore
     const {chosenWallet} = WalletStore
     const {isLoading} = NotificationStore;
     const onPressTouchStory = (story: SpendingModel) => {
@@ -33,11 +33,6 @@ const HistoryScreen = observer(({navigation}: HistoryScreenProps) => {
     useEffect(() => {
         Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1000}).start();
     })
-    useEffect(() => {
-        if (navigation.isFocused() && !selectedWalletHistory?.length) {
-            HistoryStoreService.getAllHistory()
-        }
-    }, [])
 
     const onPressTouchSpend = (spend: SpendingModel) => {
         setChosenSpend(spend)
@@ -67,16 +62,19 @@ const HistoryScreen = observer(({navigation}: HistoryScreenProps) => {
         setModalFilterHistory(true)
     }
     const renderEmptyContainer = () => {
-        return <View>
-            <Text style={styles.renderEmptyText}>У вас нет не одной траты</Text>
-        </View>
+        const onPressLink = () => {
+            setModalFilterHistory(true)
+        }
+        return <Box alignItems={'center'}>
+            <Link styleText={styles.linkWallet} style={styles.link} text={'Выбрать кошелек'} onPress={onPressLink}/>
+        </Box>
     }
     return (
         <>
             <SafeAreaView>
                 <View style={styles.headerContainer}>
                     <Image style={styles.imgLogo} resizeMode={'contain'} source={logo}/>
-                    <Text style={styles.textWalletName}>{chosenWallet?.name ? chosenWallet?.name : 'Вся история'}</Text>
+                    <Text style={styles.textWalletName}>{chosenWallet?.name ? `Имя: ${chosenWallet?.name}` : ''}</Text>
                     <TouchableOpacity style={{alignItems: 'center', marginLeft: 15}}
                                       onPress={onPressButtonFilterHistory}>
                         <Ionicons name={"filter"} size={24} color={colors.black}/>
@@ -106,6 +104,12 @@ const HistoryScreen = observer(({navigation}: HistoryScreenProps) => {
 })
 
 const styles = StyleSheet.create({
+    link: {
+        marginTop: 10,
+    },
+    linkWallet: {
+        fontSize: 18
+    },
     storyName: {
         marginTop: 10,
         marginBottom: 5
@@ -129,10 +133,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     contentContainerStyle: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5},
-    renderEmptyText: {
-        color: colors.gray,
-        fontSize: 20
-    },
     text: {
         width: '100%',
         marginTop: 5,
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
     textWalletName: {
         fontWeight: '800',
         fontSize: 20,
+        maxWidth: '50%',
         color: colors.black,
     },
     headerContainer: {
