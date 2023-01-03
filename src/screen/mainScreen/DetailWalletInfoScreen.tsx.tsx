@@ -25,7 +25,6 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
     const [modalChangeWallet, setModalChangeWallet] = useState(false);
     const {chosenWallet, clearChosenWallet} = WalletStore
     const {lastSpendsWallet, clearSelectedWalletHistory} = HistoryStore
-
     const confirmDeleteWallet = () => {
         createAlert({
             title: 'Удаление кошелька',

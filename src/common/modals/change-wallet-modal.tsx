@@ -57,8 +57,11 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                         }}
                         validate={values => {
                             const errors = {};
-                            if (!values.currency && !values.currency && !values.balance) {
+                            if (!values.currency && !values.name && !values.balance) {
                                 errors['inValidFields'] = true
+                            }
+                            if (!values.name) {
+                                errors['inValidName'] = true
                             }
                             return errors;
                         }}
@@ -79,6 +82,7 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                                         value={values.name}
                                         onBlur={handleBlur('name')}
                                         label={'Имя'}
+                                        isInvalid={!!errors.inValidName}
                                     />
                                     <Input
                                         keyboardType={'numeric'}
@@ -97,7 +101,7 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                                         label={'Валюта'}/>
                                     <View style={styles.buttonContainer}>
                                         <Button
-                                            disabled={!!errors.inValidFields}
+                                            disabled={!!errors.inValidFields || !!errors.inValidName}
                                             title={'Сохранить'}
                                             onPress={handleSubmit}
                                             styleContainer={styles.buttonSave}

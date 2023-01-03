@@ -66,6 +66,7 @@ const HistoryScreen = observer(({navigation}: HistoryScreenProps) => {
             setModalFilterHistory(true)
         }
         return <Box alignItems={'center'}>
+            <Text style={styles.renderEmptyText}>История пуста</Text>
             <Link styleText={styles.linkWallet} style={styles.link} text={'Выбрать кошелек'} onPress={onPressLink}/>
         </Box>
     }
@@ -108,6 +109,10 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     linkWallet: {
+        fontSize: 18
+    },
+    renderEmptyText: {
+        color: colors.gray,
         fontSize: 18
     },
     storyName: {

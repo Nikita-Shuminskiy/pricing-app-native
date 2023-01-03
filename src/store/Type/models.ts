@@ -93,7 +93,7 @@ export type ChartDataType = {
 }
 export type ChartDataDateType = {
     year: string,
-    month: number
+    month: string
 }
 
 export type CurrencyType = {
