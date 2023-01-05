@@ -1,21 +1,19 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Image, StyleSheet, View} from "react-native";
 import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {Formik} from "formik";
 import logo from '../../assets/logo/logo-pony-web.png'
 import Link from "../../common/components/link";
 import Button from '../../common/components/button';
-import AuthStore from "../../store/AuthStore/auth-store";
 import {colors} from "../../assets/colors/colors";
 import regex from "../../helpers/regex";
-import {createAlert} from "../../common/components/alert";
 import {routerConstants} from "../../constants/router-constants/router-constants";
 import LoginLayout from "../../common/components/login-layout";
 import {Center, ScrollView} from "native-base";
-import {Feather} from "@expo/vector-icons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Input from "../../common/components/input";
+import rootStore from "../../store/RootStore/root-store";
 
 type PasswordScreenProps = {
     navigation: NavigationProp<ParamListBase>
@@ -23,21 +21,14 @@ type PasswordScreenProps = {
 
 
 const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
-    const {registration} = AuthStore
-    const [showPassword, setShowPassword] = useState(true)
+    const {AuthStoreService} = rootStore
+
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
-        registration({
+        AuthStoreService.registration({
             email: values.email.trim(),
             password: values.password,
             name: values.name,
             lastName: values.lastName
-        }).then((res) => {
-            if (!!res.data) return navigation.navigate(routerConstants.LOGIN)
-            return createAlert({
-                title: 'Сообщение',
-                message: 'Ошибка, попробуйте позже',
-                buttons: [{text: 'Закрыть', style: "cancel", onPress: () => console.log('')}]
-            })
         })
     }
     const onPressLink = () => {
@@ -94,7 +85,9 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
                                     }
                                     onBlur={handleBlur('email')}
                                     errorMessage={touched.email && errors.inValidEmail && 'Некорректно введен емейл'}
-                                    label={'Емайл*'}
+                                    label={'Емайл'}
+                                    isRequired={true}
+                                    isInvalid={!!(errors.inValidEmail && touched.email)}
                                 />
                                 <Input
                                     style={styles.input}
@@ -102,9 +95,11 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
                                     placeholder={'введите пароль'}
                                     value={values.password}
                                     onBlur={handleBlur('password')}
-                                    errorMessage={errors.inValidPassword && touched.password && 'Пароль должен содержать не меньше 4-рех символов'}
-                                    label={'Пароль*'}
+                                    errorMessage={errors.inValidPassword && touched.password && 'Пароль должен содержать не меньше 6-ти символов'}
+                                    label={'Пароль'}
                                     type={'password'}
+                                    isRequired={true}
+                                    isInvalid={!!(errors.inValidPassword && touched.password)}
                                 />
                                 <Input
                                     type={'password'}
@@ -114,6 +109,8 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
                                     value={values.confirmPassword}
                                     onBlur={handleBlur('confirmPassword')}
                                     errorMessage={errors.inValidConfirmPassword && touched.confirmPassword && 'Пароли не совпадают'}
+                                    isRequired={true}
+                                    isInvalid={!!(errors.inValidConfirmPassword && touched.confirmPassword)}
                                 />
                                 <Button
                                     disabled={!!errors.inValidConfirmPassword || !!errors.inValidPassword || !!errors.inValidPassword}

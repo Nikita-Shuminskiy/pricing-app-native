@@ -11,12 +11,13 @@ import FilterChartModal from "../../common/modals/filter-chart-modal";
 import {colors} from "../../assets/colors/colors";
 import {convertToDate, dateFormat} from "../../utils/utils";
 import {FontAwesome} from "@expo/vector-icons";
+import Link from "../../common/components/link";
+import logo from "../../assets/logo/logo-pony-web.png";
 
 const ChartScreen = observer(() => {
     const {chosenWallet} = WalletStore
     const {chartDataPie, chartFilterDate} = CategoriesStore
     const [modalFilterChart, setModalFilterChart] = useState(false);
-
     const chartConf = {
         backgroundColor: "#e26a00",
         backgroundGradientFrom: "#fb8c00",
@@ -62,12 +63,25 @@ const ChartScreen = observer(() => {
             <Text fontSize={18} fontWeight={'700'} color={colors.gray}> Лист категорий пуст </Text>
         </Box>
     }
+    const onPressLink = () => {
+        setModalFilterChart(true)
+    }
 
     return (
         <>
             <ScrollView contentContainerStyle={!chartDataPie?.length && {flex: 1, alignItems: 'center'}}>
                 <SafeAreaView>
                     <Box marginTop={10} paddingLeft={5} paddingRight={5} flex={1} width={'100%'}>
+                        {
+                            !!chartDataPie?.length &&
+                            <Box alignItems={'center'} marginBottom={5}>
+                                <TouchableOpacity onPress={onPressFilter}>
+                                    <Image alt={'filter for chart'} w={10} height={10} source={filterImage}/>
+                                </TouchableOpacity>
+                            </Box>
+
+                        }
+
                         {
                             chartDataPie?.length ? (
                                 <>
@@ -90,7 +104,7 @@ const ChartScreen = observer(() => {
                                         <Box alignItems={'center'}>
                                             <Text fontSize={20} fontWeight={'700'} color={colors.gray}>
                                                 Статистика
-                                                за {chartFilterDate.month ? `${chartFilterDate.month} ${chartFilterDate.year} года` : `${chartFilterDate.year} год`}
+                                                за {chartFilterDate?.month ? `${chartFilterDate?.month} ${chartFilterDate?.year} года` : `${chartFilterDate?.year} год`}
                                             </Text>
                                         </Box>
                                         <Box alignItems={'center'}>
@@ -105,8 +119,6 @@ const ChartScreen = observer(() => {
                                                 height={220}
                                                 chartConfig={chartConf}
                                                 accessor={"population"}
-                                                backgroundColor={"none"}
-                                                center={[32, 0]}
                                                 hasLegend={true}
                                                 avoidFalseZero={true}
                                                 style={{
@@ -118,7 +130,12 @@ const ChartScreen = observer(() => {
                                                     alignItems: 'center',
                                                     width: width
                                                 }}
-                                                paddingLeft={'-20'}/>
+                                                backgroundColor={"transparent"}
+                                                paddingLeft={"15"}
+                                                center={[10, 10]}
+                                                absolute
+
+                                            />
                                         </Box>
 
                                         <Box mb={4}>
@@ -137,19 +154,20 @@ const ChartScreen = observer(() => {
                                     </Box>
                                 </>
                             ) : (
-                                <Box flex={1} alignItems={'center'} justifyContent={'center'}>
-                                    <Text fontSize={24}
-                                          color={colors.gray}
-                                          fontWeight={'700'}>Пусто</Text>
+                                <Box flex={1} alignItems={'center'} justifyContent={'space-between'}>
+                                  <Box  flex={1} justifyContent={'flex-start'}>
+                                      <Image style={styles.logo} alt={'logo'} resizeMode={'contain'} source={logo}/>
+                                  </Box>
+                                    <Box flex={5} justifyContent={'center'} alignItems={'center'}>
+                                        <Text fontSize={18}
+                                              color={colors.gray}>Кошелек для графика не выбран</Text>
+                                        <Link styleText={styles.linkWallet} style={styles.link} text={'Выбрать кошелек'}
+                                              onPress={onPressLink}/>
+                                    </Box>
                                 </Box>
                             )
 
                         }
-                        <Box right={5} position={'absolute'} top={0}>
-                            <TouchableOpacity onPress={onPressFilter}>
-                                <Image alt={'filter for chart'} w={50} height={50} source={filterImage}/>
-                            </TouchableOpacity>
-                        </Box>
                     </Box>
                 </SafeAreaView>
             </ScrollView>
@@ -160,6 +178,16 @@ const ChartScreen = observer(() => {
 });
 
 const styles = StyleSheet.create({
+    link: {
+        marginTop: 10,
+    },
+    logo: {
+        width: 150,
+        height: 150,
+    },
+    linkWallet: {
+        fontSize: 18
+    },
     contentContainerStyle: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5},
 });
 

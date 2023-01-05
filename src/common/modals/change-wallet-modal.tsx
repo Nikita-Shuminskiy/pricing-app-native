@@ -50,22 +50,18 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                 <SafeAreaView>
                     <Formik
                         initialValues={{
-                            name: '',
-                            balance: '',
-                            currency: '',
+                            name: chosenWallet?.name,
+                            balance: Math.round(chosenWallet?.balance),
+                            currency: chosenWallet?.currency,
                             userId: userId
                         }}
                         validate={values => {
                             const errors = {};
+                            if (!values.currency && !values.name && !values.balance) {
+                                errors['inValidFields'] = true
+                            }
                             if (!values.name) {
                                 errors['inValidName'] = true
-                            }
-                            if (!values.balance) {
-                                errors['inValidBalance'] = true
-                            }
-
-                            if (!values.currency) {
-                                errors['inValidCurrency'] = true
                             }
                             return errors;
                         }}
@@ -85,9 +81,8 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                                         placeholder={'введите имя кошелька'}
                                         value={values.name}
                                         onBlur={handleBlur('name')}
-                                        isInvalid={!!(touched.name && errors.inValidName)}
-                                        errorMessage={touched.name && errors.inValidName && 'Поля обязательно'}
-                                        label={`Имя: ${chosenWallet?.name}`}
+                                        label={'Имя'}
+                                        isInvalid={!!errors.inValidName}
                                     />
                                     <Input
                                         keyboardType={'numeric'}
@@ -95,21 +90,18 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                                         onChangeText={handleChange('balance')}
                                         placeholder={'введите баланс'}
                                         onBlur={handleBlur('balance')}
-                                        isInvalid={!!(errors.inValidBalance && touched.balance)}
-                                        errorMessage={errors.inValidBalance && touched.balance && 'Поля обязательно'}
                                         value={String(values.balance)}
-                                        label={`Баланс: ${chosenWallet?.balance}`}
+                                        label={'Баланс'}
                                     />
                                     <SelectPicker<CurrencyType>
                                         arrItem={allCurrencyList ? allCurrencyList : []}
                                         defaultLabel={'Выберете валюту'}
                                         onValueChange={handleChange('currency')}
                                         values={values.currency}
-                                        isInvalid={!!(errors.inValidCurrency && touched.currency)}
-                                        label={`Валюта: ${chosenWallet?.currency}`}/>
+                                        label={'Валюта'}/>
                                     <View style={styles.buttonContainer}>
                                         <Button
-                                            disabled={!!errors.inValidCurrency || !!errors.inValidName || !!errors.inValidBalance}
+                                            disabled={!!errors.inValidFields || !!errors.inValidName}
                                             title={'Сохранить'}
                                             onPress={handleSubmit}
                                             styleContainer={styles.buttonSave}

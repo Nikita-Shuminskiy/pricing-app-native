@@ -4,11 +4,12 @@
     "slug": "pony-web-native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo-pony-web.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/logo-pony-web.png",
-      "resizeMode": "contain"
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#25292e"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,11 +18,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nik1995.pony-ios"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo-pony-web.png"
+        "foregroundImage": "./assets/adaptive-icon.png"
       },
       "package": "com.nicknick1995.ponywebnative"
     },
@@ -33,6 +35,9 @@
         "projectId": "f16cfde1-ee3c-48c6-a3ab-f59a08450f50"
       }
     },
-    "githubUrl" : "https://github.com/Nikita-Shuminskiy/pricing-app-native"
+    "androidStatusBar": {
+      "translucent": true
+    },
+    "githubUrl": "https://github.com/Nikita-Shuminskiy/pricing-app-native"
   }
 }

@@ -12,6 +12,7 @@ import rootStore from "../../store/RootStore/root-store";
 import WalletStore from "../../store/WalletStore/wallet-store";
 import Loading from "../components/loading";
 import {arrMonth, arrYear} from "../constants/constants";
+import CategoriesStore from "../../store/CategoriesStore/categories-store";
 
 type FilterChartModalProps = {
     visible: boolean
@@ -21,14 +22,14 @@ type FilterChartModalProps = {
 const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
     const {CategoryStoreService} = rootStore
     const {wallets, getWallet} = WalletStore
+    const {clearChartFilterDate} = CategoriesStore
     const [data, setData] = useState({
-        year: '',
+        year: new Date().getFullYear().toString(),
         walletId: '',
         monthId: ''
     })
 
     const [loading, setLoading] = useState(false)
-
 
     const onPressSave = async () => {
         setLoading(true)
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     },
     closeIco: {
         position: 'absolute',
-        right: 0,
+        right: 20,
         top: 20
     },
     buttonSave: {

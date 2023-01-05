@@ -1,13 +1,13 @@
 import React, {useState} from "react";
-import {Image, Platform, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {Modal} from "native-base";
+import {Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {KeyboardAvoidingView, Modal} from "native-base";
 import SafeAreaView from "../components/safe-area-view";
 import {Formik} from "formik";
 import {colors} from "../../assets/colors/colors";
 import Button from "../components/button";
 import spend from '../../assets/images/spend.png';
 import WalletStore from "../../store/WalletStore/wallet-store";
-import {CategoryModelType, CategoryType, WalletModelType} from "../../store/Type/models";
+import {CategoryType, WalletModelType} from "../../store/Type/models";
 import rootStore from "../../store/RootStore/root-store";
 import CategoriesStore from "../../store/CategoriesStore/categories-store";
 import AuthStore from "../../store/AuthStore/auth-store";
@@ -15,8 +15,6 @@ import Loading from "../components/loading";
 import TextArea from "../components/text-area";
 import Input from "../components/input";
 import SelectPicker from "../components/select-picker";
-import {ScrollView} from "native-base";
-import {KeyboardAvoidingView} from "native-base";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 type ModalWindowType = {
@@ -43,6 +41,7 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
             }
         }).then((res) => {
             if (res) {
+                rootStore.WalletStoreService.getWallets(user._id)
                 resetForm()
             }
             setLoading(false)
@@ -58,13 +57,13 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
             {
                 loading ? <Loading/>
                     :
-                    <SafeAreaView>
-                        <KeyboardAvoidingView h={{
-                            base: "600px",
-                            lg: "auto"
-                        }} alignItems={'center'} flex={1} enabled={true}
-                                              behavior={Platform.OS === "ios" ? "padding" : "height"}>
-                            <ScrollView w={["110%", "100%"]}>
+                        <SafeAreaView>
+                            <KeyboardAvoidingView h={{
+                                base: "600px",
+                                lg: "auto"
+                            }} alignItems={'center'} flex={1} enabled={true}
+                                                  behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                                <ScrollView bounces={true} style={{width: '100%'}}>
                                 <Formik
                                     initialValues={{
                                         categories: '',
@@ -135,8 +134,9 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
                                                     label={'Сумма которую вы потратили'}
                                                 />
 
-                                                <TextArea value={values.description} label={'Комментарий к трате'}
-                                                          onChange={handleChange('description')}
+                                                <TextArea value={values.description}
+                                                          label={'Комментарий к трате'}
+                                                          onChangeText={handleChange('description')}
                                                           placeholder={'введите коммментарий'}/>
                                                 <View style={styles.buttonContainer}>
                                                     <Button
@@ -150,9 +150,10 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
                                         </View>
                                     )}
                                 </Formik>
-                            </ScrollView>
-                        </KeyboardAvoidingView>
-                    </SafeAreaView>
+                                </ScrollView>
+                            </KeyboardAvoidingView>
+                        </SafeAreaView>
+
             }
         </Modal>
     )
@@ -161,7 +162,8 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
 const styles = StyleSheet.create({
     formikContainer: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%'
     },
 
     closeIco: {

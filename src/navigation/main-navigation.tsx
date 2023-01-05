@@ -1,4 +1,4 @@
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import {routerConstants} from "../constants/router-constants/router-constants";
 import {colors} from "../assets/colors/colors";
 import WalletNavigation from "./wallet-navigation";
@@ -6,17 +6,34 @@ import HistoryScreen from "../screen/mainScreen/HistoryScreen";
 import ChartScreen from "../screen/mainScreen/ChartScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SettingScreen from "../screen/mainScreen/SettingScreen";
+const tapBarOptions = {
 
-const Tab = createMaterialBottomTabNavigator();
+}
+const Tab = createMaterialTopTabNavigator();
 
 const MainNavigation = () => {
 
     return (
         <Tab.Navigator
             screenOptions={({route}) => ({
+                tabBarStyle: {
+                    width: '100%', borderWidth: 0, elevation: 0,
+                    height: 65,
+                    backgroundColor: colors.white,
+                },
+                tabBarActiveTintColor: colors.orange,
+                tabBarInactiveTintColor: colors.gray,
+                tabBarIndicatorStyle: {
+                   marginTop: 0,
+                    bottom: 0,
+                  backgroundColor: colors.orange
+                },
+                tabBarLabelStyle:{
+                    fontSize: 10,
+                    color: 'gray'
+                },
                 tabBarIcon: ({focused, color}) => {
                     let iconName;
-
                     if (route.name === 'wallets') {
                         iconName = focused
                             ? 'wallet'
@@ -34,10 +51,8 @@ const MainNavigation = () => {
                     )
                 },
             })}
-            activeColor={colors.orange}
-            barStyle={{
-                backgroundColor: colors.white,
-            }}
+            showPageIndicator={false}
+            tabBarPosition={'bottom'}
         >
             <Tab.Screen options={{tabBarLabel: 'Кошельки'}}
                         name={routerConstants.WALLETS}

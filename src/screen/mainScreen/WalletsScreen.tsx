@@ -16,6 +16,8 @@ import {AddSpendModal} from "../../common/modals/add-spend-modal";
 import HistoryStore from "../../store/HistoryStore/history-store";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import {createAlert} from "../../common/components/alert";
+import Link from "../../common/components/link";
+import {Box} from "native-base";
 
 
 type WalletScreenProps = {
@@ -33,10 +35,10 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
         }
     }, [])
     const onPressButtonAddWallet = () => {
-        if(wallets.length >= 6) {
+        if (wallets.length >= 6) {
             return createAlert({
                 title: 'Сообщение',
-                message: 'На данный момент у вас максимальное количество кошельков',
+                message: 'У вас максимальное количество кошельков',
                 buttons: [{text: 'Закрыть', style: "cancel", onPress: () => console.log('')}]
             })
         } else {
@@ -73,7 +75,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                             Имя: {item?.name}
                         </Text>
                         <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                            Баланс: {item?.balance} {item?.currency}
+                            Баланс: {Math.round(item?.balance)} {item?.currency}
                         </Text>
                     </View>
 
@@ -84,9 +86,13 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
         );
     };
     const renderEmptyContainer = () => {
-        return <View>
+        const onPressLink = () => {
+            setModalAddWallet(true)
+        }
+        return <Box alignItems={'center'}>
             <Text style={styles.renderEmptyText}>У вас нет кошельков</Text>
-        </View>
+            <Link styleText={styles.linkWallet} style={styles.link} text={'Создать кошелек'} onPress={onPressLink}/>
+        </Box>
     }
 
     return (
@@ -127,10 +133,16 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
     },
+    link: {
+        marginTop: 10,
+    },
+    linkWallet: {
+        fontSize: 18
+    },
     contentContainerStyle: {flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5},
     renderEmptyText: {
         color: colors.gray,
-        fontSize: 20
+        fontSize: 18
     },
     text: {
         marginTop: 5,
@@ -157,8 +169,8 @@ const styles = StyleSheet.create({
         elevation: 10
     },
     logo: {
-        width: 70,
-        height: 70,
+        width: 80,
+        height: 80,
         marginRight: 5,
     },
     addWalletContainer: {
