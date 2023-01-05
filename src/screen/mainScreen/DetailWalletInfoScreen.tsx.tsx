@@ -85,7 +85,7 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
                         </View>
                         <View style={styles.blockText}>
                             <Text style={styles.textName}>Баланс:</Text>
-                            <Text style={styles.text}>{chosenWallet?.balance}</Text>
+                            <Text style={styles.text}>{Math.round(chosenWallet?.balance)}</Text>
                         </View>
                         {/*  <View style={styles.blockText}>
                             <Text style={styles.textName}>Всего Трат:</Text>

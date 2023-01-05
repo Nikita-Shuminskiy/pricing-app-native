@@ -51,7 +51,7 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
                     <Formik
                         initialValues={{
                             name: chosenWallet?.name,
-                            balance: chosenWallet?.balance,
+                            balance: Math.round(chosenWallet?.balance),
                             currency: chosenWallet?.currency,
                             userId: userId
                         }}

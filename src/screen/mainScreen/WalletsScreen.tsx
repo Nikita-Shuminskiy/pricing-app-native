@@ -75,7 +75,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                             Имя: {item?.name}
                         </Text>
                         <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                            Баланс: {item?.balance} {item?.currency}
+                            Баланс: {Math.round(item?.balance)} {item?.currency}
                         </Text>
                     </View>
 

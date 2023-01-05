@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Modal} from "native-base";
 import SafeAreaView from "../components/safe-area-view";
 import filterImage from '../../assets/images/filterWichBorder.png'
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     },
     closeIco: {
         position: 'absolute',
-        right: 0,
+        right: 20,
         top: 20
     },
     buttonSave: {

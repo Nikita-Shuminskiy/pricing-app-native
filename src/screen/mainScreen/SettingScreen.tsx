@@ -37,7 +37,7 @@ const SettingScreen = observer(({navigation}: SettingScreenProps) => {
                     </Box>
                     <Box mt={5} flexDirection={'row'} alignItems={'center'}>
                         <Text color={colors.gray} fontSize={20} fontWeight={500}>Имя: </Text>
-                        <Text fontSize={18}>{firstName ? firstName : 'No name'}</Text>
+                        <Text fontSize={18}>{firstName ? firstName : lastName ? lastName : 'No name'}</Text>
                     </Box>
                     <Box mt={5} flexDirection={'row'} alignItems={'center'}>
                         <Text color={colors.gray} fontSize={20} fontWeight={500}>Емайл: </Text>

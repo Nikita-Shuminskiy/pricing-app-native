@@ -71,7 +71,6 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                 <Text style={styles.textCreate}>Создание кошелька</Text>
                                 <View style={styles.container}>
                                     <Input
-                                        style={styles.input}
                                         onChangeText={handleChange('name')}
                                         placeholder={'введите имя кошелька'}
                                         value={values.name}
@@ -83,7 +82,6 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                     />
                                     <Input
                                         keyboardType={'numeric'}
-                                        style={styles.input}
                                         onChangeText={handleChange('balance')}
                                         placeholder={'введите баланс'}
                                         errorMessage={errors.inValidBalance && touched.balance && 'Поля обязательно'}
@@ -160,10 +158,6 @@ const styles = StyleSheet.create({
         width: 120,
         height: 100,
         marginBottom: 30,
-    },
-    input: {
-        paddingLeft: 10,
-        borderColor: colors.grayWhite,
     },
     error: {
         color: colors.red
