@@ -14,6 +14,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Input from "../../common/components/input";
 import rootStore from "../../store/RootStore/root-store";
+import {useSwipe} from "../../utils/hooks/useSwipe";
 
 type PasswordScreenProps = {
     navigation: NavigationProp<ParamListBase>
@@ -34,9 +35,15 @@ const RegistrationScreen = ({navigation}: PasswordScreenProps) => {
     const onPressLink = () => {
         navigation.navigate(routerConstants.LOGIN)
     }
+    const onSwipeRight = () => {
+        return  navigation.navigate(routerConstants.LOGIN)
+    }
+
+    const {onTouchStart, onTouchEnd} = useSwipe(null, onSwipeRight, null, 4)
     return (
         <LoginLayout>
-            <ScrollView w={["100%", "100%"]}>
+            <ScrollView onTouchStart={onTouchStart}
+                        onTouchEnd={onTouchEnd} w={["100%", "100%"]}>
                 <Formik
                     initialValues={{
                         email: '',

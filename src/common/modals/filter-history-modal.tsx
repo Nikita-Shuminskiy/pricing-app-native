@@ -12,6 +12,7 @@ import rootStore from "../../store/RootStore/root-store";
 import SelectPicker from "../components/select-picker";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import settingsImage from '../../assets/images/settings.png'
+import {useSwipe} from "../../utils/hooks/useSwipe";
 
 type FilterHistoryModalType = {
     visible: boolean
@@ -30,7 +31,11 @@ const FilterHistoryModal = ({visible, onClose}: FilterHistoryModalType) => {
     const [sortByName, setSortByName] = useState('')
     const [toggleSortBy, setToggleSortBy] = useState(false)
     const [invalidWallet, setInvalidWallet] = useState(false)
+    const onSwipeLeft = () => {
+        return onClose()
+    }
 
+    const {onTouchStart, onTouchEnd} = useSwipe(onSwipeLeft, null, null, 4)
     const onValueChangeSwitcher = (value: boolean) => {
         setToggleSortBy(value)
     }
@@ -53,7 +58,8 @@ const FilterHistoryModal = ({visible, onClose}: FilterHistoryModalType) => {
             background={'white'}
         >
             <SafeAreaView>
-                <View style={styles.container}>
+                <View onTouchStart={onTouchStart}
+                      onTouchEnd={onTouchEnd} style={styles.container}>
                     <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
                         <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
                     </TouchableOpacity>

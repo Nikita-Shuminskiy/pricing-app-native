@@ -68,16 +68,16 @@ export type NewWalletType = {
     balance: number | null;
     currency: string;
 };
-
+export type SpendingType = {
+    title: string;
+    category: string;
+    description: string;
+    amount: string;
+}
 export type SpendDataType = {
     userId: string;
     walletId: string;
-    spending: {
-        title: string;
-        category: string;
-        description: string;
-        amount: string;
-    };
+    spending: SpendingType;
 };
 
 export type ParamsToChartDate = {

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import {Box, FormControl, Icon, Input, Pressable, WarningOutlineIcon} from "native-base";
+import {Box, FormControl, Input, WarningOutlineIcon} from "native-base";
 import {KeyboardTypeOptions, StyleProp, TextStyle, TouchableOpacity} from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {Feather} from "@expo/vector-icons";
 import {colors} from "../../assets/colors/colors";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Modal} from "native-base";
 import SafeAreaView from "../components/safe-area-view";
@@ -7,6 +7,8 @@ import HistoryStore from "../../store/HistoryStore/history-store";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {convertToDate, dateFormat, getDateFormatTime} from "../../utils/utils";
 import {observer} from "mobx-react-lite";
+import {spendingApi} from "../../api/spendingApi";
+import {useSwipe} from "../../utils/hooks/useSwipe";
 
 type DetailSpendModalType = {
     onClose: () => void
@@ -14,6 +16,11 @@ type DetailSpendModalType = {
 }
 export const DetailSpendModal = observer(({visible, onClose}: DetailSpendModalType) => {
     const {chosenSpend} = HistoryStore
+    const onSwipeLeft = () => {
+        return onClose()
+    }
+
+    const {onTouchStart, onTouchEnd} = useSwipe(onSwipeLeft, null, null,4)
     return (
         <Modal
             isOpen={visible}
@@ -21,7 +28,9 @@ export const DetailSpendModal = observer(({visible, onClose}: DetailSpendModalTy
             background={'white'}
         >
             <SafeAreaView>
-                <View style={styles.container}>
+                <View onTouchStart={onTouchStart}
+                      onTouchEnd={onTouchEnd}
+                      style={styles.container}>
                     <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
                         <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
                     </TouchableOpacity>

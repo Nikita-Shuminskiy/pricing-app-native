@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Animated, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {observer} from "mobx-react-lite";
 import WalletStore from "../../store/WalletStore/wallet-store";
@@ -13,11 +13,12 @@ import {NavigationProp, ParamListBase} from "@react-navigation/native";
 import {routerConstants} from "../../constants/router-constants/router-constants";
 import rootStore from "../../store/RootStore/root-store";
 import {AddSpendModal} from "../../common/modals/add-spend-modal";
-import HistoryStore from "../../store/HistoryStore/history-store";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import {createAlert} from "../../common/components/alert";
 import Link from "../../common/components/link";
 import {Box} from "native-base";
+import {useSwipe} from "../../utils/hooks/useSwipe";
+import HistoryStore from "../../store/HistoryStore/history-store";
 
 
 type WalletScreenProps = {
@@ -28,10 +29,18 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     const [modalAddSpend, setModalAddSpend] = useState(false);
     const {userId, wallets, setChosenWallet} = WalletStore
 
+    const onSwipeRight = () => {
+        setModalAddWallet(true)
+    }
+
+    const {onTouchStart, onTouchEnd} = useSwipe(null, onSwipeRight, null, 4)
+
+    const {WalletStoreService} = rootStore
     const {getCurrentHistory} = HistoryStore
+
     useEffect(() => {
         if (!wallets) {
-            rootStore.WalletStoreService.getWallets(userId)
+            WalletStoreService.getWallets(userId)
         }
     }, [])
     const onPressButtonAddWallet = () => {
@@ -61,28 +70,25 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     }
     const walletView = ({item}) => {
         return (
-            <Animated.View style={{transform: [{translateY: translateX}]}}>
-                <View style={styles.walletContainer}>
-                    <View style={styles.imagesContainer}>
-                        <TouchableOpacity style={styles.imagesOpacity}
-                                          onPress={() => onPressTouchWallet(item as WalletModelType)}>
+            <TouchableOpacity style={styles.imagesOpacity}
+                              onPress={() => onPressTouchWallet(item as WalletModelType)}>
+                <Animated.View style={{transform: [{translateY: translateX}]}}>
+                    <View style={styles.walletContainer}>
+                        <View style={styles.imagesContainer}>
                             <Image style={styles.img} source={wallet}/>
                             <FontAwesome style={styles.icoInfo} name="info-circle" size={20} color={colors.orange}/>
-                        </TouchableOpacity>
+                        </View>
+                        <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                            <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.walletName}>
+                                Имя: {item?.name}
+                            </Text>
+                            <Text numberOfLines={1} ellipsizeMode={'tail'}>
+                                Баланс: {Math.round(item?.balance)} {item?.currency}
+                            </Text>
+                        </View>
                     </View>
-                    <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-                        <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.walletName}>
-                            Имя: {item?.name}
-                        </Text>
-                        <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                            Баланс: {Math.round(item?.balance)} {item?.currency}
-                        </Text>
-                    </View>
-
-                </View>
-            </Animated.View>
-
-
+                </Animated.View>
+            </TouchableOpacity>
         );
     };
     const renderEmptyContainer = () => {
@@ -94,6 +100,13 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
             <Link styleText={styles.linkWallet} style={styles.link} text={'Создать кошелек'} onPress={onPressLink}/>
         </Box>
     }
+
+    const [isRefreshing, setIsRefreshing] = useState(false);
+
+    const onRefresh = useCallback(() => {
+        setIsRefreshing(true);
+        WalletStoreService.getWallets(userId)
+    }, []);
 
     return (
         <>
@@ -111,6 +124,8 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                 </View>
                 <View style={styles.walletsContainer}>
                     <FlatList
+                        onTouchStart={onTouchStart}
+                        onTouchEnd={onTouchEnd}
                         data={wallets}
                         renderItem={walletView}
                         keyExtractor={(item, index) => index.toString()}
@@ -118,6 +133,9 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                         style={{width: '100%'}}
                         ListEmptyComponent={renderEmptyContainer}
                         contentContainerStyle={!wallets?.length && styles.contentContainerStyle}
+                        showsVerticalScrollIndicator={false}
+                        refreshing={isRefreshing} // Added pull to refesh state
+                        onRefresh={onRefresh} // Added pull to refresh control
                     />
                 </View>
             </SafeAreaView>
@@ -159,14 +177,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 16,
         flex: 1,
-        shadowColor: colors.black,
-        shadowOffset: {
-            width: 0,
-            height: 5,
-        },
-        shadowOpacity: 0.34,
-        shadowRadius: 6.27,
-        elevation: 10
     },
     logo: {
         width: 80,
@@ -207,7 +217,7 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'center'
     }
 });
 

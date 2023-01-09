@@ -51,7 +51,7 @@ const HistoryScreen = observer(({navigation}: HistoryScreenProps) => {
                         <Text> {dateFormat(convertToDate(item.createdAt))} в {getDateFormatTime(convertToDate(item.createdAt))}</Text>
                     </View>
                     <View style={styles.blockAmount}>
-                        <Text>- {item.amount} {item.currency}</Text>
+                        <Text>{item.amount} {item.currency}</Text>
                         <Image style={styles.img} source={coinImage}/>
                     </View>
                 </TouchableOpacity>

@@ -6,7 +6,7 @@ import WalletStore from "../../store/WalletStore/wallet-store";
 import {colors} from "../../assets/colors/colors";
 import wallet from '../../assets/images/wallet-witch-money.png';
 import money from '../../assets/images/coin.png';
-import {convertToDate, dateFormat, getDateFormatTime} from "../../utils/utils";
+import {convertToDate, dateFormat, getDateFormatTime, getTotalSpends} from "../../utils/utils";
 import {FontAwesome5} from '@expo/vector-icons';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import {createAlert} from "../../common/components/alert";
@@ -16,6 +16,8 @@ import {HeaderBackButton} from "@react-navigation/elements";
 import rootStore from "../../store/RootStore/root-store";
 import HistoryStore from "../../store/HistoryStore/history-store";
 import {observer} from "mobx-react-lite";
+import {routerConstants} from "../../constants/router-constants/router-constants";
+import {useSwipe} from "../../utils/hooks/useSwipe";
 
 type DetailInfoWalletModalType = {
     navigation: NavigationProp<ParamListBase>
@@ -24,7 +26,7 @@ type DetailInfoWalletModalType = {
 export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletModalType) => {
     const [modalChangeWallet, setModalChangeWallet] = useState(false);
     const {chosenWallet, clearChosenWallet} = WalletStore
-    const {lastSpendsWallet, clearSelectedWalletHistory} = HistoryStore
+    const {lastSpendsWallet, clearSelectedWalletHistory, selectedWalletHistory} = HistoryStore
     const confirmDeleteWallet = () => {
         createAlert({
             title: 'Удаление кошелька',
@@ -35,14 +37,17 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
             ]
         })
     }
-
     const onPressRemove = () => {
         RootStore.WalletStoreService.removeWallet(chosenWallet?.userId, chosenWallet._id)
     }
     const onPressChangeWallet = () => {
         setModalChangeWallet(true)
     }
+    const onSwipeLeft = () => {
+        return navigation.goBack()
+    }
 
+    const {onTouchStart, onTouchEnd} = useSwipe(null, onSwipeLeft, null, 4)
     useEffect(() => {
         navigation.setOptions({
             headerLeft: (props) => (
@@ -59,7 +64,9 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
         });
     });
     return (
-        <ScrollView style={{width: '100%'}}>
+        <ScrollView onTouchStart={onTouchStart}
+                    onTouchEnd={onTouchEnd}
+                    style={{width: '100%'}}>
             <SafeAreaView>
                 <View style={styles.container}>
                     <Image style={styles.logo} resizeMode={'contain'} source={wallet}/>
@@ -87,10 +94,10 @@ export const DetailInfoWalletScreen = observer(({navigation}: DetailInfoWalletMo
                             <Text style={styles.textName}>Баланс:</Text>
                             <Text style={styles.text}>{Math.round(chosenWallet?.balance)}</Text>
                         </View>
-                        {/*  <View style={styles.blockText}>
-                            <Text style={styles.textName}>Всего Трат:</Text>
-                            <Text style={styles.text}>{chosenWallet?.totalSpends ? chosenWallet?.totalSpends : 0}</Text>
-                        </View>*/}
+                        <View style={styles.blockText}>
+                            <Text style={styles.textName}>Списанно:</Text>
+                            <Text style={styles.text}>{getTotalSpends(selectedWalletHistory)}</Text>
+                        </View>
                         <View style={styles.blockText}>
                             <Text style={styles.textName}>Дата создания кошелька:</Text>
                             <Text style={styles.text}>{dateFormat(convertToDate(chosenWallet?.createdAt))}</Text>

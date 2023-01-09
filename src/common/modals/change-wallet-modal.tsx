@@ -15,6 +15,7 @@ import Loading from "../components/loading";
 import SelectPicker from "../components/select-picker";
 import Input from "../components/input";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import {useSwipe} from "../../utils/hooks/useSwipe";
 
 type ChangeWalletModalType = {
     onClose: () => void
@@ -24,6 +25,12 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
     const {userId, chosenWallet} = WalletStore
     const {allCurrencyList, getCurrencyList} = HistoryStore
     const [loading, setLoading] = useState(false)
+    const onSwipeLeft = () => {
+        return onClose()
+    }
+
+    const {onTouchStart, onTouchEnd} = useSwipe(onSwipeLeft, null, null, 4)
+
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
         setLoading(true)
         rootStore.WalletStoreService.updateWallet(chosenWallet._id, values, true).then((res) => {
@@ -45,74 +52,77 @@ export const ChangeWalletModal = observer(({visible, onClose}: ChangeWalletModal
             backdropVisible={true}
             background={'white'}
         >
-            {loading ? <Loading/> : <ScrollView style={{width: '100%'}}>
+            {loading ? <Loading/> :
+                <ScrollView onTouchStart={onTouchStart}
+                            onTouchEnd={onTouchEnd}
+                            style={{width: '100%'}}>
 
-                <SafeAreaView>
-                    <Formik
-                        initialValues={{
-                            name: chosenWallet?.name,
-                            balance: Math.round(chosenWallet?.balance),
-                            currency: chosenWallet?.currency,
-                            userId: userId
-                        }}
-                        validate={values => {
-                            const errors = {};
-                            if (!values.currency && !values.name && !values.balance) {
-                                errors['inValidFields'] = true
-                            }
-                            if (!values.name) {
-                                errors['inValidName'] = true
-                            }
-                            return errors;
-                        }}
-                        onSubmit={onSubmit}
-                    >
-                        {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
-                            <View style={styles.formikContainer}>
-                                <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
-                                    <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
-                                </TouchableOpacity>
-                                <Image style={styles.img} source={wallet}/>
-                                <Text style={styles.textCreate}>Редактирование кошелька</Text>
-                                <View style={styles.container}>
-                                    <Input
-                                        style={styles.input}
-                                        onChangeText={handleChange('name')}
-                                        placeholder={'введите имя кошелька'}
-                                        value={values.name}
-                                        onBlur={handleBlur('name')}
-                                        label={'Имя'}
-                                        isInvalid={!!errors.inValidName}
-                                    />
-                                    <Input
-                                        keyboardType={'numeric'}
-                                        style={styles.input}
-                                        onChangeText={handleChange('balance')}
-                                        placeholder={'введите баланс'}
-                                        onBlur={handleBlur('balance')}
-                                        value={String(values.balance)}
-                                        label={'Баланс'}
-                                    />
-                                    <SelectPicker<CurrencyType>
-                                        arrItem={allCurrencyList ? allCurrencyList : []}
-                                        defaultLabel={'Выберете валюту'}
-                                        onValueChange={handleChange('currency')}
-                                        values={values.currency}
-                                        label={'Валюта'}/>
-                                    <View style={styles.buttonContainer}>
-                                        <Button
-                                            disabled={!!errors.inValidFields || !!errors.inValidName}
-                                            title={'Сохранить'}
-                                            onPress={handleSubmit}
-                                            styleContainer={styles.buttonSave}
+                    <SafeAreaView>
+                        <Formik
+                            initialValues={{
+                                name: chosenWallet?.name,
+                                balance: Math.round(chosenWallet?.balance),
+                                currency: chosenWallet?.currency,
+                                userId: userId
+                            }}
+                            validate={values => {
+                                const errors = {};
+                                if (!values.currency && !values.name && !values.balance) {
+                                    errors['inValidFields'] = true
+                                }
+                                if (!values.name) {
+                                    errors['inValidName'] = true
+                                }
+                                return errors;
+                            }}
+                            onSubmit={onSubmit}
+                        >
+                            {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
+                                <View style={styles.formikContainer}>
+                                    <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
+                                        <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
+                                    </TouchableOpacity>
+                                    <Image style={styles.img} source={wallet}/>
+                                    <Text style={styles.textCreate}>Редактирование кошелька</Text>
+                                    <View style={styles.container}>
+                                        <Input
+                                            style={styles.input}
+                                            onChangeText={handleChange('name')}
+                                            placeholder={'введите имя кошелька'}
+                                            value={values.name}
+                                            onBlur={handleBlur('name')}
+                                            label={'Имя'}
+                                            isInvalid={!!errors.inValidName}
                                         />
+                                        <Input
+                                            keyboardType={'numeric'}
+                                            style={styles.input}
+                                            onChangeText={handleChange('balance')}
+                                            placeholder={'введите баланс'}
+                                            onBlur={handleBlur('balance')}
+                                            value={String(values.balance)}
+                                            label={'Баланс'}
+                                        />
+                                        <SelectPicker<CurrencyType>
+                                            arrItem={allCurrencyList ? allCurrencyList : []}
+                                            defaultLabel={'Выберете валюту'}
+                                            onValueChange={handleChange('currency')}
+                                            values={values.currency}
+                                            label={'Валюта'}/>
+                                        <View style={styles.buttonContainer}>
+                                            <Button
+                                                disabled={!!errors.inValidFields || !!errors.inValidName}
+                                                title={'Сохранить'}
+                                                onPress={handleSubmit}
+                                                styleContainer={styles.buttonSave}
+                                            />
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        )}
-                    </Formik>
-                </SafeAreaView>
-            </ScrollView>}
+                            )}
+                        </Formik>
+                    </SafeAreaView>
+                </ScrollView>}
         </Modal>
     )
 })

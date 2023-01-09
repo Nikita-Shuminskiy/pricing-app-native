@@ -13,6 +13,7 @@ import {CurrencyType} from "../../store/Type/models";
 import SelectPicker from "../components/select-picker";
 import Input from "../components/input";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import {useSwipe} from "../../utils/hooks/useSwipe";
 
 type ModalWindowType = {
     onClose: () => void
@@ -21,6 +22,12 @@ type ModalWindowType = {
 export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
     const {userId} = WalletStore
     const {allCurrencyList, getCurrencyList} = HistoryStore
+    const onSwipeLeft = () => {
+        return onClose()
+    }
+
+    const {onTouchStart, onTouchEnd} = useSwipe(onSwipeLeft, null, null, 4)
+
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
         rootStore.WalletStoreService.addWallet(values)
     }
@@ -35,7 +42,8 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
             backdropVisible={true}
             background={'white'}
         >
-            <ScrollView bounces={true} style={{width: '100%'}}>
+            <ScrollView onTouchStart={onTouchStart}
+                        onTouchEnd={onTouchEnd} bounces={true} style={{width: '100%'}}>
                 <SafeAreaView>
                     <Formik
                         initialValues={{

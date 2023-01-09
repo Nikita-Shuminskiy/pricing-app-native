@@ -13,6 +13,7 @@ import WalletStore from "../../store/WalletStore/wallet-store";
 import Loading from "../components/loading";
 import {arrMonth, arrYear} from "../constants/constants";
 import CategoriesStore from "../../store/CategoriesStore/categories-store";
+import {useSwipe} from "../../utils/hooks/useSwipe";
 
 type FilterChartModalProps = {
     visible: boolean
@@ -22,13 +23,16 @@ type FilterChartModalProps = {
 const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
     const {CategoryStoreService} = rootStore
     const {wallets, getWallet} = WalletStore
-    const {clearChartFilterDate} = CategoriesStore
     const [data, setData] = useState({
         year: new Date().getFullYear().toString(),
         walletId: '',
         monthId: ''
     })
+    const onSwipeLeft = () => {
+        return onClose()
+    }
 
+    const {onTouchStart, onTouchEnd} = useSwipe(onSwipeLeft, null, null, 4)
     const [loading, setLoading] = useState(false)
 
     const onPressSave = async () => {
@@ -55,7 +59,8 @@ const FilterChartModal = ({visible, onClose}: FilterChartModalProps) => {
                     )
                     : (
                         <SafeAreaView>
-                            <View style={styles.container}>
+                            <View onTouchStart={onTouchStart}
+                                  onTouchEnd={onTouchEnd} style={styles.container}>
                                 <TouchableOpacity onPress={() => onClose()} style={styles.closeIco}>
                                     <Ionicons name="close-circle-outline" size={34} color={colors.black}/>
                                 </TouchableOpacity>

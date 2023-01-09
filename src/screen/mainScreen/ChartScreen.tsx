@@ -27,7 +27,7 @@ const ChartScreen = observer(() => {
         labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         style: {
             flex: 1,
-            borderRadius: 16
+            borderRadius: 16,
         },
         propsForDots: {
             r: "6",

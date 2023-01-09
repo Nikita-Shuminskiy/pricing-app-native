@@ -13,22 +13,32 @@ import {Center, ScrollView} from "native-base";
 import Input from '../../common/components/input';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import rootStore from "../../store/RootStore/root-store";
+import {useSwipe} from "../../utils/hooks/useSwipe";
 
 type LoginScreenProps = {
     navigation: NavigationProp<ParamListBase>
 }
 const LoginScreen = ({navigation}: LoginScreenProps) => {
     const {AuthStoreService} = rootStore
-
     const onSubmit = (values, {setFieldError, setSubmitting}) => {
         AuthStoreService.login({email: values.email.trim(), password: values.password})
     }
     const onPressLink = () => {
         navigation.navigate(routerConstants.REGISTRATION)
     }
+    const onSwipeTop = () => {
+        return AuthStoreService.checkAuth()
+    }
+    const onSwipeLeft = () => {
+        return navigation.navigate(routerConstants.REGISTRATION)
+    }
+
+    const {onTouchStart, onTouchEnd} = useSwipe(onSwipeLeft, null, onSwipeTop, 4)
     return (
         <LoginLayout>
-            <ScrollView w={["100%", "100%"]}>
+            <ScrollView onTouchStart={onTouchStart}
+                        onTouchEnd={onTouchEnd}
+                        w={["100%", "100%"]}>
                 <Formik
                     initialValues={{
                         email: '',

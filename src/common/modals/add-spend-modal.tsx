@@ -16,6 +16,8 @@ import TextArea from "../components/text-area";
 import Input from "../components/input";
 import SelectPicker from "../components/select-picker";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import {replaceCommaOnDot} from "../../utils/utils";
+import {useSwipe} from "../../utils/hooks/useSwipe";
 
 type ModalWindowType = {
     onClose: () => void
@@ -27,7 +29,11 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
     const {user} = AuthStore
     const {categories} = CategoriesStore
     const {WalletStoreService} = rootStore
+    const onSwipeLeft = () => {
+        return onClose()
+    }
 
+    const {onTouchStart, onTouchEnd} = useSwipe(onSwipeLeft, null, null, 4)
     const onSubmit = (values, {resetForm}) => {
         setLoading(true)
         WalletStoreService.addSpending({
@@ -37,7 +43,7 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
                 title: values.categories,
                 category: values.categories,
                 description: values.description,
-                amount: values.amount
+                amount: replaceCommaOnDot(values.amount)
             }
         }).then((res) => {
             if (res) {
@@ -63,11 +69,12 @@ export const AddSpendModal = ({visible, onClose}: ModalWindowType) => {
                                 lg: "auto"
                             }} alignItems={'center'} flex={1} enabled={true}
                                                   behavior={Platform.OS === "ios" ? "padding" : "height"}>
-                                <ScrollView bounces={true} style={{width: '100%'}}>
+                                <ScrollView onTouchStart={onTouchStart}
+                                            onTouchEnd={onTouchEnd} bounces={true} style={{width: '100%'}}>
                                 <Formik
                                     initialValues={{
                                         categories: '',
-                                        amount: '',
+                                        amount: 0,
                                         wallet: '',
                                         description: '',
                                     }}

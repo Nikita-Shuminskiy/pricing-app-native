@@ -1,7 +1,7 @@
 import {Navigations} from "./src/navigation/navigations";
 import * as React from 'react';
+import {useEffect} from 'react';
 import {NativeBaseProvider} from "native-base";
-import {useEffect} from "react";
 import NetInfo from "@react-native-community/netinfo";
 import {createAlert} from "./src/common/components/alert";
 import {StatusBar} from 'expo-status-bar';
