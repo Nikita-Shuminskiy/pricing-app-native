@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
 import {Box, Center, Image, Modal, ScrollView, Text} from "native-base";
-import {StyleSheet} from "react-native";
 import SafeAreaView from "../components/safe-area-view";
 import Button from "../components/button";
 import wallet from '../../assets/images/wallet.png';
@@ -110,7 +109,7 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
                                     disabled={!!errors.currency || !!errors.name || !!errors.balance}
                                     title={'Сохранить'}
                                     onPress={handleSubmit}
-                                    styleContainer={styles.buttonSave}
+                                    styleContainer={{margin: 10}}
                                 />
                             </Box>
                         </Box>
@@ -120,9 +119,3 @@ export const AddWalletModal = ({visible, onClose}: ModalWindowType) => {
         </Modal>
     )
 }
-
-const styles = StyleSheet.create({
-    buttonSave: {
-        margin: 10
-    },
-});
