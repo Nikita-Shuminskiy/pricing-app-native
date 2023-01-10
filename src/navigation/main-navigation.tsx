@@ -6,9 +6,6 @@ import HistoryScreen from "../screen/mainScreen/HistoryScreen";
 import ChartScreen from "../screen/mainScreen/ChartScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SettingScreen from "../screen/mainScreen/SettingScreen";
-const tapBarOptions = {
-
-}
 const Tab = createMaterialTopTabNavigator();
 
 const MainNavigation = () => {

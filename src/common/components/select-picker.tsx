@@ -14,6 +14,7 @@ type SelectPickerProps<T> = {
     textErrorStyles?: StyleProp<TextStyle>
     onReturnValueId?: boolean
     isRequired?: boolean
+    errorMessage?: string
 }
 const SelectPicker = function <T>({
                                       arrItem,
@@ -26,28 +27,27 @@ const SelectPicker = function <T>({
                                       isRequired,
                                       onReturnValueId,
                                       onValueChange,
+                                      errorMessage,
                                       ...rest
                                   }: SelectPickerProps<T>) {
     return (
-        <Center mt={2} style={{width: '100%'}}>
+        <Center mt={2} w={'100%'}>
             <FormControl isRequired={isRequired} isInvalid={isInvalid}>
                 <FormControl.Label>{label}</FormControl.Label>
                 <Select {...rest}
-                        onClose={() => {
-                            onBlur && onBlur(true)
-                        }}
                         onValueChange={onValueChange}
                         defaultValue={values}
                         placeholder={defaultLabel}
                         height={50}
                         width={'100%'}
-                        accessibilityLabel="Choose Service"
+                        accessibilityLabel={"Choose Service"}
                         variant={'outline'}
                         _selectedItem={{
                             bg: 'teal.600',
                             endIcon: <CheckIcon size="5"/>,
                         }}
                         mt={1}
+                        onTouchCancel={onBlur}
                 >
                     {
                         arrItem.map((list, index) => {
@@ -60,7 +60,7 @@ const SelectPicker = function <T>({
                     }
                 </Select>
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon/>}>
-                    Поля являеться обязательным
+                    {errorMessage ? errorMessage : 'Поля являеться обязательным'}
                 </FormControl.ErrorMessage>
             </FormControl>
         </Center>

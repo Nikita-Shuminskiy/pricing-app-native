@@ -48,7 +48,7 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
             return createAlert({
                 title: 'Сообщение',
                 message: 'У вас максимальное количество кошельков',
-                buttons: [{text: 'Закрыть', style: "cancel", onPress: () => console.log('')}]
+                buttons: [{text: 'Закрыть', style: "cancel"}]
             })
         } else {
             setModalAddWallet(true)
@@ -58,7 +58,9 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     const onPressButtonAddSpend = () => {
         setModalAddSpend(true)
     }
+
     const translateX = useRef(new Animated.Value(Dimensions.get("window").height)).current
+
     useEffect(() => {
         Animated.timing(translateX, {useNativeDriver: false, toValue: 0, duration: 1000}).start();
     })
@@ -70,25 +72,28 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
     }
     const walletView = ({item}) => {
         return (
-            <TouchableOpacity style={styles.imagesOpacity}
-                              onPress={() => onPressTouchWallet(item as WalletModelType)}>
-                <Animated.View style={{transform: [{translateY: translateX}]}}>
-                    <View style={styles.walletContainer}>
-                        <View style={styles.imagesContainer}>
-                            <Image style={styles.img} source={wallet}/>
-                            <FontAwesome style={styles.icoInfo} name="info-circle" size={20} color={colors.orange}/>
+            <Animated.View style={{transform: [{translateY: translateX}], flex: 1, height: '100%'}}>
+                <Box style={styles.walletContainer}>
+                    <TouchableOpacity style={styles.imagesOpacity}
+                                      onPress={() => onPressTouchWallet(item as WalletModelType)}>
+                        <View style={styles.walletBody}>
+                            <View style={styles.imagesContainer}>
+                                <Image style={styles.img} source={wallet}/>
+                                <FontAwesome style={styles.icoInfo} name="info-circle" size={20} color={colors.orange}/>
+                            </View>
+                            <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
+                                <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.walletName}>
+                                    Имя: {item?.name}
+                                </Text>
+                                <Text numberOfLines={1} ellipsizeMode={'tail'}>
+                                    Баланс: {Math.round(item?.balance)} {item?.currency}
+                                </Text>
+                            </View>
                         </View>
-                        <View style={{flexDirection: 'column', alignItems: 'flex-start'}}>
-                            <Text numberOfLines={1} ellipsizeMode={'tail'} style={styles.walletName}>
-                                Имя: {item?.name}
-                            </Text>
-                            <Text numberOfLines={1} ellipsizeMode={'tail'}>
-                                Баланс: {Math.round(item?.balance)} {item?.currency}
-                            </Text>
-                        </View>
-                    </View>
-                </Animated.View>
-            </TouchableOpacity>
+                    </TouchableOpacity>
+
+                </Box>
+            </Animated.View>
         );
     };
     const renderEmptyContainer = () => {
@@ -122,7 +127,6 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                         <Text style={styles.text}>Добавить трату</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.walletsContainer}>
                     <FlatList
                         onTouchStart={onTouchStart}
                         onTouchEnd={onTouchEnd}
@@ -137,7 +141,6 @@ const WalletsScreen = observer(({navigation}: WalletScreenProps) => {
                         refreshing={isRefreshing} // Added pull to refesh state
                         onRefresh={onRefresh} // Added pull to refresh control
                     />
-                </View>
             </SafeAreaView>
             <AddWalletModal visible={modalAddWallet} onClose={() => setModalAddWallet(false)}/>
             <AddSpendModal visible={modalAddSpend} onClose={() => setModalAddSpend(false)}/>
@@ -169,14 +172,24 @@ const styles = StyleSheet.create({
         fontWeight: '800'
     },
     walletContainer: {
-        backfaceVisibility: 'hidden',
-        alignItems: 'center',
         backgroundColor: colors.white,
         width: 170,
         margin: 10,
+        marginBottom: 20,
         padding: 10,
         borderRadius: 16,
-        flex: 1,
+        shadowColor: colors.black,
+        shadowOffset: {
+            width: 0,
+            height: 6,
+        },
+        shadowOpacity: 0.37,
+        shadowRadius: 7.49,
+        elevation: 12,
+    },
+    walletBody: {
+        backfaceVisibility: 'hidden',
+        alignItems: 'center',
     },
     logo: {
         width: 80,

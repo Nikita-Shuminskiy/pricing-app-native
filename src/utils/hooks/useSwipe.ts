@@ -21,7 +21,6 @@ export function useSwipe(onSwipeLeft?: any, onSwipeRight?: any, onSwipeTop?:any,
         const positionY = e.nativeEvent.pageY
         const range = windowWidth / rangeOffset
         const rangeHeight = windowHeight / rangeOffset
-
         // check if position is growing positively and has reached specified range
         if(positionX - pageX > range){
             onSwipeRight && onSwipeRight()
