@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import {Box, Center, Image, Modal, ScrollView, Text} from "native-base";
+import {StyleSheet} from "react-native";
 import SafeAreaView from "../components/safe-area-view";
 import Button from "../components/button";
 import wallet from '../../assets/images/wallet.png';
